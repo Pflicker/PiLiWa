@@ -1,0 +1,82 @@
+
+hudtest.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+board
+  rotate: false
+  xy: 1, 1
+  size: 800, 480
+  orig: 800, 480
+  offset: 0, 0
+  index: -1
+btnStart
+  rotate: false
+  xy: 803, 449
+  size: 64, 32
+  orig: 64, 32
+  offset: 0, 0
+  index: -1
+roll
+  rotate: false
+  xy: 803, 415
+  size: 64, 32
+  orig: 64, 32
+  offset: 0, 0
+  index: -1
+dice1
+  rotate: false
+  xy: 869, 449
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+dice2
+  rotate: false
+  xy: 803, 381
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+dice3
+  rotate: false
+  xy: 869, 415
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+dice4
+  rotate: false
+  xy: 903, 449
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+dice5
+  rotate: false
+  xy: 803, 347
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+dice6
+  rotate: false
+  xy: 837, 381
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+black
+  rotate: false
+  xy: 903, 417
+  size: 30, 30
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
+white
+  rotate: false
+  xy: 937, 451
+  size: 30, 30
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
