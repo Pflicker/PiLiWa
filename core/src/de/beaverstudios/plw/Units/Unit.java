@@ -18,6 +18,7 @@ import de.beaverstudios.plw.Screens.GameScreen;
 
 public class Unit {
 
+    String name;
     float x;
     float y;
     Integer w;
@@ -116,6 +117,10 @@ public class Unit {
 
     public Float getAttackspeed() {
         return this.attackspeed;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Integer getRange() {

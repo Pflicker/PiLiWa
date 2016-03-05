@@ -12,6 +12,7 @@ public class TextureManager {
     public static TextureAtlas hudAtlas;
     public static Texture BASE = new Texture(Gdx.files.internal("base.png"));
     public static Texture MARINE = new Texture(Gdx.files.internal("base.png"));
+    public static Texture HUDBACK = new Texture(Gdx.files.internal("hudback.png"));
 
     public TextureManager() {
         hudAtlas = new TextureAtlas(Gdx.files.internal("hudtest.atlas"));

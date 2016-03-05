@@ -12,6 +12,7 @@ import de.beaverstudios.plw.TextureManager;
 public class Marine extends Unit {
 
     public Marine(int p) {
+        name = "Marine";
         x = getSpawnPointX(p);
         y = 16;
         skin = TextureManager.MARINE;

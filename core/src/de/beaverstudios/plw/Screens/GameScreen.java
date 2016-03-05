@@ -1,6 +1,7 @@
 package de.beaverstudios.plw.Screens;
 
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -8,47 +9,17 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import de.beaverstudios.plw.PlwGame;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.util.ArrayList;
-
 import de.beaverstudios.plw.PlwGame;
-import de.beaverstudios.plw.Units.Base;
+
 import de.beaverstudios.plw.Units.BuildingManager;
-import de.beaverstudios.plw.Units.Marine;
-import de.beaverstudios.plw.Units.Unit;
 import de.beaverstudios.plw.Units.UnitManager;
 
 public class GameScreen implements Screen,InputProcessor {
@@ -68,7 +39,7 @@ public class GameScreen implements Screen,InputProcessor {
     private float gameCamY;
     public Integer p;
 
-    private Hud hud;
+    private de.beaverstudios.plw.Hud.Hud hud;
     public UnitManager um;
     public BuildingManager bm;
 
@@ -90,14 +61,14 @@ public class GameScreen implements Screen,InputProcessor {
 
         um = new UnitManager();
         bm = new BuildingManager();
-        hud = new Hud(batch,um,bm);
+        hud = new de.beaverstudios.plw.Hud.Hud(batch,um,bm);
 
 
         gameCamX = gamePort.getWorldWidth() / 2;
         gameCamY = gamePort.getWorldHeight() / 2;
         gamecam.position.set(gameCamX, gameCamY, 0);
 
-        InputMultiplexer im = new InputMultiplexer(hud.hudStage, this);
+        InputMultiplexer im = new InputMultiplexer(hud.hudStage,hud.menuStage, this);
         Gdx.input.setInputProcessor(im);
     }
 
@@ -131,6 +102,7 @@ public class GameScreen implements Screen,InputProcessor {
 
         batch.setProjectionMatrix(hud.hudStage.getCamera().combined);
         hud.hudStage.draw();
+        hud.menuStage.draw();
     }
 
     @Override
