@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import java.lang.reflect.InvocationTargetException;
+
 import de.beaverstudios.plw.Units.Building;
 import de.beaverstudios.plw.Units.BuildingManager;
 import de.beaverstudios.plw.Units.Marine;
@@ -29,7 +31,7 @@ public class Menu implements InputProcessor {
     private String name;
     public Hud hud;
 
-    public Menu(Skin skin, final BuildingManager bm, final UnitManager um, Hud hud) {
+    public Menu(Skin skin, final BuildingManager bm, final UnitManager um, Hud hud) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException {
         hud = this.hud;
         bounds = new Rectangle();
         bounds.set(Gdx.graphics.getWidth() * 0.8f, 0, Gdx.graphics.getWidth() * 0.2f, Gdx.graphics.getHeight());

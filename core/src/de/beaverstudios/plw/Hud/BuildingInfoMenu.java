@@ -31,7 +31,7 @@ public class BuildingInfoMenu {
     private Marine marine;
 
 
-    public BuildingInfoMenu(Skin skin, final BuildingManager bm, final UnitManager um, final Menu menu) {
+    public BuildingInfoMenu(Skin skin, final BuildingManager bm, final UnitManager um, final Menu menu) throws ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
         unitName = menu.getName();
         this.menu = menu;
         btnBuild = new TextButton("Build Marine", skin);
@@ -39,6 +39,14 @@ public class BuildingInfoMenu {
         unitNameLabel = new Label(unitName, skin);
         unitNameLabel.setText(menu.getName());
         movementspeedLabel = new Label("5", skin);
+
+        Class unit = Class.forName(unitName);
+        Integer player = 1;
+        Object building = unit.getSuperclass();
+        Constructor con = unit.getConstructor(new Class[] {Integer.class});
+
+        building = con.newInstance(player);
+
 
 
         btnBuild.addListener(new ClickListener() {
@@ -48,7 +56,7 @@ public class BuildingInfoMenu {
                     Gdx.app.log("Clicked Button", "Marine");
                     menu.hud.gameInfo.setMoneyPlayer(GameInfo.getMoneyPlayer() - 10);
                     menu.hud.gameInfo.setIncomePlayer(GameInfo.getIncomePlayer() + 2);
-                    bm.playerBuilding.add(new Building(um, new Marine(1)));
+                    bm.playerBuilding.add(new Building(um, ));
                 } else {
                     Gdx.app.log("Warning:", "Not enough Money");
                 }
