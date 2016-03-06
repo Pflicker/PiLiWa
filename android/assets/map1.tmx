@@ -5,7 +5,7 @@
  </tileset>
  <layer name="Ground" width="40" height="30">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3DAQkAAAwDoK1/6dU4XMEEAAAAgM96/ACo6xkhwBIAAA==
+   H4sIAAAAAAAAC+3DQQ0AAAwDoat/07OxBySsmqqqqqo+fSGSD83AEgAA
   </data>
  </layer>
  <objectgroup name="Ground" width="40" height="30">

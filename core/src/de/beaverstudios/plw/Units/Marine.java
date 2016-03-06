@@ -11,6 +11,7 @@ import de.beaverstudios.plw.TextureManager;
  */
 public class Marine extends Unit {
 
+
     public Marine(int p) {
         name = "Marine";
         x = getSpawnPointX(p);
@@ -20,7 +21,7 @@ public class Marine extends Unit {
         h = 10;
         life = 100;
         armor = 1;
-        movementspeed =10 ;
+        setMovementspeed(10);
         range = 5;
         damage = 5;
         damageType = 5;

@@ -28,11 +28,16 @@ public class Menu implements InputProcessor {
     private GameMenu gameMenu;
     private BuildMenu buildMenu;
     private BuildingInfoMenu buildingInfoMenu;
-    private String name;
     public Hud hud;
+    private int unitCode;
+    private String name;
+    public DialogPlacement dialog;
+    private boolean dialogPlacement;
 
-    public Menu(Skin skin, final BuildingManager bm, final UnitManager um, Hud hud) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        hud = this.hud;
+    public Menu(Skin skin, final BuildingManager bm, final UnitManager um, Hud hud) {
+        dialogPlacement = false;
+        unitCode = 0;
+        this.hud = hud;
         bounds = new Rectangle();
         bounds.set(Gdx.graphics.getWidth() * 0.8f, 0, Gdx.graphics.getWidth() * 0.2f, Gdx.graphics.getHeight());
         table = new Table();
@@ -42,8 +47,9 @@ public class Menu implements InputProcessor {
         menuState = 0;
 
         gameMenu = new GameMenu(skin, Menu .this);
-        buildMenu = new BuildMenu(skin,bm,um,Menu .this);
+        buildMenu = new BuildMenu(Menu .this);
         buildingInfoMenu = new BuildingInfoMenu(skin,bm,um,Menu .this);
+        dialog = new DialogPlacement(bm, um, Menu .this);
 
         gameMenu.create(table);
 
@@ -69,6 +75,14 @@ public class Menu implements InputProcessor {
         }
     }
 
+    public boolean isDialogPlacement() {
+        return dialogPlacement;
+    }
+
+    public void setDialogPlacement(boolean dialogPlacement) {
+        this.dialogPlacement = dialogPlacement;
+    }
+
     public static boolean isMenuStateChanged() {
         return menuStateChanged;
     }
@@ -86,11 +100,20 @@ public class Menu implements InputProcessor {
     }
 
     public String getName() {
+
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getUnitCode() {
+        return unitCode;
+    }
+
+    public void setUnitCode(int unitCode) {
+        this.unitCode = unitCode;
     }
 
     @Override

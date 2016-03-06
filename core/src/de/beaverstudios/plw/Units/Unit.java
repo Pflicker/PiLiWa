@@ -25,8 +25,9 @@ public class Unit {
     Integer h;
     Integer dx;
     Integer dy;
-    Integer life;
-    Integer armor;
+    static Integer maxLife;
+    static Integer life;
+    static Integer armor;
     Integer movementspeed;
     Integer range;
     Integer damage;
@@ -113,6 +114,9 @@ public class Unit {
 
     public Integer getMovementspeed() {
         return this.movementspeed;
+    }
+    public void setMovementspeed(int m){
+        this.movementspeed = m;
     }
 
     public Float getAttackspeed() {

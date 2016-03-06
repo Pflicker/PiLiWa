@@ -24,11 +24,11 @@ public class BuildMenu {
     public static int marineCount;
     private Menu menu;
 
-    public BuildMenu(Skin skin, final BuildingManager bm, final UnitManager um, Menu menu) {
+    public BuildMenu(Menu menu) {
 
-        btnMarine = new TextButton("Marine", skin);
-        btnReturn = new TextButton("Return",skin);
-        marineLabel = new Label(String.format("%03d", marineCount), skin);
+        btnMarine = new TextButton("Marine", menu.hud.skin);
+        btnReturn = new TextButton("Return",menu.hud.skin);
+        marineLabel = new Label(String.format("%03d", marineCount), menu.hud.skin);
         marineLabel.setText(String.format("%03d", marineCount));
         this.menu = menu;
 
@@ -63,6 +63,7 @@ public class BuildMenu {
     private void clickActionButton(){
         menu.setMenuStateChanged(true);
         menu.setMenuState(2);
+        menu.setUnitCode(0);
 
     }
 

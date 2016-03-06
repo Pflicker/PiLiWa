@@ -68,7 +68,7 @@ public class GameScreen implements Screen,InputProcessor {
         gameCamY = gamePort.getWorldHeight() / 2;
         gamecam.position.set(gameCamX, gameCamY, 0);
 
-        InputMultiplexer im = new InputMultiplexer(hud.hudStage,hud.menuStage, this);
+        InputMultiplexer im = new InputMultiplexer(hud.hudStage,hud.menuStage, hud.dialogStage, this);
         Gdx.input.setInputProcessor(im);
     }
 
@@ -103,6 +103,9 @@ public class GameScreen implements Screen,InputProcessor {
         batch.setProjectionMatrix(hud.hudStage.getCamera().combined);
         hud.hudStage.draw();
         hud.menuStage.draw();
+        if(hud.menu.isDialogPlacement()){
+            hud.dialogStage.draw();
+        }
     }
 
     @Override

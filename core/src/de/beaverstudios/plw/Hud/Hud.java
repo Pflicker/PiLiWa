@@ -22,11 +22,12 @@ public class Hud implements MediaDisposer.Disposable, InputProcessor{
 
     public Stage hudStage;
     public Stage menuStage;
+    public Stage dialogStage;
     public Viewport hudPort;
     private TextureAtlas hudAtlas;
     public static GameInfo gameInfo;
-    private Menu menu;
-    private Skin skin;
+    public Menu menu;
+    public Skin skin;
 
     public Hud (SpriteBatch batch, final UnitManager um, final BuildingManager bm){
 
@@ -34,12 +35,14 @@ public class Hud implements MediaDisposer.Disposable, InputProcessor{
         hudPort = new FitViewport(PlwGame.V_WIDTH, PlwGame.V_HEIGHT, new OrthographicCamera());
         menuStage = new Stage(hudPort, batch);
         hudStage = new Stage(hudPort, batch);
+        dialogStage = new Stage(hudPort,batch);
 
         gameInfo = new GameInfo(skin);
         menu = new Menu(skin,bm,um, Hud .this);
 
         hudStage.addActor(gameInfo.infoTable);
         menuStage.addActor(menu.table);
+        dialogStage.addActor(menu.dialog.table);
     }
 
     public void update(float dt) {
