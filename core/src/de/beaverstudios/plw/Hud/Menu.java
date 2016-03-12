@@ -2,63 +2,58 @@ package de.beaverstudios.plw.Hud;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import java.lang.reflect.InvocationTargetException;
-
-import de.beaverstudios.plw.Units.Building;
-import de.beaverstudios.plw.Units.BuildingManager;
-import de.beaverstudios.plw.Units.Marine;
-import de.beaverstudios.plw.Units.UnitManager;
+import de.beaverstudios.plw.Screens.GameScreen;
 
 /**
  * Created by Grass on 3/5/2016.
  */
 public class Menu implements InputProcessor {
-    public Table table;
+    public static Table table;
     private static boolean menuStateChanged;
     private static int menuState;
-    private Rectangle bounds;
-    private GameMenu gameMenu;
-    private BuildMenu buildMenu;
-    private BuildingInfoMenu buildingInfoMenu;
-    public Hud hud;
-    private int unitCode;
-    private String name;
-    public DialogPlacement dialog;
-    private boolean dialogPlacement;
+    private static GameMenu gameMenu;
+    private static BuildMenu buildMenu;
+    private static BuildingInfoMenu buildingInfoMenu;
+    private static int unitCode;
+    private static String name;
+    public static DialogPlacement dialog;
+    private static boolean dialogPlacement;
+    private static boolean ret;
 
-    public Menu(Skin skin, final BuildingManager bm, final UnitManager um, Hud hud) {
+    public Menu() {
         dialogPlacement = false;
         unitCode = 0;
-        this.hud = hud;
-        bounds = new Rectangle();
-        bounds.set(Gdx.graphics.getWidth() * 0.8f, 0, Gdx.graphics.getWidth() * 0.2f, Gdx.graphics.getHeight());
         table = new Table();
-        table.setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+        table.setBounds(Gdx.graphics.getWidth() * 0.8f, 0, Gdx.graphics.getWidth() * 0.2f, Gdx.graphics.getHeight());
+        table.setBackground(Hud.getSkin().getDrawable("default-scroll"));
         table.top();
-        menuStateChanged = false;
-        menuState = 0;
 
-        gameMenu = new GameMenu(skin, Menu .this);
-        buildMenu = new BuildMenu(Menu .this);
-        buildingInfoMenu = new BuildingInfoMenu(skin,bm,um,Menu .this);
-        dialog = new DialogPlacement(bm, um, Menu .this);
+        menuStateChanged = true;
+        menuState = 0;
+        dialogPlacement = false;
+
+        gameMenu = new GameMenu();
+        buildMenu = new BuildMenu();
+        buildingInfoMenu = new BuildingInfoMenu();
+        dialog = new DialogPlacement();
 
         gameMenu.create(table);
 
     }
 
-    public void update() {
+    public void update(float dt) {
+
         if (menuStateChanged) {
             table.clear();
             int i = getMenuState();
+            Gdx.app.log("Menu", "State Changed");
             switch (i) {
                 case 0:
                     Gdx.app.log("Table created", "GameMenu");
@@ -72,15 +67,28 @@ public class Menu implements InputProcessor {
                     Gdx.app.log("Table created", "MarineInfo");
                     buildingInfoMenu.create(table);
             }
+            setMenuStateChanged(false);
         }
+        if (dialogPlacement){
+            dialog.table.setVisible(true);
+            int i = getUnitCode();
+            Gdx.app.log("Table created", "Dialog");
+            dialog.update(dt);
+            dialogPlacement = false;
+        }
+        if (ret){
+            dialog.table.setVisible(false);
+            ret = false;
+        }
+
     }
 
     public boolean isDialogPlacement() {
         return dialogPlacement;
     }
 
-    public void setDialogPlacement(boolean dialogPlacement) {
-        this.dialogPlacement = dialogPlacement;
+    public static void setDialogPlacement(boolean dialogPlacement) {
+        Menu.dialogPlacement = dialogPlacement;
     }
 
     public static boolean isMenuStateChanged() {
@@ -99,21 +107,29 @@ public class Menu implements InputProcessor {
         menuState = state;
     }
 
-    public String getName() {
+    public static String getName() {
 
         return name;
+    }
+
+    public static boolean isRet() {
+        return ret;
+    }
+
+    public static void setRet(boolean ret) {
+        Menu.ret = ret;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public int getUnitCode() {
+    public static int getUnitCode() {
         return unitCode;
     }
 
-    public void setUnitCode(int unitCode) {
-        this.unitCode = unitCode;
+    public static void setUnitCode(int code) {
+       unitCode = code;
     }
 
     @Override

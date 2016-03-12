@@ -31,6 +31,7 @@ public class MainMenuScreen implements Screen, InputProcessor{
 
     private Table table;
     private TextButton startButton;
+    private TextButton btnOptions;
     private TextButton quitButton;
 
     private SpriteBatch batch;
@@ -40,10 +41,10 @@ public class MainMenuScreen implements Screen, InputProcessor{
     final PlwGame game;
 
 
-        public MainMenuScreen(final PlwGame gam) {
+        public MainMenuScreen(PlwGame gam) {
 
             skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-            game = gam;
+            this.game = gam;
 
             menuPort = new FitViewport(PlwGame.V_WIDTH,PlwGame.V_HEIGHT);
             stage = new Stage(menuPort);
@@ -55,12 +56,22 @@ public class MainMenuScreen implements Screen, InputProcessor{
 
             startButton = new TextButton("New Game",skin);
             quitButton = new TextButton("Quit Game",skin);
+            btnOptions = new TextButton("Options",skin);
 
             startButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     Gdx.app.log("Clicked button", "Yep, you did");
                     game.setScreen(new de.beaverstudios.plw.Screens.GameScreen());
+                    dispose();
+                }
+            });
+
+            btnOptions.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Gdx.app.log("Clicked button", "Options");
+                    game.setScreen(new de.beaverstudios.plw.Screens.OptionsScreen(game));
                     dispose();
                 }
             });
@@ -73,8 +84,11 @@ public class MainMenuScreen implements Screen, InputProcessor{
                     Gdx.app.exit();
                 }
             });
+
             table.padTop(30);
             table.add(startButton).padBottom(30);
+            table.row();
+            table.add(btnOptions).padBottom(30);
             table.row();
             table.add(quitButton);
             stage.addActor(table);

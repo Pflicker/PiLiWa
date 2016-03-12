@@ -16,7 +16,7 @@ import de.beaverstudios.plw.Healthbar.HealthBar;
 import de.beaverstudios.plw.PlwGame;
 import de.beaverstudios.plw.Screens.GameScreen;
 
-public class Unit {
+public abstract class Unit {
 
     String name;
     float x;
@@ -25,11 +25,11 @@ public class Unit {
     Integer h;
     Integer dx;
     Integer dy;
-    static Integer maxLife;
-    static Integer life;
-    static Integer armor;
-    Integer movementspeed;
-    Integer range;
+    Integer maxLife;
+    Integer life;
+    Integer armor;
+    float movementspeed;
+    float range;
     Integer damage;
     Integer damageType;
     float timeSinceShot;
@@ -44,147 +44,9 @@ public class Unit {
     float rotate;
     HealthBar healthBar;
 
-    public Unit() {
-
-    }
-
-    public Integer getW() {
-        return this.w;
-    }
-
-    public Integer getH() {
-        return this.h;
-    }
-
-    public float getTimeSinceShot() {
-        return this.timeSinceShot;
-    }
-
-    public void setTimeSinceShot(float timeSinceShot) {
-        this.timeSinceShot = timeSinceShot;
-    }
-
-    public float getRotate() {
-        return this.rotate;
-    }
-
-    public float getX() {
-        return this.x;
-    }
-
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public float getY() {
-        return this.y;
-    }
-
-    public void setY(float y) {
-        this.y = y;
-    }
-
-    public Integer getDx() {
-        return this.dx;
-    }
-
-    public void setDx(Integer dx) {
-        this.dx = dx;
-    }
-
-    public Integer getDy() {
-        return this.dy;
-    }
-
-    public void setDy(Integer dy) {
-        this.dy = dy;
-    }
-
-    public Integer getLife() {
-        return this.life;
-    }
-
-    public void setLife(Integer life) {
-        this.life = life;
-    }
-
-    public Integer getArmor() {
-        return this.armor;
-    }
-
-    public Integer getMovementspeed() {
-        return this.movementspeed;
-    }
-    public void setMovementspeed(int m){
-        this.movementspeed = m;
-    }
-
-    public Float getAttackspeed() {
-        return this.attackspeed;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Integer getRange() {
-        return this.range;
-    }
-
-    public Integer getDamage() {
-        return this.damage;
-    }
-
-    public Integer getDamageType() {
-        return this.damageType;
-    }
-
-    public Texture getSkin() {
-        return this.skin;
-    }
-
-    public Boolean getInvisible() {
-        return this.invisible;
-    }
-
-    public Boolean getFlying() {
-        return this.flying;
-    }
-
-    public Boolean getAttackFlying() {
-        return this.attackFlying;
-    }
-
-    public Boolean getAttackGround() {
-        return this.attackGround;
-    }
-
-    public Boolean getStealthDetect() {
-        return this.stealthDetect;
-    }
-
-    public Boolean getDirection() {
-        return this.direction;
-    }
-
-    public Boolean rangeCheck(float x, float range) {
-
-        return false;
-    }
-
-    public void stop() {
-        movementspeed = 0;
-    }
-
     public void update(float dt) {
-
-        if (rangeCheck(this.x,this.range)) {
-            stop();
-        }else{
-            x = (x - movementspeed*dt);
-            }
-        }
-
+        x = (x - movementspeed * dt);
+    }
     public float getSpawnPointX(int p){
         if(p == 1){
             x = (800) ;
@@ -194,20 +56,206 @@ public class Unit {
         return x;
     }
 
-    public boolean inRange(int p){
-        if (p == 0){
-
-        }
-        return true;
-    }
-
     public void draw(SpriteBatch batch) {
-        batch.draw(this.skin,this.x,this.y,this.w, this.h);
-        healthBar.draw(batch,1,this.x, this.y+this.h+1,this.w,1,this.life);
+        batch.draw(skin,x,y,w,h);
+        healthBar.draw(batch,1,x, y+h+1,w,1,life);
 
     }
 
     public void dispose() {
         this.healthBar.dispose();
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public Integer getW() {
+        return w;
+    }
+
+    public void setW(Integer w) {
+        this.w = w;
+    }
+
+    public Integer getH() {
+        return h;
+    }
+
+    public void setH(Integer h) {
+        this.h = h;
+    }
+
+    public Integer getDx() {
+        return dx;
+    }
+
+    public void setDx(Integer dx) {
+        this.dx = dx;
+    }
+
+    public Integer getDy() {
+        return dy;
+    }
+
+    public void setDy(Integer dy) {
+        this.dy = dy;
+    }
+
+    public Integer getMaxLife() {
+        return maxLife;
+    }
+
+    public void setMaxLife(Integer maxLife) {
+        this.maxLife = maxLife;
+    }
+
+    public Integer getLife() {
+        return life;
+    }
+
+    public void setLife(Integer life) {
+        this.life = life;
+    }
+
+    public Integer getArmor() {
+        return armor;
+    }
+
+    public void setArmor(Integer armor) {
+        this.armor = armor;
+    }
+
+    public float getMovementspeed() {
+        return movementspeed;
+    }
+
+    public void setMovementspeed(float movementspeed) {
+        this.movementspeed = movementspeed;
+    }
+
+    public float getRange() {
+        return range;
+    }
+
+    public void setRange(float range) {
+        this.range = range;
+    }
+
+    public Integer getDamage() {
+        return damage;
+    }
+
+    public void setDamage(Integer damage) {
+        this.damage = damage;
+    }
+
+    public Integer getDamageType() {
+        return damageType;
+    }
+
+    public void setDamageType(Integer damageType) {
+        this.damageType = damageType;
+    }
+
+    public float getTimeSinceShot() {
+        return timeSinceShot;
+    }
+
+    public void setTimeSinceShot(float timeSinceShot) {
+        this.timeSinceShot = timeSinceShot;
+    }
+
+    public float getAttackspeed() {
+        return attackspeed;
+    }
+
+    public void setAttackspeed(float attackspeed) {
+        this.attackspeed = attackspeed;
+    }
+
+    public Texture getSkin() {
+        return skin;
+    }
+
+    public void setSkin(Texture skin) {
+        this.skin = skin;
+    }
+
+    public Boolean getInvisible() {
+        return invisible;
+    }
+
+    public void setInvisible(Boolean invisible) {
+        this.invisible = invisible;
+    }
+
+    public Boolean getFlying() {
+        return flying;
+    }
+
+    public void setFlying(Boolean flying) {
+        this.flying = flying;
+    }
+
+    public Boolean getAttackFlying() {
+        return attackFlying;
+    }
+
+    public void setAttackFlying(Boolean attackFlying) {
+        this.attackFlying = attackFlying;
+    }
+
+    public Boolean getAttackGround() {
+        return attackGround;
+    }
+
+    public void setAttackGround(Boolean attackGround) {
+        this.attackGround = attackGround;
+    }
+
+    public Boolean getStealthDetect() {
+        return stealthDetect;
+    }
+
+    public void setStealthDetect(Boolean stealthDetect) {
+        this.stealthDetect = stealthDetect;
+    }
+
+    public Boolean getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Boolean direction) {
+        this.direction = direction;
+    }
+
+    public float getRotate() {
+        return rotate;
+    }
+
+    public void setRotate(float rotate) {
+        this.rotate = rotate;
+    }
+
 }

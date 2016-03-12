@@ -9,83 +9,33 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import de.beaverstudios.plw.Units.Building;
-import de.beaverstudios.plw.Units.BuildingManager;
-import de.beaverstudios.plw.Units.Marine;
-import de.beaverstudios.plw.Units.UnitManager;
+import de.beaverstudios.plw.Screens.GameScreen;
+
 
 /**
  * Created by Grass on 3/5/2016.
  */
-public class GameMenu implements InputProcessor {
+public class GameMenu {
 
     private TextButton btnBuildMenu;
-    private Menu menu;
 
+    public GameMenu() {
 
-    public GameMenu(Skin skin,Menu menu) {
-
-        menu = this.menu;
-
-        btnBuildMenu = new TextButton("Build", skin);
+        btnBuildMenu = new TextButton("Build", Hud.getSkin());
 
         btnBuildMenu.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("Clicked Button", "Build");
-                clickAction();
+                Menu.setMenuState(1);
+                Menu.setMenuStateChanged(true);
             }
 
         });
 
     }
 
-    public void clickAction(){
-        menu.setMenuState(1);
-        menu.setMenuStateChanged(true);
-    }
-
     public void create(Table table) {
-           table.add(btnBuildMenu);
-    }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
+        table.add(btnBuildMenu);
     }
 }

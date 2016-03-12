@@ -1,81 +1,59 @@
 package de.beaverstudios.plw.Hud;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import de.beaverstudios.plw.Units.Building;
-import de.beaverstudios.plw.Units.BuildingManager;
-import de.beaverstudios.plw.Units.Marine;
-import de.beaverstudios.plw.Units.UnitManager;
+import de.beaverstudios.plw.Screens.GameScreen;
 
 /**
  * Created by Grass on 3/5/2016.
  */
 public class BuildMenu {
-    private TextButton btnMarine;
+    private TextButton btnGetMarine;
     private TextButton btnReturn;
     private static Label marineLabel;
     public static int marineCount;
-    private Menu menu;
 
-    public BuildMenu(Menu menu) {
+    public BuildMenu() {
 
-        btnMarine = new TextButton("Marine", menu.hud.skin);
-        btnReturn = new TextButton("Return",menu.hud.skin);
-        marineLabel = new Label(String.format("%03d", marineCount), menu.hud.skin);
+        btnGetMarine = new TextButton("Marine", Hud.getSkin());
+        btnReturn = new TextButton("Return",Hud.getSkin());
+        marineLabel = new Label(String.format("%03d", marineCount), Hud.getSkin());
         marineLabel.setText(String.format("%03d", marineCount));
-        this.menu = menu;
 
-        btnMarine.addListener(new ClickListener() {
+        btnGetMarine.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("Clicked Button", "Marine");
-                clickActionButton();
-
-
+                Menu.setMenuStateChanged(true);
+                Menu.setMenuState(2);
+                Menu.setUnitCode(0);
             }
         });
-
 
         btnReturn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                    clickActionReturn();
-                    Gdx.app.log("Button:", "Return");
+                Menu.setMenuStateChanged(true);
+                Menu.setMenuState(0);
+                Gdx.app.log("Button:", "Return");
                 }
 
         });
-
-
-
-    }
-    private void clickActionReturn(){
-        menu.setMenuStateChanged(true);
-        menu.setMenuState(0);
-
-    }
-    private void clickActionButton(){
-        menu.setMenuStateChanged(true);
-        menu.setMenuState(2);
-        menu.setUnitCode(0);
-
     }
 
-        public void create(Table table) {
+    public void create(Table table) {
             table.clear();
             table.row();
             table.add(btnReturn);
             table.row();
             table.row();
             table.row();
-            table.add(btnMarine);
+            table.add(btnGetMarine);
             table.add(marineLabel);
-
-        }
     }
+}

@@ -9,11 +9,11 @@ import java.util.ArrayList;
  */
 public class UnitManager {
 
-    public final ArrayList<Unit> comUnits = new ArrayList<Unit>();
-    public final ArrayList<Unit> playerUnits = new ArrayList<Unit>();
-    private final Base playerBase;
-    private final Base comBase;
-    public int unitsSpawned;
+    public static ArrayList<Unit> comUnits = new ArrayList<Unit>();
+    public static ArrayList<Unit> playerUnits = new ArrayList<Unit>();
+    private Base playerBase;
+    private Base comBase;
+    public static int unitsSpawned;
     public Marine marine;
 
     public UnitManager() {
@@ -30,53 +30,53 @@ public class UnitManager {
     public void update(float dt) {
 
         for (int i = 0; i > comUnits.size(); i++) {
-           comUnits.get(i).update(dt);
-            if(comUnits.get(i).getX() < 0){
+            comUnits.get(i).update(dt);
+            if (comUnits.get(i).getX() < 0) {
                 comUnits.remove(i);
             }
         }
-        for (Unit u : comUnits){
+        for (Unit u : comUnits) {
             u.update(dt);
         }
 
         for (int i = 0; i > playerUnits.size(); i++) {
             playerUnits.get(i).update(dt);
-            if(playerUnits.get(i).getX() < 0){
+            if (playerUnits.get(i).getX() < 0) {
                 playerUnits.remove(i);
             }
         }
-        for (Unit u : playerUnits){
+        for (Unit u : playerUnits) {
             u.update(dt);
         }
 
-        //checkCollisions();
     }
 
     public void render(SpriteBatch batch) {
-        for (Unit u : comUnits){
-            u.draw(batch);
+        for (Unit u : comUnits) {
+            batch.draw(u.getSkin(),u.getX(),u.getY(),u.getW(),u.getH());
+            u.healthBar.draw(batch,1,u.getX(), u.getY()+u.getH()+1,u.getW(),1,u.getLife());
         }
 
-        for (Unit u : playerUnits){
-            u.draw(batch);
+        for (Unit u : playerUnits) {
+            batch.draw(u.getSkin(),u.getX(),u.getY(),u.getW(),u.getH());
+            u.healthBar.draw(batch,1,u.getX(), u.getY()+u.getH()+1,u.getW(),1,u.getLife());
         }
 
     }
 
-    /*private Array<Enemy> getEnemies() {
-        Array<Enemy> ret = new Array<Enemy>();
-        for (Entity e : entities)
-            if (e instanceof Enemy)
-                ret.add((Enemy)e);
-        return ret;
+    public static ArrayList<Unit> getComUnits() {
+        return comUnits;
     }
 
-    private Array<Missile> getMissiles() {
-        Array<Missile> ret = new Array<Missile>();
-        for (Entity e : entities)
-            if (e instanceof Missile)
-                ret.add((Missile)e);
-        return ret;
-    }*/
+    public static void setComUnits(ArrayList<Unit> comUnits) {
+        UnitManager.comUnits = comUnits;
+    }
 
+    public static ArrayList<Unit> getPlayerUnits() {
+        return playerUnits;
+    }
+
+    public static void setPlayerUnits(ArrayList<Unit> playerUnits) {
+        UnitManager.playerUnits = playerUnits;
+    }
 }
