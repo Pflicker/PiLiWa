@@ -11,31 +11,31 @@ import de.beaverstudios.plw.TextureManager;
  */
 public class Marine extends Unit {
 
-    private static String name = "Marine";
-    private static Integer armor = 1;
-    private static Integer range = 5;
-    private static Integer damage = 5;
-    private static Integer damageType = 5;
-    private static Integer attackspeed = 1;
-    private static Integer maxMovementSpeed = 100;
-    private static boolean flying = false;
-    private static boolean attackFlying = true;
-    private static boolean attackGround = true;
-    private static boolean stealthDetect = false;
-    private static boolean invisible = false;
 
     public Marine(int p) {
         player = p;
-        movementspeed = maxMovementSpeed;
         maxLife = 100;
         w = 10;
         h = 10;
         x = getSpawnPointX(p);
+        damage = 5;
         y = 16;
         skin = TextureManager.MARINE;
         timeSinceShot = 0;
         life = maxLife;
         healthBar = new HealthBar(x,y+h+1,w,1,life);
         buildung = true;
+        name = "Marine";
+        armor = 1;
+        range = 5;
+        damageType = 5;
+        attackspeed = 1;
+        flying = false;
+        attackFlying = true;
+        attackGround = true;
+        stealthDetect = false;
+        invisible = false;
+
     }
+
 }

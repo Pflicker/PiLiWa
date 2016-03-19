@@ -8,7 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-
+import de.beaverstudios.plw.Buildings.BuildingTypes;
+import de.beaverstudios.plw.PlwGame;
 import de.beaverstudios.plw.Screens.GameScreen;
 
 /**
@@ -21,7 +22,6 @@ public class Menu implements InputProcessor {
     private static GameMenu gameMenu;
     private static BuildMenu buildMenu;
     private static BuildingInfoMenu buildingInfoMenu;
-    private static int unitCode;
     private static String name;
     public static DialogPlacement dialog;
     private static boolean dialogPlacement;
@@ -29,9 +29,8 @@ public class Menu implements InputProcessor {
 
     public Menu() {
         dialogPlacement = false;
-        unitCode = 0;
         table = new Table();
-        table.setBounds(Gdx.graphics.getWidth() * 0.8f, 0, Gdx.graphics.getWidth() * 0.2f, Gdx.graphics.getHeight());
+        table.setBounds(PlwGame.V_WIDTH * 0.8f, 0, PlwGame.V_WIDTH * 0.2f, PlwGame.V_HEIGHT);
         table.setBackground(Hud.getSkin().getDrawable("default-scroll"));
         table.top();
 
@@ -71,7 +70,7 @@ public class Menu implements InputProcessor {
         }
         if (dialogPlacement){
             dialog.table.setVisible(true);
-            int i = getUnitCode();
+//            int i = getUnitCode();
             Gdx.app.log("Table created", "Dialog");
             dialog.update(dt);
             dialogPlacement = false;
@@ -122,14 +121,6 @@ public class Menu implements InputProcessor {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public static int getUnitCode() {
-        return unitCode;
-    }
-
-    public static void setUnitCode(int code) {
-       unitCode = code;
     }
 
     @Override

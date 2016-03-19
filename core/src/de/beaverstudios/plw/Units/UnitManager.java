@@ -16,11 +16,11 @@ public class UnitManager {
     public static ArrayList<Unit> playerUnits = new ArrayList<Unit>();
     private static Grid grid;
     public static int unitsSpawned;
-    public Marine marine;
+    public static Marine ghostMarine;
 
     public UnitManager() {
 
-        marine = new Marine(1);
+        ghostMarine = new Marine(2);
 
         grid = new Grid();
 
