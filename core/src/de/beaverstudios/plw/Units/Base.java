@@ -13,13 +13,15 @@ public class Base extends Unit {
 
     public Base(int p) {
 
+
         if (p == 0) {
-            x = 0;
+            getSpawnPointX(p);
             direction = false;
         } else {
-            x = (Gdx.graphics.getWidth());
+            getSpawnPointX(p);
             direction = true;
         }
+
 
         y = 16;
         w = 20;
@@ -28,12 +30,14 @@ public class Base extends Unit {
         armor = 50;
         damage = 50;
         range = 5;
+        player = p;
         stealthDetect = true;
         attackGround = true;
         attackFlying = true;
         movementspeed = 0;
         attackspeed = 1;
         healthBar = new HealthBar(x,y+h+1,w,1,life);
+        buildung = false;
 
         skin = TextureManager.BASE;
 

@@ -4,29 +4,29 @@ import com.badlogic.gdx.Gdx;
 
 import java.util.ArrayList;
 
+import de.beaverstudios.plw.PlwGame;
+
 /**
  * Created by paul on 05.03.16.
  *///
 public class Grid {
 
-    ArrayList<ArrayList<ArrayList<Unit>>> grid = new ArrayList<ArrayList<ArrayList<Unit>>>();
-    UnitManager um;
-    int res = 100;
-    public Grid(UnitManager um_) {
+    ArrayList<ArrayList<ArrayList<Unit>>> gridTable = new ArrayList<ArrayList<ArrayList<Unit>>>();
 
-    this.um = um_;
+    public Grid() {
+
 
         create_new_grid();
     }
 
     public void create_new_grid(){
 
-        this.grid.clear();
-        for (int i = 0; i < res; i++) {
+        this.gridTable.clear();
+        for (int i = 0; i < PlwGame.GRID_RES; i++) {
 
-            this.grid.add(new ArrayList<ArrayList<Unit>>());
-            for (int j = 0; j < res; j++) {
-                this.grid.get(i).add(new ArrayList<Unit>());
+            this.gridTable.add(new ArrayList<ArrayList<Unit>>());
+            for (int j = 0; j < PlwGame.GRID_RES; j++) {
+                this.gridTable.get(i).add(new ArrayList<Unit>());
 
             }
         }
@@ -40,20 +40,25 @@ public class Grid {
 
         create_new_grid();
 
-        for (int i = 0; i < um.comUnits.size(); i++) {
+        for (int i = 0; i < UnitManager.comUnits.size(); i++) {
 
-            x = um.comUnits.get(i).getX();
-            y = um.comUnits.get(i).getY();
+            x = UnitManager.comUnits.get(i).getX();
+            y = UnitManager.comUnits.get(i).getY();
 
-            this.grid.get((int)(x/801*res)).get((int)(y/50*res)).add(um.comUnits.get(i));
+            UnitManager.comUnits.get(i).setgridX((int) ((x) / PlwGame.V_WIDTH * PlwGame.GRID_RES));
+            UnitManager.comUnits.get(i).setgridY((int) ((y) / PlwGame.V_HEIGHT * PlwGame.GRID_RES));
+
+            this.gridTable.get((int)(x/ (PlwGame.V_WIDTH+1)*(PlwGame.GRID_RES+1))).get((int) (y / (PlwGame.V_HEIGHT + 1) * PlwGame.GRID_RES)).add(UnitManager.comUnits.get(i));
         }
 
-        for (int j = 0; j < um.playerUnits.size(); j++) {
+        for (int i = 0; i < UnitManager.playerUnits.size(); i++) {
 
-            x = um.playerUnits.get(j).getX();
-            y = um.playerUnits.get(j).getY();
+            x = UnitManager.playerUnits.get(i).getX();
+            y = UnitManager.playerUnits.get(i).getY();
 
-            this.grid.get((int)(x/801*res)).get((int)(y/50*res)).add(um.playerUnits.get(j));
+            UnitManager.playerUnits.get(i).setgridX((int)((x)/ PlwGame.V_WIDTH*PlwGame.GRID_RES));
+            UnitManager.playerUnits.get(i).setgridY((int) ((y) / PlwGame.V_HEIGHT * PlwGame.GRID_RES));
+            this.gridTable.get((int)(x/ (PlwGame.V_WIDTH+1)*PlwGame.GRID_RES)).get((int) (y / (PlwGame.V_HEIGHT + 1) * PlwGame.GRID_RES)).add(UnitManager.playerUnits.get(i));
         }
     return;
     }

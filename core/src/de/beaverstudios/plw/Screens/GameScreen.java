@@ -20,6 +20,7 @@ import de.beaverstudios.plw.Hud.Hud;
 import de.beaverstudios.plw.PlwGame;
 
 import de.beaverstudios.plw.Buildings.BuildingManager;
+import de.beaverstudios.plw.Units.Grid;
 import de.beaverstudios.plw.Units.UnitManager;
 
 public class GameScreen implements Screen,InputProcessor {

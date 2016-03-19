@@ -21,6 +21,7 @@ public abstract class Unit {
     String name;
     float x;
     float y;
+    Integer player;
     Integer w;
     Integer h;
     Integer dx;
@@ -28,6 +29,8 @@ public abstract class Unit {
     Integer maxLife;
     Integer life;
     Integer armor;
+    int gridX;
+    int gridY;
     float movementspeed;
     float range;
     Integer damage;
@@ -41,15 +44,24 @@ public abstract class Unit {
     Boolean attackGround;
     Boolean stealthDetect;
     Boolean direction;
+    Boolean buildung;
     float rotate;
     HealthBar healthBar;
 
 
     public float getSpawnPointX(int p){
         if(p == 1){
+            //x = (PlwGame.V_WIDTH-w) ;
             x = (800) ;
-        } else {
+            gridX = (int)(x/ PlwGame.V_WIDTH*PlwGame.GRID_RES);
+            gridY = (int)(y/PlwGame.V_HEIGHT*PlwGame.GRID_RES);
+            System.out.println("test:              " + gridX + "  " + gridY + "  " + p);
+        }
+        else {
             x = 0;
+            gridX = (int)(x/ PlwGame.V_WIDTH*PlwGame.GRID_RES);
+            gridY = (int)(y/PlwGame.V_HEIGHT*PlwGame.GRID_RES);
+            System.out.println("test:              " + gridX + "  " + gridY + "  " + p);
         }
         return x;
     }
@@ -72,6 +84,14 @@ public abstract class Unit {
         this.name = name;
     }
 
+    public void setPlayer(Integer player) {
+        this.player = player;
+    }
+
+    public Integer getPlayer() {
+        return player;
+    }
+
     public float getX() {
         return x;
     }
@@ -86,6 +106,22 @@ public abstract class Unit {
 
     public void setY(float y) {
         this.y = y;
+    }
+
+    public Integer getgridX() {
+        return gridX;
+    }
+
+    public void setgridX(Integer gridX) {
+        this.gridX = gridX;
+    }
+
+    public Integer getgridY() {
+        return gridY;
+    }
+
+    public void setgridY(Integer gridY) {
+        this.gridY = gridY;
     }
 
     public Integer getW() {

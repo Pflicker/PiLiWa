@@ -17,7 +17,7 @@ public class Marine extends Unit {
     private static Integer damage = 5;
     private static Integer damageType = 5;
     private static Integer attackspeed = 1;
-    private static Integer maxMovementSpeed = 10;
+    private static Integer maxMovementSpeed = 100;
     private static boolean flying = false;
     private static boolean attackFlying = true;
     private static boolean attackGround = true;
@@ -25,7 +25,7 @@ public class Marine extends Unit {
     private static boolean invisible = false;
 
     public Marine(int p) {
-
+        player = p;
         movementspeed = maxMovementSpeed;
         maxLife = 100;
         w = 10;
@@ -36,5 +36,6 @@ public class Marine extends Unit {
         timeSinceShot = 0;
         life = maxLife;
         healthBar = new HealthBar(x,y+h+1,w,1,life);
+        buildung = true;
     }
 }

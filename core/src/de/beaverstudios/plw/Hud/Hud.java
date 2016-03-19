@@ -52,13 +52,10 @@ public class Hud implements InputProcessor {
         return skin;
     }
 
-<<<<<<< HEAD
-=======
 
     public void dispose() {
     }
 
->>>>>>> bc32127f30a71b452acb01cef6210045168b1f66
     @Override
     public boolean keyDown(int keycode) {
         return false;
