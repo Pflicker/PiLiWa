@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 
@@ -20,6 +21,7 @@ public class Hud implements InputProcessor {
 
     public Stage hudStage;
     public Viewport hudPort;
+    private OrthographicCamera hudCam;
     private TextureAtlas hudAtlas;
     public static GameInfo gameInfo;
     public Menu menu;
@@ -28,7 +30,9 @@ public class Hud implements InputProcessor {
     public Hud() {
 
         skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+        //hudCam = new OrthographicCamera();
         hudPort = new FitViewport(PlwGame.V_WIDTH, PlwGame.V_HEIGHT, new OrthographicCamera());
+        //hudPort = new ScreenViewport(new OrthographicCamera());
         hudStage = new Stage(hudPort, GameScreen.getBatch());
 
         gameInfo = new GameInfo(skin);
@@ -48,6 +52,13 @@ public class Hud implements InputProcessor {
         return skin;
     }
 
+<<<<<<< HEAD
+=======
+
+    public void dispose() {
+    }
+
+>>>>>>> bc32127f30a71b452acb01cef6210045168b1f66
     @Override
     public boolean keyDown(int keycode) {
         return false;
