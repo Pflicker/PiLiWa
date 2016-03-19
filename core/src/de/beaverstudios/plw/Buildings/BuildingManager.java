@@ -27,6 +27,7 @@ public class BuildingManager {
         }
         for (de.beaverstudios.plw.Buildings.Building b : comBuilding){
             b.update(dt);
+
         }
         for (de.beaverstudios.plw.Buildings.Building b : playerBuildings){
             b.update(dt);

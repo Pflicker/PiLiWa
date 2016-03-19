@@ -44,9 +44,7 @@ public abstract class Unit {
     float rotate;
     HealthBar healthBar;
 
-    public void update(float dt) {
-        x = (x - movementspeed * dt);
-    }
+
     public float getSpawnPointX(int p){
         if(p == 1){
             x = (800) ;

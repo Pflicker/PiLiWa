@@ -29,24 +29,13 @@ public class UnitManager {
 
     public void update(float dt) {
 
-        for (int i = 0; i > comUnits.size(); i++) {
-            comUnits.get(i).update(dt);
-            if (comUnits.get(i).getX() < 0) {
-                comUnits.remove(i);
-            }
-        }
+
         for (Unit u : comUnits) {
-            u.update(dt);
+            u.setX((u.getX() - u.getMovementspeed() * dt));
         }
 
-        for (int i = 0; i > playerUnits.size(); i++) {
-            playerUnits.get(i).update(dt);
-            if (playerUnits.get(i).getX() < 0) {
-                playerUnits.remove(i);
-            }
-        }
         for (Unit u : playerUnits) {
-            u.update(dt);
+            u.setX((u.getX() - u.getMovementspeed() * dt));
         }
 
     }

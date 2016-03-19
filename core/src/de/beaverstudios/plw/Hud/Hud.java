@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.sun.media.jfxmediaimpl.MediaDisposer;
+
 
 import de.beaverstudios.plw.PlwGame;
 import de.beaverstudios.plw.Screens.GameScreen;
@@ -16,7 +16,7 @@ import de.beaverstudios.plw.Screens.GameScreen;
 /**
  * Created by Grass on 3/2/2016.
  */
-public class Hud implements MediaDisposer.Disposable, InputProcessor {
+public class Hud implements InputProcessor {
 
     public Stage hudStage;
     public Viewport hudPort;
@@ -46,10 +46,6 @@ public class Hud implements MediaDisposer.Disposable, InputProcessor {
 
     public static Skin getSkin() {
         return skin;
-    }
-
-    @Override
-    public void dispose() {
     }
 
     @Override

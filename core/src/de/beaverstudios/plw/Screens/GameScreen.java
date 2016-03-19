@@ -132,7 +132,6 @@ public class GameScreen implements Screen,InputProcessor {
     public void dispose() {
         map.dispose();
         renderer.dispose();
-        hud.dispose();
         batch.dispose();
     }
 
