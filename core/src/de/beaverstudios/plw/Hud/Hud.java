@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sun.media.jfxmediaimpl.MediaDisposer;
 
@@ -16,10 +17,11 @@ import de.beaverstudios.plw.Screens.GameScreen;
 /**
  * Created by Grass on 3/2/2016.
  */
-public class Hud implements MediaDisposer.Disposable, InputProcessor {
+public class Hud implements InputProcessor {
 
     public Stage hudStage;
     public Viewport hudPort;
+    private OrthographicCamera hudCam;
     private TextureAtlas hudAtlas;
     public static GameInfo gameInfo;
     public Menu menu;
@@ -28,7 +30,9 @@ public class Hud implements MediaDisposer.Disposable, InputProcessor {
     public Hud() {
 
         skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+        //hudCam = new OrthographicCamera();
         hudPort = new FitViewport(PlwGame.V_WIDTH, PlwGame.V_HEIGHT, new OrthographicCamera());
+        //hudPort = new ScreenViewport(new OrthographicCamera());
         hudStage = new Stage(hudPort, GameScreen.getBatch());
 
         gameInfo = new GameInfo(skin);
@@ -48,7 +52,7 @@ public class Hud implements MediaDisposer.Disposable, InputProcessor {
         return skin;
     }
 
-    @Override
+
     public void dispose() {
     }
 
