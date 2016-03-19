@@ -30,9 +30,8 @@ public class Hud implements InputProcessor {
     public Hud() {
 
         skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-        //hudCam = new OrthographicCamera();
-        hudPort = new FitViewport(PlwGame.V_WIDTH, PlwGame.V_HEIGHT, new OrthographicCamera());
-        //hudPort = new ScreenViewport(new OrthographicCamera());
+        hudCam = new OrthographicCamera();
+        hudPort = new FitViewport(PlwGame.V_WIDTH, PlwGame.V_HEIGHT, hudCam);
         hudStage = new Stage(hudPort, GameScreen.getBatch());
 
         gameInfo = new GameInfo(skin);

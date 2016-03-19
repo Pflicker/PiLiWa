@@ -14,11 +14,11 @@ public class UnitManager {
     private Base playerBase;
     private Base comBase;
     public static int unitsSpawned;
-    public Marine marine;
+    public static Marine ghostMarine;
 
     public UnitManager() {
 
-        marine = new Marine(1);
+        ghostMarine = new Marine(2);
 
         playerBase = new Base(1);
         comBase = new Base(0);

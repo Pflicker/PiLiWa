@@ -2,30 +2,18 @@ package de.beaverstudios.plw.Hud;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Scaling;
-
-import javax.xml.soap.Text;
 
 import de.beaverstudios.plw.Buildings.BuildingManager;
-import de.beaverstudios.plw.Screens.GameScreen;
-import de.beaverstudios.plw.TextureManager;
-import de.beaverstudios.plw.Buildings.Building;
-import de.beaverstudios.plw.Units.Marine;
 
 /**
  * Created by Grass on 3/5/2016.
  */
+
 public class DialogPlacement {
 
     public Table table;

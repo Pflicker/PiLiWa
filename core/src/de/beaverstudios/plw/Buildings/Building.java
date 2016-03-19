@@ -12,26 +12,31 @@ import de.beaverstudios.plw.Units.UnitManager;
 /**
  * Created by Grass on 3/3/2016.
  */
-public class Building {
-    private float timeSinceSpawn;
-    private int slot;
-    private Image buildingImage;
+public abstract class Building {
+    public float timeSinceSpawn;
+    public Integer slot;
+    public Image buildingImage;
+    public Integer price;
+    public String name;
+    public Integer incomeRaise;
 
     public Building(int slot) {
         this.slot = slot;
         timeSinceSpawn = 0;
         buildingImage = new Image(TextureManager.BASE);
-
     }
 
     public void update(float dt){
         timeSinceSpawn += dt;
         if(timeSinceSpawn > 5){
-            UnitManager.playerUnits.add(new Marine(1));
+            spawnUnit();
             UnitManager.unitsSpawned += 1;
             Gdx.app.log("Unit spawned", String.format("%03f", timeSinceSpawn));
             timeSinceSpawn =0;
         }
+    }
+
+    public void spawnUnit(){
     }
 
     public int getSlot() {
