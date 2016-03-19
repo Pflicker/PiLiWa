@@ -35,6 +35,7 @@ public class Marine extends Unit {
         attackGround = true;
         stealthDetect = false;
         invisible = false;
+        movementspeed = 100;
 
     }
 
