@@ -1,4 +1,4 @@
-package de.beaverstudios.plw.Buildings.Types;
+package de.beaverstudios.plw.Buildings.Races.Types;
 
 import de.beaverstudios.plw.Buildings.Building;
 import de.beaverstudios.plw.Buildings.BuildingManager;

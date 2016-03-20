@@ -5,10 +5,8 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 
-import de.beaverstudios.plw.Buildings.Types.Barracks;
+import de.beaverstudios.plw.Buildings.Races.Types.Barracks;
 import de.beaverstudios.plw.Hud.GameInfo;
-import de.beaverstudios.plw.PlwGame;
-import de.beaverstudios.plw.Units.UnitManager;
 
 public class BuildingManager {
 

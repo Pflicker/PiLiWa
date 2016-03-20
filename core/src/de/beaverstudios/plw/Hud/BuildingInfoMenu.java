@@ -84,7 +84,7 @@ public class BuildingInfoMenu {
         lbarmor= new Label(String.format("%03d",u.getArmor()),skin);
         lbspeed= new Label(Float.toString(u.getMovementspeed()),skin);
         lbdamage= new Label(String.format("%03d",u.getDamage()),skin);
-        lbdamageType= new Label(String.format("%03d",u.getDamageType()),skin);
+        //lbdamageType= new Label(String.format("%03d",u.getDamageType()),skin);
         lbattackSpeed= new Label(Float.toString(u.getAttackspeed()),skin);
 
         btnBuild.addListener(new ClickListener() {

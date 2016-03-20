@@ -3,18 +3,11 @@ package de.beaverstudios.plw.Units;
 /**
  * Created by Grass on 3/2/2016.
  */
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Pools;
 
-import de.beaverstudios.plw.Healthbar.HealthBar;
+import de.beaverstudios.plw.Units.Healthbar.HealthBar;
 import de.beaverstudios.plw.PlwGame;
-import de.beaverstudios.plw.Screens.GameScreen;
 
 public abstract class Unit {
 
@@ -44,7 +37,6 @@ public abstract class Unit {
     }
 
     Integer damage;
-    Integer damageType;
     float timeSinceAttack;
 
     public Unit getTarget() {
@@ -143,11 +135,13 @@ public abstract class Unit {
         return y;
     }
 
+    public void initShield(){
+
+    }
 
     public void draw(SpriteBatch batch) {
         batch.draw(skin,x,y,w,h);
-        healthBar.draw(batch, 1, x, y + h + 1, w, 1, life);
-
+        healthBar.draw(batch,1,x, y+h+1,w,1,life,maxLife);
     }
 
     public void dispose() {
@@ -276,17 +270,8 @@ public abstract class Unit {
         this.damage = damage;
     }
 
-    public Integer getDamageType() {
-        return damageType;
-    }
-
     public int getGridX() {
         return gridX;
-    }
-
-    public void setDamageType(Integer damageType) {
-
-        this.damageType = damageType;
     }
 
     public float getAttackspeed() {
