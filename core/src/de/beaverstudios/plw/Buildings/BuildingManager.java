@@ -45,7 +45,7 @@ public class BuildingManager {
         }
         switch(newBuildingType){
             case BARRACKS:
-                playerBuildings.add(new Barracks(buildNewSlot));
+                playerBuildings.add(new Barracks(buildNewSlot,1));
                 Gdx.app.log("BuildingManager: ", "Barracks added");
                 setBuildNew(false);
                 break;

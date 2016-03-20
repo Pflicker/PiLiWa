@@ -45,8 +45,10 @@ public class GameScreen implements Screen,InputProcessor {
     public static UnitManager um;
     public static BuildingManager bm;
     public static KI ki;
+    final PlwGame gam;
 
-    public GameScreen() {
+    public GameScreen(PlwGame game) {
+        this.gam = game;
 
         p = 1;
         startTime = System.nanoTime();

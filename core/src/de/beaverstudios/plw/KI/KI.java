@@ -10,6 +10,6 @@ import de.beaverstudios.plw.Buildings.Types.Barracks;
 public class KI {
 
     public KI(){
-        BuildingManager.comBuilding.add(new Barracks(0));
+        BuildingManager.comBuilding.add(new Barracks(0, 0));
     }
 }

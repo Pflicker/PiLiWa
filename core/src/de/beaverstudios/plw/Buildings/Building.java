@@ -14,14 +14,14 @@ import de.beaverstudios.plw.Units.UnitManager;
  */
 public abstract class Building {
     public float timeSinceSpawn;
-    public Integer slot;
     public Image buildingImage;
     public Integer price;
     public String name;
     public Integer incomeRaise;
+    public Integer player;
+    public Integer slot;
 
-    public Building(int slot) {
-        this.slot = slot;
+    public Building() {
         timeSinceSpawn = 0;
         buildingImage = new Image(TextureManager.BASE);
     }
