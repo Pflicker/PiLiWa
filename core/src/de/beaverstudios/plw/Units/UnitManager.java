@@ -17,6 +17,7 @@ public class UnitManager {
     private static Grid grid;
     public static int unitsSpawned;
     public static Marine ghostMarine;
+    public static Unit target;
 
     public UnitManager() {
 
@@ -39,6 +40,9 @@ public class UnitManager {
                 if(rangeCheck(u)) {
                     u.setX((u.getX() - u.getMovementspeed() * dt));
                 }
+                else{
+                    fight(u);
+                }
         }
 
         for (Unit u : playerUnits) {
@@ -47,23 +51,26 @@ public class UnitManager {
                     u.setX((u.getX() - u.getMovementspeed() * dt));
                 }
                 else{
-
+                    fight(u);
                 }
         }
+
+        killUnits();
 
     }
 
     public boolean rangeCheck(Unit u){
 
-        int row = 0;
-        int col = 0;
-        int size = 0;
-        int rowMax = 0;
-        int colMax = 0;
+        int row;
+        int col;
+        int size;
+        int rowMax;
+        int colMax;
+        double dist;
+        double distTarget = 10000;
+        Boolean trigger = false;
 
         Unit unit_ptr;
-
-        System.out.println(u.getPlayer());
 
         row = u.getgridX() - 1;
         col = u.getgridY() - 1;
@@ -86,35 +93,90 @@ public class UnitManager {
             colMax = u.getgridY();
         }
         while (row <= rowMax) {
-
             while (col <= colMax) {
-
+                size = grid.gridTable.get(row).get(col).size();
                 if (u.getPlayer() == 0) {
-                    size = grid.gridTable.get(row).get(col).size();
                     for (int k = 0; k < size; k++) {
                         unit_ptr = grid.gridTable.get(row).get(col).get(k);
 
                         if (unit_ptr.getPlayer() == 1) {
-                            return false;
+                            dist = java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - unit_ptr.getX(), 2 ) + java.lang.Math.pow(u.getY() - unit_ptr.getY(), 2 ));
+                            if (dist < u.getRange()) {
+                                if (dist < distTarget){
+                                    distTarget = dist;
+                                    trigger = true;
+                                    target = unit_ptr;
+                                }
+                            }
                         }
                     }
                 }
+                if (trigger){
+                    return false;
+                }
                 if (u.getPlayer() == 1){
-                    size = grid.gridTable.get(row).get(col).size();
                     for (int k = 0; k < size; k++) {
                         unit_ptr = grid.gridTable.get(row).get(col).get(k);
                         if (unit_ptr.getPlayer() == 0) {
-                            return false;
+                            dist = java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - unit_ptr.getX(), 2 ) + java.lang.Math.pow(u.getY() - unit_ptr.getY(), 2 ));
+                            if (dist < u.getRange()) {
+                                if (dist < distTarget){
+                                    distTarget = dist;
+                                    trigger = true;
+                                    target = unit_ptr;
+                                }
+                            }
+
                         }
                     }
-
                 }
+                if (trigger) {
+                    return false;
+                }/*
+                for (int k = 0; k < size; k++) {
+                    unit_ptr = grid.gridTable.get(row).get(col).get(k);
+                    dist = java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - unit_ptr.getX(), 2 ) + java.lang.Math.pow(u.getY() - unit_ptr.getY(), 2 ));
+                    if (!unit_ptr.buildung) {
+                        if (u.getX() != unit_ptr.getX()){
+                            if (dist < PlwGame.MELE_RANGE) {
+                                trigger = true;
+                            }
+                        }
+                    }
+                }*/
                 col++;
             }
             row++;
         }
 
         return true;
+    }
+
+    public void fight(Unit u) {
+        //vllt rausnehmen für performence
+        double dist = java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - target.getX(), 2 ) + java.lang.Math.pow(u.getY() - target.getY(), 2 ));
+        if (dist < u.getRange()){
+            u.timeSinceAttack += Gdx.graphics.getDeltaTime();
+            if (u.timeSinceAttack > u.getAttackspeed()) {
+                target.setLife(target.getLife() - u.getDamage());
+                u.timeSinceAttack = 0;
+                System.out.println("Live: " + target.getLife() + " " + u + " " + target);
+            }
+        }
+    }
+    public void killUnits() {
+        for (int i = 0; i < playerUnits.size(); i++) {
+            if (playerUnits.get(i).getLife() < 1){
+                playerUnits.remove(i);
+                System.out.println("PlayerUnit killed");
+            }
+        }
+        for (int i = 0; i < comUnits.size(); i++) {
+            if (comUnits.get(i).getLife() < 1){
+                comUnits.remove(i);
+                System.out.println("ComUnit killed");
+            }
+        }
     }
 
     public void render(SpriteBatch batch) {

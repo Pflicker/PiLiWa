@@ -21,13 +21,12 @@ public class Marine extends Unit {
         damage = 5;
         y = 16;
         skin = TextureManager.MARINE;
-        timeSinceShot = 0;
         life = maxLife;
         healthBar = new HealthBar(x,y+h+1,w,1,life);
-        buildung = true;
+        buildung = false;
         name = "Marine";
         armor = 1;
-        range = 5;
+        range = 50;
         damageType = 5;
         attackspeed = 1;
         flying = false;

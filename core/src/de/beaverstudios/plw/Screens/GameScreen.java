@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.beaverstudios.plw.Hud.Hud;
+import de.beaverstudios.plw.KI.KI;
 import de.beaverstudios.plw.PlwGame;
 
 import de.beaverstudios.plw.Buildings.BuildingManager;
@@ -43,6 +44,7 @@ public class GameScreen implements Screen,InputProcessor {
     public static Hud hud;
     public static UnitManager um;
     public static BuildingManager bm;
+    public static KI ki;
 
     public GameScreen() {
 
@@ -63,6 +65,7 @@ public class GameScreen implements Screen,InputProcessor {
         um = new UnitManager();
         bm = new BuildingManager();
         hud = new Hud();
+        ki = new KI();
 
 
         gameCamX = gamePort.getWorldWidth() / 2;

@@ -29,7 +29,7 @@ public class Base extends Unit {
         life = 100;
         armor = 50;
         damage = 50;
-        range = 5;
+        range = 80;
         player = p;
         stealthDetect = true;
         attackGround = true;
@@ -37,7 +37,7 @@ public class Base extends Unit {
         movementspeed = 0;
         attackspeed = 1;
         healthBar = new HealthBar(x,y+h+1,w,1,life);
-        buildung = false;
+        buildung = true;
 
         skin = TextureManager.BASE;
 

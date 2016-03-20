@@ -35,7 +35,7 @@ public abstract class Unit {
     float range;
     Integer damage;
     Integer damageType;
-    float timeSinceShot;
+    float timeSinceAttack;
     float attackspeed;
     Texture skin;
     Boolean invisible;
@@ -52,10 +52,17 @@ public abstract class Unit {
     public float getSpawnPointX(int p){
         if(p == 1){
             //x = (PlwGame.V_WIDTH-w) ;
-            x = (800) ;
+            x = (PlwGame.V_WIDTH) ;
             gridX = (int)(x/ PlwGame.V_WIDTH*PlwGame.GRID_RES);
             gridY = (int)(y/PlwGame.V_HEIGHT*PlwGame.GRID_RES);
             System.out.println("test:              " + gridX + "  " + gridY + "  " + p);
+        }
+        else if(p == 2){
+            x = 100000;
+            gridX = (int)(x/ PlwGame.V_WIDTH*PlwGame.GRID_RES);
+            gridY = (int)(y/PlwGame.V_HEIGHT*PlwGame.GRID_RES);
+            System.out.println("test:              " + gridX + "  " + gridY + "  " + p);
+
         }
         else {
             x = 0;
@@ -63,6 +70,8 @@ public abstract class Unit {
             gridY = (int)(y/PlwGame.V_HEIGHT*PlwGame.GRID_RES);
             System.out.println("test:              " + gridX + "  " + gridY + "  " + p);
         }
+
+
         return x;
     }
 
@@ -208,20 +217,25 @@ public abstract class Unit {
         return damageType;
     }
 
+    public int getGridX() {
+        return gridX;
+    }
+
     public void setDamageType(Integer damageType) {
+
         this.damageType = damageType;
-    }
-
-    public float getTimeSinceShot() {
-        return timeSinceShot;
-    }
-
-    public void setTimeSinceShot(float timeSinceShot) {
-        this.timeSinceShot = timeSinceShot;
     }
 
     public float getAttackspeed() {
         return attackspeed;
+    }
+
+    public float getTimeSinceAttack() {
+        return timeSinceAttack;
+    }
+
+    public void setTimeSinceAttack(float timeSinceAttack) {
+        this.timeSinceAttack = timeSinceAttack;
     }
 
     public void setAttackspeed(float attackspeed) {
