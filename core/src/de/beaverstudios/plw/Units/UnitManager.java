@@ -17,28 +17,33 @@ public class UnitManager {
     private static Grid grid;
     public static int unitsSpawned;
     public static Marine ghostMarine;
-    public static Unit target;
+    public static Path path;
 
     public UnitManager() {
 
         ghostMarine = new Marine(2,9);
 
         grid = new Grid();
-
+        path = new Path();
         playerUnits.add(new Base(1));
         comUnits.add(new Base(0));
     }
 
     public void update(float dt) {
 
-
-
         grid.update();
 
         for (Unit u : comUnits) {
 
                 if(rangeCheck(u)) {
-                    u.setX((u.getX() + u.getMovementspeed() * dt));
+                    if(!u.buildung) {
+                        //System.out.println(u.getX() + " " + u.getY());
+                        path.findPath(u);
+                        //System.out.println(u.getX() + " " + u.getY());
+                        u.setX((u.getX() + u.getDx() * dt));
+                        u.setY((u.getY() + u.getDy() * dt));
+                        //System.out.println(u.getX() + " " + u.getY());
+                    }
                 }
                 else{
                     fight(u);
@@ -48,7 +53,14 @@ public class UnitManager {
         for (Unit u : playerUnits) {
 
                 if(rangeCheck(u)) {
-                    u.setX((u.getX() - u.getMovementspeed() * dt));
+                    if(!u.buildung) {
+                        //System.out.println(u.getX() + " " + u.getY());
+                        path.findPath(u);
+                        //System.out.println(u.getX() + " " + u.getY());
+                        u.setX((u.getX() + u.getDx() * dt));
+                        u.setY((u.getY() + u.getDy() * dt));
+                        //System.out.println(u.getX() + " " + u.getY());
+                    }
                 }
                 else{
                     fight(u);
@@ -67,7 +79,6 @@ public class UnitManager {
         int rowMax;
         int colMax;
         double dist;
-        double distTarget = 10000;
         Boolean trigger = false;
 
         Unit unit_ptr;
@@ -104,11 +115,11 @@ public class UnitManager {
 
                                 dist = java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - unit_ptr.getX(), 2 ) + java.lang.Math.pow(u.getY() - unit_ptr.getY(), 2 ));
                                 if (dist < u.getRange()) {
-                                    target = unit_ptr;
+                                    u.setTarget(unit_ptr);
                                     trigger = true;
-                                    if (dist < distTarget) {
-                                        distTarget = dist;
-
+                                    if (dist < u.distTarget) {
+                                        u.setDistTarget((float) dist);
+                                        u.setTarget(unit_ptr);
                                     }
                                 }
                             }
@@ -125,15 +136,14 @@ public class UnitManager {
                            if (unit_ptr.getPlayer() == 0) {
                                 dist = java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - unit_ptr.getX(), 2 ) + java.lang.Math.pow(u.getY() - unit_ptr.getY(), 2 ));
                                 if (dist < u.getRange()) {
-                                    target = unit_ptr;
+                                    u.setTarget(unit_ptr);
                                     trigger = true;
-                                    if (dist < distTarget) {
-                                        distTarget = dist;
-                                        target = unit_ptr;
+                                    if (dist < u.distTarget) {
+                                        u.setDistTarget((float) dist);
+                                        u.setTarget(unit_ptr);
                                     }
                                 }
                             }
-
                         }
                     }
                 }
@@ -155,19 +165,27 @@ public class UnitManager {
             }
 
         }
+        if (u.getPlayer() == 1){
+            u.setTarget(comUnits.get(0));
+            u.setDistTarget((float) java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - u.getTarget().getX(), 2) + java.lang.Math.pow(u.getY() - u.getTarget().getY(), 2)));
 
+        }
+        if (u.getPlayer() == 0){
+            u.setTarget(playerUnits.get(0));
+            u.setDistTarget((float)java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - u.getTarget().getX(), 2) + java.lang.Math.pow(u.getY() - u.getTarget().getY(), 2)));
+        }
         return true;
     }
 
     public void fight(Unit u) {
         //vllt rausnehmen für performence
-        double dist = java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - target.getX(), 2 ) + java.lang.Math.pow(u.getY() - target.getY(), 2 ));
+        double dist = java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - u.target.getX(), 2 ) + java.lang.Math.pow(u.getY() - u.target.getY(), 2 ));
         if (dist < u.getRange()){
             u.timeSinceAttack += Gdx.graphics.getDeltaTime();
             if (u.timeSinceAttack > u.getAttackspeed()) {
-                target.setLife(target.getLife() - u.getDamage());
+                u.target.setLife(u.target.getLife() - u.getDamage());
                 u.timeSinceAttack = 0;
-                System.out.println("Live: " + target.getLife() + " " + u + " " + target);
+                System.out.println("Live: " + u.target.getLife() + " " + u + " " + u.target);
             }
         }
     }
@@ -179,11 +197,11 @@ public class UnitManager {
             }
             else if (playerUnits.get(i).getX() < 0 || playerUnits.get(i).getX() > PlwGame.V_WIDTH){
                 playerUnits.remove(i);
-                System.out.println("PlayerUnit disposed");
+                System.out.println("PlayerUnit disposed0");
             }
             else if (playerUnits.get(i).getY() < 0 || playerUnits.get(i).getY() > PlwGame.V_HEIGHT){
                 playerUnits.remove(i);
-                System.out.println("PlayerUnit disposed");
+                System.out.println("PlayerUnit disposed1");
             }
         }
         for (int i = 0; i < comUnits.size(); i++) {
@@ -193,11 +211,11 @@ public class UnitManager {
             }
             else if (comUnits.get(i).getX() < 0 || comUnits.get(i).getX() > PlwGame.V_WIDTH){
                 comUnits.remove(i);
-                System.out.println("ComUnit disposed");
+                System.out.println("ComUnit disposed0");
             }
             else if (comUnits.get(i).getY() < 0 || comUnits.get(i).getY() > PlwGame.V_HEIGHT){
                 comUnits.remove(i);
-                System.out.println("ComUnit disposed");
+                System.out.println("ComUnit disposed1");
             }
         }
     }

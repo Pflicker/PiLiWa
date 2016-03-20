@@ -24,18 +24,53 @@ public abstract class Unit {
     Integer player;
     Integer w;
     Integer h;
-    Integer dx;
-    Integer dy;
+    float dx;
+    float dy;
     Integer maxLife;
     Integer life;
+
+    public void setDx(float dx) {
+        this.dx = dx;
+    }
+
     Integer armor;
     int gridX;
     int gridY;
     float movementspeed;
     float range;
+
+    public void setDy(float dy) {
+        this.dy = dy;
+    }
+
     Integer damage;
     Integer damageType;
     float timeSinceAttack;
+
+    public Unit getTarget() {
+        return target;
+    }
+
+    public void setTarget(Unit target) {
+        this.target = target;
+    }
+
+    public float getDx() {
+        return dx;
+    }
+
+    public float getDy() {
+        return dy;
+    }
+
+    public float getDistTarget() {
+        return distTarget;
+    }
+
+    public void setDistTarget(float distTarget) {
+        this.distTarget = distTarget;
+    }
+
     float attackspeed;
     Texture skin;
     Boolean invisible;
@@ -48,7 +83,8 @@ public abstract class Unit {
     float rotate;
     HealthBar healthBar;
     int slot;
-
+    Unit target;
+    float distTarget;
 
     public float getSpawnPointX(int player, int slot) {
         float x = 300f;
@@ -110,7 +146,7 @@ public abstract class Unit {
 
     public void draw(SpriteBatch batch) {
         batch.draw(skin,x,y,w,h);
-        healthBar.draw(batch,1,x, y+h+1,w,1,life);
+        healthBar.draw(batch, 1, x, y + h + 1, w, 1, life);
 
     }
 
@@ -182,17 +218,11 @@ public abstract class Unit {
         this.h = h;
     }
 
-    public Integer getDx() {
-        return dx;
-    }
 
     public void setDx(Integer dx) {
         this.dx = dx;
     }
 
-    public Integer getDy() {
-        return dy;
-    }
 
     public void setDy(Integer dy) {
         this.dy = dy;
