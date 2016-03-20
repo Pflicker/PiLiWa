@@ -36,6 +36,7 @@ public class Marine extends Unit {
         invisible = false;
         movementspeed = 100;
 
+
     }
 
 }

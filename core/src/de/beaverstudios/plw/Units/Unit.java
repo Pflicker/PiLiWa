@@ -47,6 +47,7 @@ public abstract class Unit {
     Boolean buildung;
     float rotate;
     HealthBar healthBar;
+    int slot;
 
 
     public float getSpawnPointX(int p){

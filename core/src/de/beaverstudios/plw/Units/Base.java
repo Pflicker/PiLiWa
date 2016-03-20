@@ -39,6 +39,7 @@ public class Base extends Unit {
         healthBar = new HealthBar(x,y+h+1,w,1,life);
         buildung = true;
 
+
         skin = TextureManager.BASE;
 
     }
