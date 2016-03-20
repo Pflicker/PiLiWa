@@ -64,13 +64,13 @@ public abstract class Unit {
 
         if (player == 1) {
             if (slot == 0 || slot == 3 || slot == 6) {
-                x = 600f;
+                x = 560f;
             }
             if (slot == 1 || slot == 4 || slot == 7) {
                 x = 580f;
             }
             if (slot == 2 || slot == 5 || slot == 8) {
-                x = 560f;
+                x = 600f;
             }
         }
         gridX = (int)(x/ PlwGame.V_WIDTH*PlwGame.GRID_RES);
@@ -105,21 +105,6 @@ public abstract class Unit {
         return y;
     }
 
-
-    public float getSpawnPointX(int p){
-        if(p == 1){
-            //x = (PlwGame.V_WIDTH-w) ;
-            x = (800) ;
-            System.out.println("test:              " + gridX + "  " + gridY + "  " + p);
-        }
-        else {
-            x = 0;
-            gridX = (int)(x/ PlwGame.V_WIDTH*PlwGame.GRID_RES);
-            gridY = (int)(y/PlwGame.V_HEIGHT*PlwGame.GRID_RES);
-            System.out.println("test:              " + gridX + "  " + gridY + "  " + p);
-        }
-        return x;
-    }
 
     public void draw(SpriteBatch batch) {
         batch.draw(skin,x,y,w,h);

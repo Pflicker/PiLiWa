@@ -63,8 +63,6 @@ public class UnitManager {
 
         Unit unit_ptr;
 
-        System.out.println(u.getPlayer());
-
         row = u.getgridX() - 1;
         col = u.getgridY() - 1;
         rowMax = u.getgridX() + 1;
