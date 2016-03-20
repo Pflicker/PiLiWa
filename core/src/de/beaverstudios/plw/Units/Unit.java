@@ -50,31 +50,63 @@ public abstract class Unit {
     int slot;
 
 
-    public float getSpawnPointX(int p){
-        if(p == 1){
-            //x = (PlwGame.V_WIDTH-w) ;
-            x = (PlwGame.V_WIDTH) ;
-            gridX = (int)(x/ PlwGame.V_WIDTH*PlwGame.GRID_RES);
-            gridY = (int)(y/PlwGame.V_HEIGHT*PlwGame.GRID_RES);
-            System.out.println("test:              " + gridX + "  " + gridY + "  " + p);
-        }
-        else if(p == 2){
-            x = 100000;
-            gridX = (int)(x/ PlwGame.V_WIDTH*PlwGame.GRID_RES);
-            gridY = (int)(y/PlwGame.V_HEIGHT*PlwGame.GRID_RES);
-            System.out.println("test:              " + gridX + "  " + gridY + "  " + p);
-
-        }
-        else {
-            x = 0;
-            gridX = (int)(x/ PlwGame.V_WIDTH*PlwGame.GRID_RES);
-            gridY = (int)(y/PlwGame.V_HEIGHT*PlwGame.GRID_RES);
-            System.out.println("test:              " + gridX + "  " + gridY + "  " + p);
+    public float getSpawnPointX(int player, int slot) {
+        float x = 300f;
+        if (player == 0) {
+            if (slot == 0 || slot == 3 || slot == 6) {
+                x = 30f;
+            }
+            if (slot == 1 || slot == 4 || slot == 7) {
+                x = 50f;
+            }
+            if (slot == 2 || slot == 5 || slot == 8) {
+                x = 70f;
+            }
         }
 
-
+        if (player == 1) {
+            if (slot == 0 || slot == 3 || slot == 6) {
+                x = 560f;
+            }
+            if (slot == 1 || slot == 4 || slot == 7) {
+                x = 580f;
+            }
+            if (slot == 2 || slot == 5 || slot == 8) {
+                x = 600f;
+            }
+        }
+        gridX = (int)(x/ PlwGame.V_WIDTH*PlwGame.GRID_RES);
         return x;
     }
+
+    public float getSpawnPointY(int player, int slot){
+        float y = 0f;
+        if (player == 0) {
+            if (slot <= 2) {
+                y = (float)((PlwGame.V_HEIGHT/2) + 20);
+            }
+            if (slot > 2 && slot <= 5) {
+                y = (float)(PlwGame.V_HEIGHT/2);
+            }
+            if (slot > 5 && slot <= 8) {
+                y = (float)((PlwGame.V_HEIGHT/2) - 20);
+            }
+        }
+        if (player == 1) {
+            if (slot <= 2) {
+                y = (float)((PlwGame.V_HEIGHT/2) +20);
+            }
+            if (slot > 2 && slot <= 5) {
+                y = (float)(PlwGame.V_HEIGHT/2);
+            }
+            if (slot > 5 && slot <= 8) {
+                y = (float)((PlwGame.V_HEIGHT/2) -20);
+            }
+        }
+        gridY = (int)(y/PlwGame.V_HEIGHT*PlwGame.GRID_RES);
+        return y;
+    }
+
 
     public void draw(SpriteBatch batch) {
         batch.draw(skin,x,y,w,h);

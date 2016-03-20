@@ -8,26 +8,30 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.beaverstudios.plw.Hud.Hud;
 import de.beaverstudios.plw.KI.KI;
+import de.beaverstudios.plw.Hud.Menu;
 import de.beaverstudios.plw.PlwGame;
-
 import de.beaverstudios.plw.Buildings.BuildingManager;
-import de.beaverstudios.plw.Units.Grid;
 import de.beaverstudios.plw.Units.UnitManager;
 
 public class GameScreen implements Screen,InputProcessor {
-    public static long startTime;
-    public static long gameTime;
-    public static long gameTimeInt;
+    public static float gameTime;
+    public static int gameTimeInt;
 
     private static TmxMapLoader mapLoader;
     private static TiledMap map;
@@ -41,17 +45,27 @@ public class GameScreen implements Screen,InputProcessor {
     private static float gameCamY;
     public Integer p;
 
+    public enum STATE{
+        RUN,PAUSE
+    }
+    public static STATE state;
+
+    public static int speed;
+
     public static Hud hud;
     public static UnitManager um;
     public static BuildingManager bm;
     public static KI ki;
     final PlwGame gam;
 
+
     public GameScreen(PlwGame game) {
+
+        state = STATE.RUN;
+        speed = 0;
         this.gam = game;
 
         p = 1;
-        startTime = System.nanoTime();
         gameTimeInt = 0;
 
         // create the camera and the SpriteBatch
@@ -76,39 +90,56 @@ public class GameScreen implements Screen,InputProcessor {
 
         InputMultiplexer im = new InputMultiplexer(hud.hudStage, this);
         Gdx.input.setInputProcessor(im);
+
     }
 
 
     public void update(float dt){
-        gameTime = System.nanoTime() - startTime;
-        gameTimeInt = TimeUtils.timeSinceNanos(startTime)/1000000;
 
-        gamecam.update();
-        gamecam.position.set(gameCamX, gameCamY, 0);
-        renderer.setView(gamecam);
-        hud.update(dt);
-        bm.update(dt);
-        um.update(dt);
 
+        float deltaTime = state == STATE.PAUSE ? 0 : Gdx.graphics.getDeltaTime();
+        switch(state) {
+            case RUN: {
+                if(speed == 1) dt = dt*2;
+                gameTime += dt;
+                gameTimeInt = (int)(gameTime);
+                gamecam.update();
+                gamecam.position.set(gameCamX, gameCamY, 0);
+                renderer.setView(gamecam);
+                hud.update(dt);
+                bm.update(dt);
+                um.update(dt);
+                break;
+            }
+            case PAUSE: {
+                break;
+            }
+        }
     }
 
     @Override
-    public void render(float delta) {
-        update(delta);
+    public void render(float dt) {
+        switch(state) {
+            case RUN:
+                update(dt);
 
-        gamePort.apply();
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+                gamePort.apply();
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        renderer.render();
+                renderer.render();
 
-        batch.setProjectionMatrix(gamecam.combined);
-        batch.begin();
-        um.render(batch);
-        batch.end();
+                batch.setProjectionMatrix(gamecam.combined);
+                batch.begin();
+                um.render(batch);
+                batch.end();
 
-        batch.setProjectionMatrix(hud.hudStage.getCamera().combined);
-        hud.hudStage.draw();
-
+                batch.setProjectionMatrix(hud.hudStage.getCamera().combined);
+                hud.hudStage.draw();
+                break;
+            case PAUSE:
+               hud.hudStage.draw();
+                break;
+        }
     }
 
     @Override
@@ -128,10 +159,12 @@ public class GameScreen implements Screen,InputProcessor {
 
     @Override
     public void pause() {
+        this.state = STATE.PAUSE;
     }
 
     @Override
     public void resume() {
+        this.state = STATE.RUN;
     }
 
     @Override

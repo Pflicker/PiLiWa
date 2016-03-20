@@ -27,13 +27,7 @@ public abstract class Building {
     }
 
     public void update(float dt){
-        timeSinceSpawn += dt;
-        if(timeSinceSpawn > 5){
-            spawnUnit();
-            UnitManager.unitsSpawned += 1;
-            Gdx.app.log("Unit spawned", String.format("%03f", timeSinceSpawn));
-            timeSinceSpawn =0;
-        }
+
     }
 
     public void spawnUnit(){

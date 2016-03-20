@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import de.beaverstudios.plw.Buildings.Types.Barracks;
 import de.beaverstudios.plw.Hud.GameInfo;
+import de.beaverstudios.plw.PlwGame;
+import de.beaverstudios.plw.Units.UnitManager;
 
 public class BuildingManager {
 
@@ -16,6 +18,7 @@ public class BuildingManager {
     private static int buildNewB;
     private static int buildNewSlot;
     public static BuildingTypes newBuildingType;
+    private float timeSinceSpawn;
 
 
     public BuildingManager() {
@@ -27,12 +30,16 @@ public class BuildingManager {
         if (buildNew){
             createBuilding();
         }
-        for (de.beaverstudios.plw.Buildings.Building b : comBuilding){
-            b.update(dt);
-
-        }
-        for (de.beaverstudios.plw.Buildings.Building b : playerBuildings){
-            b.update(dt);
+        timeSinceSpawn += dt;
+        if(timeSinceSpawn > 5){
+            for (de.beaverstudios.plw.Buildings.Building b : comBuilding){
+                b.spawnUnit();
+            }
+            for (de.beaverstudios.plw.Buildings.Building b : playerBuildings) {
+                b.spawnUnit();
+            }
+            Gdx.app.log("Unit spawned", String.format("%03f", timeSinceSpawn));
+            timeSinceSpawn =0;
         }
     }
 
@@ -63,6 +70,8 @@ public class BuildingManager {
         Gdx.app.log("BuildingManager: ", "Slot " + String.format("%01d", buildNewSlot));
         Gdx.app.log("BuildingManager: ", "playerBuildingsSize " + String.format("%01d", playerBuildings.size));
     }
+
+
 
     public static ArrayList<Building> getComBuilding() {
         return comBuilding;
