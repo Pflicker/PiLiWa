@@ -39,6 +39,7 @@ public class UnitManager {
 
                 if(rangeCheck(u)) {
                     u.setX((u.getX() + u.getMovementspeed() * dt));
+
                 }
                 else{
                     fight(u);
@@ -205,12 +206,12 @@ public class UnitManager {
     public void render(SpriteBatch batch) {
         for (Unit u : comUnits) {
             batch.draw(u.getSkin(),u.getX(),u.getY(),u.getW(),u.getH());
-            u.healthBar.draw(batch, 1, u.getX(), u.getY() + u.getH() + 1, u.getW(), 1, u.getLife());
+            u.healthBar.draw(batch, 1, u.getX(), u.getY() + u.getH() + 1, u.getW(), 1, u.getLife(),u.getMaxLife());
         }
 
         for (Unit u : playerUnits) {
             batch.draw(u.getSkin(),u.getX(),u.getY(),u.getW(),u.getH());
-            u.healthBar.draw(batch, 1, u.getX(), u.getY() + u.getH() + 1, u.getW(), 1, u.getLife());
+            u.healthBar.draw(batch, 1, u.getX(), u.getY() + u.getH() + 1, u.getW(), 1, u.getLife(),u.getMaxLife());
         }
 
     }

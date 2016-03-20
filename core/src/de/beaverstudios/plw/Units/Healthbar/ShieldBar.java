@@ -1,4 +1,4 @@
-package de.beaverstudios.plw.Healthbar;
+package de.beaverstudios.plw.Units.Healthbar;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;

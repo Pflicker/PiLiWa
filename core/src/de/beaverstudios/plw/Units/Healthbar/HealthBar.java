@@ -1,4 +1,4 @@
-package de.beaverstudios.plw.Healthbar;
+package de.beaverstudios.plw.Units.Healthbar;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -18,18 +18,20 @@ public class HealthBar{
 
     private Texture healthBar;
 
-    public HealthBar(float x, float y, float width, float height, int life) {
-        createTexture((int)width, (int)height, getColor(life));
+    public HealthBar(float x, float y, float width, float height, int life, int maxlife) {
+        createTexture((int)width, (int)height, getColor(life,maxlife));
     }
 
-    public Color getColor(int life){
+    public Color getColor(int life, int maxLife){
         Color color;
         color = new Color();
-            if (life >= 50){
-               color.set(Color.GREEN);
-            } else {
-                color.set(Color.RED);
-            }
+        if (life >= (maxLife * 2 / 3)){
+            color.set(Color.GREEN);
+        } else if(life >= (maxLife *1 / 3)){
+            color.set(Color.YELLOW);
+        } else {
+            color.set(Color.RED);
+        }
         return color;
     }
 
@@ -41,11 +43,12 @@ public class HealthBar{
         pixmap.dispose();
     }
 
-    public void draw(Batch batch, float parentAlpha, float x, float y, float w, float h, int life) {
+    public void draw(Batch batch, float parentAlpha, float x, float y, float w, float h, int life, int maxLife) {
         Color ret = batch.getColor();
-        Color color = getColor(life);
+        Color color = new Color();
+        color.set(getColor(life, maxLife));
         batch.setColor(color);
-        batch.draw(healthBar, x, y, w, h);
+        batch.draw(healthBar, x, y, w*life/maxLife, h);
         batch.setColor(ret);
     }
 
