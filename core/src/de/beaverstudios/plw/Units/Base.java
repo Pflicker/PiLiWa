@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
 import de.beaverstudios.plw.Healthbar.HealthBar;
+import de.beaverstudios.plw.PlwGame;
 import de.beaverstudios.plw.TextureManager;
 
 /**
@@ -13,19 +14,20 @@ public class Base extends Unit {
 
     public Base(int p) {
 
+        w = 20;
+        h = 20;
 
         if (p == 0) {
-            getSpawnPointX(p);
+            x = 0;
             direction = false;
         } else {
-            getSpawnPointX(p);
+            x = PlwGame.V_WIDTH*0.8f - w;
             direction = true;
         }
 
 
-        y = 16;
-        w = 20;
-        h = 20;
+        y = PlwGame.V_HEIGHT/2;
+
         life = 100;
         armor = 50;
         damage = 50;

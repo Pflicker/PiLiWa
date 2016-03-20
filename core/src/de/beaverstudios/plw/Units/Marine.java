@@ -12,14 +12,14 @@ import de.beaverstudios.plw.TextureManager;
 public class Marine extends Unit {
 
 
-    public Marine(int p) {
+    public Marine(int p, int slot) {
         player = p;
         maxLife = 100;
         w = 10;
         h = 10;
-        x = getSpawnPointX(p);
+        x = getSpawnPointX(p,slot);
+        y = getSpawnPointY(p,slot);
         damage = 5;
-        y = 16;
         skin = TextureManager.MARINE;
         timeSinceShot = 0;
         life = maxLife;

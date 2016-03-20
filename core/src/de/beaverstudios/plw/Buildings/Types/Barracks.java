@@ -20,10 +20,10 @@ public class Barracks extends Building {
 
     public void spawnUnit() {
         if (player == 0) {
-            UnitManager.comUnits.add(new Marine(0));
+            UnitManager.comUnits.add(new Marine(0,slot));
         }
         if (player == 1) {
-            UnitManager.playerUnits.add(new Marine(1));
+            UnitManager.playerUnits.add(new Marine(1,slot));
         }
 
     }

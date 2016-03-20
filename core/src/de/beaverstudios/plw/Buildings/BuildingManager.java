@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import de.beaverstudios.plw.Buildings.Types.Barracks;
 import de.beaverstudios.plw.Hud.GameInfo;
+import de.beaverstudios.plw.PlwGame;
 
 public class BuildingManager {
 
@@ -63,6 +64,8 @@ public class BuildingManager {
         Gdx.app.log("BuildingManager: ", "Slot " + String.format("%01d", buildNewSlot));
         Gdx.app.log("BuildingManager: ", "playerBuildingsSize " + String.format("%01d", playerBuildings.size));
     }
+
+
 
     public static ArrayList<Building> getComBuilding() {
         return comBuilding;

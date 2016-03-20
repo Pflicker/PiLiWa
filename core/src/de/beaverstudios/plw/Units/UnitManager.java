@@ -20,7 +20,7 @@ public class UnitManager {
 
     public UnitManager() {
 
-        ghostMarine = new Marine(2);
+        ghostMarine = new Marine(2,9);
 
         grid = new Grid();
 
