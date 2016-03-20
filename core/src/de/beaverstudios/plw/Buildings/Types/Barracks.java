@@ -9,16 +9,22 @@ import de.beaverstudios.plw.Units.UnitManager;
 /**
  * Created by Grass on 3/19/2016.
  */
-public class Barracks extends Building{
+public class Barracks extends Building {
 
-    public Barracks(int slot) {
-        super(slot);
+    public Barracks(int slot, int player) {
+        this.slot = slot;
+        this.player = player;
         name = "Barracks";
 
     }
 
-    public void spawnUnit(){
-        UnitManager.playerUnits.add(new Marine(1));
-    }
+    public void spawnUnit() {
+        if (player == 0) {
+            UnitManager.comUnits.add(new Marine(0));
+        }
+        if (player == 1) {
+            UnitManager.playerUnits.add(new Marine(1));
+        }
 
+    }
 }

@@ -65,7 +65,7 @@ public class BuildMenu {
     public void create(Table table) {
             table.clear();
             table.row();
-            table.add(btnReturn);
+            table.add(btnReturn).left();
             table.row();
             table.row();
             table.row();
