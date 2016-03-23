@@ -2,15 +2,15 @@ package de.beaverstudios.plw.Hud;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import de.beaverstudios.plw.Buildings.BuildingTypes;
+
+import de.beaverstudios.plw.Buildings.BuildingManager;
+import de.beaverstudios.plw.Hud.MenuStates.BaseInfo;
+import de.beaverstudios.plw.Hud.MenuStates.GeneralTechsMenu;
+import de.beaverstudios.plw.Hud.MenuStates.SpecificTechsMenu;
+import de.beaverstudios.plw.Hud.MenuStates.TechMenu;
 import de.beaverstudios.plw.PlwGame;
-import de.beaverstudios.plw.Screens.GameScreen;
+import de.beaverstudios.plw.Techs.SpecificTechs;
 
 /**
  * Created by Grass on 3/5/2016.
@@ -18,29 +18,41 @@ import de.beaverstudios.plw.Screens.GameScreen;
 public class Menu implements InputProcessor {
     public static Table table;
     private static boolean menuStateChanged;
-    private static int menuState;
-    private static GameMenu gameMenu;
-    private static BuildMenu buildMenu;
-    private static BuildingInfoMenu buildingInfoMenu;
-    private static String name;
+    private static de.beaverstudios.plw.Hud.MenuStates.GameMenu gameMenu;
+    private static de.beaverstudios.plw.Hud.MenuStates.BuildMenu buildMenu;
+    private static de.beaverstudios.plw.Hud.MenuStates.BuildingInfoMenu buildingInfoMenu;
+    private static TechMenu techMenu;
+    public static GeneralTechsMenu generalTechsMenu;
+    private static SpecificTechsMenu specificTechsMenu;
+    private static BaseInfo baseInfo;
     public static DialogPlacement dialog;
+
+    private static String name;
     private static boolean dialogPlacement;
     private static boolean ret;
+    public enum MENUSTATES{
+        GAME,BUILD,BUILDINFO,TECH,GENERALTECH,SPECIFICTECH,BASEINFO
+    }
+    public static MENUSTATES menuState;
 
     public Menu() {
-        dialogPlacement = false;
+
         table = new Table();
         table.setBounds(PlwGame.V_WIDTH * 0.8f, 0, PlwGame.V_WIDTH * 0.2f, PlwGame.V_HEIGHT);
         table.setBackground(Hud.getSkin().getDrawable("default-scroll"));
         table.top();
 
         menuStateChanged = true;
-        menuState = 0;
+        menuState = MENUSTATES.GAME;
         dialogPlacement = false;
 
-        gameMenu = new GameMenu();
-        buildMenu = new BuildMenu();
-        buildingInfoMenu = new BuildingInfoMenu();
+        gameMenu = new de.beaverstudios.plw.Hud.MenuStates.GameMenu();
+        buildMenu = new de.beaverstudios.plw.Hud.MenuStates.BuildMenu();
+        buildingInfoMenu = new de.beaverstudios.plw.Hud.MenuStates.BuildingInfoMenu();
+        techMenu = new TechMenu();
+        generalTechsMenu = new GeneralTechsMenu();
+        specificTechsMenu = new SpecificTechsMenu();
+        baseInfo = new BaseInfo();
         dialog = new DialogPlacement();
 
         gameMenu.create(table);
@@ -48,31 +60,55 @@ public class Menu implements InputProcessor {
     }
 
     public void update(float dt) {
+        if (BuildingManager.buildingTypeChanged) {
+            buildingInfoMenu.update(dt);
+            BuildingManager.buildingTypeChanged =false;
+        }
+            baseInfo.update(dt);
+
+
+
 
         if (menuStateChanged) {
             table.clear();
-            int i = getMenuState();
             Gdx.app.log("Menu", "State Changed");
-            switch (i) {
-                case 0:
+            switch (menuState) {
+                case GAME:
                     Gdx.app.log("Table created", "GameMenu");
                     gameMenu.create(table);
                     break;
-                case 1:
+                case BUILD:
                     Gdx.app.log("Table created", "BuildMenu");
                     buildMenu.create(table);
                     break;
-                case 2:
-                    Gdx.app.log("Table created", "MarineInfo");
+                case BUILDINFO:
+                    Gdx.app.log("Table created", "BuildingInfo");
                     buildingInfoMenu.create(table);
+                    break;
+                case TECH:
+                    Gdx.app.log("Table created", "TechMenu");
+                    techMenu.create(table);
+                    break;
+                case GENERALTECH:
+                    Gdx.app.log("Table created", "GeneralTechs");
+                    generalTechsMenu.create(table);
+                    break;
+                case SPECIFICTECH:
+                    Gdx.app.log("Table created", "Specific Techs");
+                    specificTechsMenu.create(table);
+                    break;
+                case BASEINFO:
+                    Gdx.app.log("Table created", "Base Info");
+                    baseInfo.create(table);
+                    break;
+
+
             }
             setMenuStateChanged(false);
         }
         if (dialogPlacement){
             dialog.table.setVisible(true);
-//            int i = getUnitCode();
             Gdx.app.log("Table created", "Dialog");
-            dialog.update(dt);
             dialogPlacement = false;
         }
         if (ret){
@@ -96,14 +132,6 @@ public class Menu implements InputProcessor {
 
     public static void setMenuStateChanged(boolean changed) {
         menuStateChanged = changed;
-    }
-
-    public int getMenuState() {
-        return menuState;
-    }
-
-    public static void setMenuState(int state) {
-        menuState = state;
     }
 
     public static String getName() {

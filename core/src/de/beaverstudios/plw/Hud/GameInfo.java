@@ -2,14 +2,16 @@ package de.beaverstudios.plw.Hud;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.TimeUtils;
 
+import de.beaverstudios.plw.Player.Game;
 import de.beaverstudios.plw.Screens.GameScreen;
+import de.beaverstudios.plw.TextureManager;
 
 /**
  * Created by Grass on 3/5/2016.
@@ -27,26 +29,19 @@ public class GameInfo {
     private Label moneyComValue;
 
     private TextButton btnState;
+    private Button btnPause;
+    private Button btnResume;
     private TextButton btnSpeed;
-
-
-    public static Integer incomeCom;
-    public static Integer incomePlayer;
-    public static Integer moneyCom;
-    public static Integer moneyPlayer;
-    public static float timeSinceInc;
 
     public Table infoTable;
 
+
     public GameInfo(Skin skin) {
-        timeSinceInc = System.nanoTime();
-        incomeCom = 5;
-        incomePlayer = 5;
-        moneyCom = 100;
-        moneyPlayer = 100;
 
         btnState = new TextButton("Pause",skin);
         btnSpeed = new TextButton("Double",skin);
+
+        btnPause = new Button(TextureManager.IMGBTNPAUSE.getDrawable());
 
         btnState.addListener(new ClickListener() {
             @Override
@@ -93,15 +88,15 @@ public class GameInfo {
         });
 
         incomeComLabel= new Label("Income Com: ", skin);
-        incomeComValue =new Label(String.format("%03d", incomeCom), skin);
+        incomeComValue =new Label(String.format("%03d", Game.player1.getIncome()), skin);
         incomePlayerLabel = new Label("Income Player: ",skin);
-        incomePlayerValue = new Label(String.format("%03d", incomePlayer),skin);
+        incomePlayerValue = new Label(String.format("%03d", Game.player2.getIncome()),skin);
         moneyComLabel = new Label("Money Com: ", skin);
-        moneyComValue = new Label(String.format("$04d", moneyCom), skin);
+        moneyComValue = new Label(String.format("$04d", Game.player1.getMoney()), skin);
         moneyPlayerLabel = new Label ("Money Player: ",skin);
-        moneyPlayerValue = new Label(String.format("%04d", moneyPlayer),skin);
+        moneyPlayerValue = new Label(String.format("%04d", Game.player1.getMoney()),skin);
         gameTimeLabel = new Label("Time: ", skin);
-        gameTimeValue = new Label(String.format("%03d", GameScreen.gameTimeInt),skin);
+        gameTimeValue = new Label(String.format("%03d", Game.getGameTimeInt()),skin);
 
         infoTable = new Table();
         infoTable.setBounds(0, 0, Gdx.graphics.getWidth() * 0.8f, Gdx.graphics.getHeight());
@@ -130,52 +125,15 @@ public class GameInfo {
 
     }
 
-    public static Integer getIncomePlayer() {
-        return incomePlayer;
-    }
-
-    public static void setIncomePlayer(Integer incomePlayer) {
-        GameInfo.incomePlayer = incomePlayer;
-    }
-
-    public static Integer getIncomeCom() {
-        return incomeCom;
-    }
-
-    public static void setIncomeCom(Integer incomeCom) {
-        GameInfo.incomeCom = incomeCom;
-    }
-
-    public static Integer getMoneyCom() {
-        return moneyCom;
-    }
-
-    public static void setMoneyCom(Integer moneyCom) {
-        GameInfo.moneyCom = moneyCom;
-    }
-
-    public static Integer getMoneyPlayer() {
-        return moneyPlayer;
-    }
-
-    public static void setMoneyPlayer(Integer moneyPlayer) {
-        GameInfo.moneyPlayer = moneyPlayer;
-    }
-
     public void update(float dt){
 
-        timeSinceInc += dt;
-        if(timeSinceInc >=  + 5) {
-            moneyCom = moneyCom + incomeCom;
-            moneyPlayer = moneyPlayer+incomePlayer;
-            timeSinceInc = 0;
-        }
-        incomeComValue.setText(String.format("%03d", incomeCom));
-        incomePlayerValue.setText(String.format("%03d", incomePlayer));
 
-        gameTimeValue.setText(String.format("%03d", GameScreen.gameTimeInt));
-        moneyPlayerValue.setText(String.format("%04d", moneyPlayer));
-        moneyComValue.setText(String.format("%04d", moneyCom));
+        incomeComValue.setText(String.format("%03d", Game.player1.getIncome()));
+        incomePlayerValue.setText(String.format("%03d", Game.player2.getIncome()));
+
+        gameTimeValue.setText(String.format("%03d", Game.getGameTimeInt()));
+        moneyPlayerValue.setText(String.format("%04d", Game.player2.getMoney()));
+        moneyComValue.setText(String.format("%04d", Game.player1.getMoney()));
 
     }
 }

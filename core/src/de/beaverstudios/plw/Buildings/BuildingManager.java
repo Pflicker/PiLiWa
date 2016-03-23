@@ -5,8 +5,9 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 
-import de.beaverstudios.plw.Buildings.Races.Types.Barracks;
+import de.beaverstudios.plw.Hud.DialogPlacement;
 import de.beaverstudios.plw.Hud.GameInfo;
+import de.beaverstudios.plw.Player.Game;
 
 public class BuildingManager {
 
@@ -16,11 +17,13 @@ public class BuildingManager {
     private static int buildNewB;
     private static int buildNewSlot;
     public static BuildingTypes newBuildingType;
+    public static boolean buildingTypeChanged;
     private float timeSinceSpawn;
 
 
     public BuildingManager() {
         newBuildingType = BuildingTypes.BARRACKS;
+        buildingTypeChanged = false;
         buildNew = false;
     }
 
@@ -50,21 +53,21 @@ public class BuildingManager {
         }
         switch(newBuildingType){
             case BARRACKS:
-                playerBuildings.add(new Barracks(buildNewSlot,1));
+                playerBuildings.add(new Barracks(buildNewSlot, 1));
                 Gdx.app.log("BuildingManager: ", "Barracks added");
                 setBuildNew(false);
                 break;
-            case BUILDING2:
-                //playerBuildings.add(new Barracks(buildNewSlot));
-                Gdx.app.log("BuildingManager: ", "Building2 added");
+            case FACTORY:
+                playerBuildings.add(new Factory(buildNewSlot, 1));
+                Gdx.app.log("BuildingManager: ", "Factory added");
                 setBuildNew(false);
                 break;
             default:
                 Gdx.app.log("BuildingManager: ", "No Building found");
         }
 
-        GameInfo.setIncomePlayer(GameInfo.getIncomePlayer() + newBuildingType.getIncomeRaise());
-        GameInfo.setMoneyPlayer(GameInfo.getMoneyPlayer() - newBuildingType.getPrice());
+        Game.player2.addIncome(newBuildingType.getIncomeRaise());
+        Game.player2.addMoney(-newBuildingType.getPrice());
         Gdx.app.log("BuildingManager: ", "Slot " + String.format("%01d", buildNewSlot));
         Gdx.app.log("BuildingManager: ", "playerBuildingsSize " + String.format("%01d", playerBuildings.size));
     }
@@ -109,6 +112,15 @@ public class BuildingManager {
 
     public static void setPlayerBuildings(Array<Building> playerBuildings) {
         BuildingManager.playerBuildings = playerBuildings;
+    }
+
+    public static boolean hasBuilding(BuildingTypes b,int player){
+        if (player == 1){
+            for(Building t : playerBuildings){
+
+            }
+        }
+        return false;
     }
 
 }

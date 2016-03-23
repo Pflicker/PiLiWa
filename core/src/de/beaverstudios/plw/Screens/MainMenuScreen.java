@@ -62,7 +62,7 @@ public class MainMenuScreen implements Screen, InputProcessor{
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     Gdx.app.log("Clicked button", "Yep, you did");
-                    game.setScreen(new de.beaverstudios.plw.Screens.GameScreen(game));
+                    game.setScreen(new de.beaverstudios.plw.Screens.GameModeScreen(game));
                     dispose();
                 }
             });

@@ -18,7 +18,7 @@ public class DialogPlacement {
 
     public Table table;
     private static Array<TextButton> build = new Array<TextButton>(true,9);
-    private static Array<Table> slotTable = new Array<Table>(true, 9);
+    public static Array<Table> slotTable = new Array<Table>(true, 9);
     private static TextButton btnBuildSlot0;
     private static TextButton btnBuildSlot1;
     private static TextButton btnBuildSlot2;
@@ -32,12 +32,14 @@ public class DialogPlacement {
     public DialogPlacement() {
 
         table = new Table();
+
         for (int i=0; i <9;i++) {
             slotTable.add(new Table());
             slotTable.get(i).setSkin(Hud.getSkin());
             slotTable.get(i).add("Empty").expandX().expandY();
             slotTable.get(i).row();
         }
+
         btnBuildSlot0 = new TextButton("Build Slot 0",Hud.getSkin());
         btnBuildSlot1 = new TextButton("Build Slot 1",Hud.getSkin());
         btnBuildSlot2 = new TextButton("Build Slot 2",Hud.getSkin());
@@ -47,8 +49,6 @@ public class DialogPlacement {
         btnBuildSlot6 = new TextButton("Build Slot 6",Hud.getSkin());
         btnBuildSlot7 = new TextButton("Build Slot 7",Hud.getSkin());
         btnBuildSlot8 = new TextButton("Build Slot 8",Hud.getSkin());
-
-
 
         table.setVisible(false);
         table.setColor(Color.GREEN);
@@ -77,7 +77,7 @@ public class DialogPlacement {
         btnBuildSlot2.addListener(new ClickListener() {
                                       @Override
                                       public void clicked(InputEvent event, float x, float y) {
-                                          Gdx.app.log("Dialog Table", "Slot 0");
+                                          Gdx.app.log("Dialog Table", "Slot 2");
                                           BuildingManager.setBuildNewSlot(2);
                                           buildGeneral();
                                       }
@@ -149,24 +149,24 @@ public class DialogPlacement {
         build.add(btnBuildSlot7);
         build.add(btnBuildSlot8);
 
+        create();
+
     }
     public void buildGeneral(){
         BuildingManager.setBuildNew(true);
         BuildingManager.setBuildNewB(1);
+        slotTable.get(BuildingManager.getBuildNewSlot()).clearChildren();
+        slotTable.get(BuildingManager.getBuildNewSlot()).setSkin(Hud.getSkin());
+        slotTable.get(BuildingManager.getBuildNewSlot()).add(BuildingManager.newBuildingType.getBuildingName()).expandX().expandY();
+        slotTable.get(BuildingManager.getBuildNewSlot()).row();
+        slotTable.get(BuildingManager.getBuildNewSlot()).add(build.get(BuildingManager.getBuildNewSlot())).expandX().expandY();
+        System.out.println(BuildingManager.getBuildNewSlot());
         Menu.setRet(true);
     }
 
     public void create(){
-        table.clearChildren();
-        for (int i = 0; i < 9;i++) {
-            for (int size = 0;BuildingManager.getPlayerBuildings().size > size ; size++) {
-                if (BuildingManager.getPlayerBuildings().get(size).getSlot() == i) {
-                    Gdx.app.log("Dialog:", "Slot = " + String.format("%01d", BuildingManager.getPlayerBuildings().get(size).getSlot()));
-                    slotTable.get(i).clearChildren();
-                    slotTable.get(i).add("Marine").expandX().expandY();
-                    slotTable.get(i).row();
-                }
-            }
+
+     for(int i = 0; i < 9;i++) {
             slotTable.get(i).add(build.get(i)).expandX().expandY();
             table.add(slotTable.get(i)).expandX().expandY();
             if (i == 2) table.row();
@@ -174,8 +174,14 @@ public class DialogPlacement {
         }
     }
 
-    public void update(float dt){
-        create();
-    }
-
 }
+     /* table.clearChildren();
+
+            for (int size = 0;BuildingManager.getPlayerBuildings().size > size ; size++) {
+                if (BuildingManager.getPlayerBuildings().get(size).getSlot() == i) {
+                   // Gdx.app.log("Dialog:", "Slot = " + String.format("%01d", BuildingManager.getPlayerBuildings().get(size).getSlot()));
+                   // slotTable.get(i).clearChildren();
+                   // slotTable.get(i).add(BuildingManager.playerBuildings.get(i).getUnitName()).expandX().expandY();
+                   // slotTable.get(i).row();
+                }
+      */

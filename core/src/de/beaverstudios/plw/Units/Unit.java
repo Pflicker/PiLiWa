@@ -4,8 +4,14 @@ package de.beaverstudios.plw.Units;
  * Created by Grass on 3/2/2016.
  */
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import de.beaverstudios.plw.TextureManager;
 import de.beaverstudios.plw.Units.Healthbar.HealthBar;
 import de.beaverstudios.plw.PlwGame;
 
@@ -29,6 +35,7 @@ public abstract class Unit {
     Integer damage;
     float timeSinceAttack;
     float attackspeed;
+    Integer value;
     Texture skin;
     Boolean invisible;
     Boolean flying;
@@ -40,6 +47,59 @@ public abstract class Unit {
     float rotate;
     HealthBar healthBar;
     int slot;
+    int        FRAME_COLS;
+    int        FRAME_ROWS;
+    Animation walkAnimation;
+    Texture walkSheet;
+    TextureRegion[] walkFrames;
+    TextureRegion currentFrame;
+    float stateTime;
+
+    public void create() {
+        life = maxLife;
+        healthBar = new HealthBar(x, y + h + 1, w, 1, life, maxLife);
+        x = getSpawnPointX(player, slot);
+        y = getSpawnPointY(player, slot);
+
+        walkSheet = skin;
+        TextureRegion[][] tmp = TextureRegion.split(this.walkSheet, this.walkSheet.getWidth()/this.FRAME_COLS, this.walkSheet.getHeight()/this.FRAME_ROWS);
+        walkFrames = new TextureRegion[this.FRAME_COLS * this.FRAME_ROWS];
+        int index = 0;
+        for (int i = 0; i < this.FRAME_ROWS; i++) {
+            for (int j = 0; j < this.FRAME_COLS; j++) {
+                this.walkFrames[index++] = tmp[i][j];
+            }
+        }
+        this.walkAnimation = new Animation(0.125f, this.walkFrames);
+        this.stateTime = 0f;
+        if (player == 0){
+            direction =false;
+        }
+        if (player == 1){
+            direction = true;
+        }
+    }
+
+    public static Object createObject(Constructor constructor,
+                                      Object[] arguments) {
+        System.out.println ("Constructor: " + constructor.toString());
+        Object object = null;
+
+        try {
+            object = constructor.newInstance(arguments);
+            System.out.println ("Object: " + object.toString());
+            return object;
+        } catch (InstantiationException e) {
+            System.out.println(e);
+        } catch (IllegalAccessException e) {
+            System.out.println(e);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e);
+        } catch (InvocationTargetException e) {
+            System.out.println(e);
+        }
+        return object;
+    }
 
     public float getSpawnPointX(int player, int slot) {
         float x = 300f;
@@ -98,18 +158,12 @@ public abstract class Unit {
         return y;
     }
 
-    public void initShield(){
-
-    }
-
-    public void draw(SpriteBatch batch) {
-        batch.draw(skin,x,y,w,h);
-        healthBar.draw(batch,1,x, y+h+1,w,1,life,maxLife);
-
-    }
-
     public void dispose() {
         this.healthBar.dispose();
+    }
+
+    public TextureRegion getCurrentFrame() {
+        return currentFrame;
     }
 
     public String getName() {
@@ -324,4 +378,7 @@ public abstract class Unit {
         this.rotate = rotate;
     }
 
+    public Integer getValue() {
+        return value;
+    }
 }

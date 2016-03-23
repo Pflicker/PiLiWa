@@ -1,13 +1,12 @@
 package de.beaverstudios.plw.Units;
 
-import de.beaverstudios.plw.Units.DamageType.Physical;
 import de.beaverstudios.plw.Units.Healthbar.HealthBar;
 import de.beaverstudios.plw.TextureManager;
 
 /**
  * Created by Grass on 3/2/2016.
  */
-public class Marine extends Unit implements Physical {
+public class Marine extends Unit {
 
 
     public Marine(int p, int slot) {
@@ -20,7 +19,7 @@ public class Marine extends Unit implements Physical {
         damage = 5;
         skin = TextureManager.MARINE;
         life = maxLife;
-        healthBar = new HealthBar(x, y + h + 1, w, 1, life, maxLife);
+        value = 1;
         buildung = false;
         name = "Marine";
         armor = 1;
@@ -31,7 +30,12 @@ public class Marine extends Unit implements Physical {
         attackGround = true;
         stealthDetect = false;
         invisible = false;
-        movementspeed = 100;
+        movementspeed = 10;
+
+        FRAME_COLS=1;
+        FRAME_ROWS=1;
+
+        create();
 
 
 

@@ -6,10 +6,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TooltipManager;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 
 import de.beaverstudios.plw.PlwGame;
 import de.beaverstudios.plw.Screens.GameScreen;
@@ -24,8 +23,9 @@ public class Hud implements InputProcessor {
     private OrthographicCamera hudCam;
     private TextureAtlas hudAtlas;
     public static GameInfo gameInfo;
-    public Menu menu;
+    public static Menu menu;
     private static Skin skin;
+    private static TooltipManager tooltipManager;
 
     public Hud() {
 
@@ -33,6 +33,8 @@ public class Hud implements InputProcessor {
         hudCam = new OrthographicCamera();
         hudPort = new FitViewport(PlwGame.V_WIDTH, PlwGame.V_HEIGHT, hudCam);
         hudStage = new Stage(hudPort, GameScreen.getBatch());
+
+        tooltipManager = new TooltipManager();
 
         gameInfo = new GameInfo(skin);
         menu = new Menu();
@@ -94,4 +96,5 @@ public class Hud implements InputProcessor {
     public boolean scrolled(int amount) {
         return false;
     }
+
 }

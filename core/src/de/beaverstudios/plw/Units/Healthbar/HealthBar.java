@@ -14,25 +14,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 /**
  * Created by Grass on 3/3/2016.
  */
-public class HealthBar{
+public class HealthBar {
 
     private Texture healthBar;
+    private Color color;
+    private Texture healthBarBackground;
 
     public HealthBar(float x, float y, float width, float height, int life, int maxlife) {
-        createTexture((int)width, (int)height, getColor(life,maxlife));
-    }
-
-    public Color getColor(int life, int maxLife){
-        Color color;
-        color = new Color();
-        if (life >= (maxLife * 2 / 3)){
-            color.set(Color.GREEN);
-        } else if(life >= (maxLife *1 / 3)){
-            color.set(Color.YELLOW);
-        } else {
-            color.set(Color.RED);
-        }
-        return color;
+        color = new Color(Color.GREEN);
+        createTexture((int) width, (int) height, color);
+        createBackgroundTexture((int) width, (int) height);
     }
 
     private void createTexture(int width, int height, Color color) {
@@ -43,16 +34,31 @@ public class HealthBar{
         pixmap.dispose();
     }
 
-    public void draw(Batch batch, float parentAlpha, float x, float y, float w, float h, int life, int maxLife) {
-        Color ret = batch.getColor();
-        Color color = new Color();
-        color.set(getColor(life, maxLife));
-        batch.setColor(color);
-        batch.draw(healthBar, x, y, w*life/maxLife, h);
-        batch.setColor(ret);
+    private void createBackgroundTexture(int width, int height) {
+        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.BLACK);
+        pixmap.fillRectangle(0, 0, width, height);
+        healthBarBackground = new Texture(pixmap);
+        pixmap.dispose();
     }
 
-    public void dispose(){
+    public void draw(Batch batch, float parentAlpha, float x, float y, float w, float h, int life, int maxLife) {
+        batch.draw(healthBarBackground, x, y, w, h);
+        if (life >= (maxLife * 2 / 3)) {
+            healthBar.dispose();
+            createTexture((int)w,(int)h, Color.GREEN);
+        } else if (life >= (maxLife * 1 / 3)) {
+            healthBar.dispose();
+            createTexture((int) w, (int) h, Color.YELLOW);
+        } else {
+            healthBar.dispose();
+            createTexture((int) w, (int) h, Color.RED);
+        }
+        batch.draw(healthBar, x, y, (float)w * (float)life/(float)maxLife, h);
+    }
+
+    public void dispose() {
         healthBar.dispose();
+        healthBarBackground.dispose();
     }
 }

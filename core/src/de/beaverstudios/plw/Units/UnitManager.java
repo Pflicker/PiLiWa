@@ -1,11 +1,15 @@
 package de.beaverstudios.plw.Units;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.ArrayList;
 
+import de.beaverstudios.plw.Animations.UnitValue;
+import de.beaverstudios.plw.Player.Game;
 import de.beaverstudios.plw.PlwGame;
+import de.beaverstudios.plw.Screens.GameScreen;
 
 /**
  * Created by Grass on 3/3/2016.
@@ -17,11 +21,14 @@ public class UnitManager {
     private static Grid grid;
     public static int unitsSpawned;
     public static Marine ghostMarine;
+    public static Cat ghostCat;
     public static Unit target;
+    public static ArrayList<UnitValue> unitValues = new ArrayList<UnitValue>();
 
     public UnitManager() {
 
         ghostMarine = new Marine(2,9);
+        ghostCat = new Cat(2,9);
 
         grid = new Grid();
 
@@ -30,34 +37,34 @@ public class UnitManager {
     }
 
     public void update(float dt) {
-
-
-
         grid.update();
-
         for (Unit u : comUnits) {
 
                 if(rangeCheck(u)) {
                     u.setX((u.getX() + u.getMovementspeed() * dt));
-
+                    u.stateTime += dt;
                 }
                 else{
                     fight(u);
                 }
         }
-
         for (Unit u : playerUnits) {
 
                 if(rangeCheck(u)) {
                     u.setX((u.getX() - u.getMovementspeed() * dt));
+                    u.stateTime += dt;
                 }
                 else{
                     fight(u);
                 }
         }
-
         killUnits();
-
+        for (int i = 0;unitValues.size() > i;i++){
+            unitValues.get(i).update(dt);
+            if (unitValues.get(i).getTimer() > 2f){
+                unitValues.remove(i);
+            }
+        }
     }
 
     public boolean rangeCheck(Unit u){
@@ -175,6 +182,8 @@ public class UnitManager {
     public void killUnits() {
         for (int i = 0; i < playerUnits.size(); i++) {
             if (playerUnits.get(i).getLife() < 1){
+                unitValues.add(new UnitValue(playerUnits.get(i).x+playerUnits.get(i).getW()/2,playerUnits.get(i).y+playerUnits.get(i).getH(),playerUnits.get(i).value));
+                Game.player1.addMoney(playerUnits.get(i).getValue());
                 playerUnits.remove(i);
                 System.out.println("PlayerUnit killed");
             }
@@ -187,8 +196,11 @@ public class UnitManager {
                 System.out.println("PlayerUnit disposed");
             }
         }
+
         for (int i = 0; i < comUnits.size(); i++) {
             if (comUnits.get(i).getLife() < 1) {
+                unitValues.add(new UnitValue(comUnits.get(i).x,comUnits.get(i).y+comUnits.get(i).getH()+10,comUnits.get(i).value));
+                Game.player2.addMoney(comUnits.get(i).getValue());
                 comUnits.remove(i);
                 System.out.println("ComUnit killed");
             }
@@ -205,15 +217,20 @@ public class UnitManager {
 
     public void render(SpriteBatch batch) {
         for (Unit u : comUnits) {
-            batch.draw(u.getSkin(),u.getX(),u.getY(),u.getW(),u.getH());
+            u.currentFrame = u.walkAnimation.getKeyFrame(u.stateTime, true);
+            batch.draw(u.getCurrentFrame(),u.getX(),u.getY(),u.getW(),u.getH());
             u.healthBar.draw(batch, 1, u.getX(), u.getY() + u.getH() + 1, u.getW(), 1, u.getLife(),u.getMaxLife());
         }
 
         for (Unit u : playerUnits) {
-            batch.draw(u.getSkin(),u.getX(),u.getY(),u.getW(),u.getH());
+            u.currentFrame = u.walkAnimation.getKeyFrame(u.stateTime, true);
+            if(!u.currentFrame.isFlipX()){u.currentFrame.flip(true,false);}
+            batch.draw(u.getCurrentFrame(),u.getX(),u.getY(), u.getW() / 2, u.getH() / 2, u.getW(), u.getH(), 1, 1, u.getRotate());
             u.healthBar.draw(batch, 1, u.getX(), u.getY() + u.getH() + 1, u.getW(), 1, u.getLife(),u.getMaxLife());
         }
-
+        for (int i = 0;unitValues.size() > i;i++){
+            unitValues.get(i).render(batch, new BitmapFont());
+        }
     }
 
         

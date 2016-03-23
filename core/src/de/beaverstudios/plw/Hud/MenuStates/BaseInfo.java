@@ -1,4 +1,4 @@
-package de.beaverstudios.plw.Hud;
+package de.beaverstudios.plw.Hud.MenuStates;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -9,17 +9,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-
 import de.beaverstudios.plw.Buildings.BuildingManager;
-import de.beaverstudios.plw.Screens.GameScreen;
+import de.beaverstudios.plw.Hud.GameInfo;
+import de.beaverstudios.plw.Hud.Hud;
+import de.beaverstudios.plw.Hud.Menu;
 import de.beaverstudios.plw.Units.Unit;
 import de.beaverstudios.plw.Units.UnitManager;
 
 /**
- * Created by Grass on 3/5/2016.
+ * Created by Grass on 3/20/2016.
  */
-public class BuildingInfoMenu {
-
+public class BaseInfo {
     private static Skin skin;
     private static TextButton btnBuild;
     private static TextButton btnReturn;
@@ -27,7 +27,7 @@ public class BuildingInfoMenu {
     private static Label lbBuilding;
     private static Label lbBuildingPrice;
 
-    private static Label lbmaxLife;
+    private static Label lbLife;
     private static Label lbarmor;
     private static Label lbspeed;
     private static Label lbdamage;
@@ -38,7 +38,7 @@ public class BuildingInfoMenu {
     private static Label textBuilding;
     private static Label textBuildingprice;
 
-    private static Label textmaxLife;
+    private static Label textLife;
     private static Label textarmor;
     private static Label textspeed;
     private static Label textdamage;
@@ -51,27 +51,19 @@ public class BuildingInfoMenu {
     private Unit u;
     private Image img;
 
-    public BuildingInfoMenu(){
+    public BaseInfo(){
 
         skin = Hud.getSkin();
-        switch(BuildingManager.newBuildingType){
+                u = UnitManager.playerUnits.get(0);
 
-            case BARRACKS:
-            u = UnitManager.ghostMarine;
-                break;
-        }
-
-        this.buildingName = BuildingManager.newBuildingType.getBuildingName();
-        this.unitName = BuildingManager.newBuildingType.getUnitName();
 
         btnBuild = new TextButton("Build...", Hud.getSkin());
         btnReturn = new TextButton("Return", Hud.getSkin());
         lbBuilding = new Label(buildingName, Hud.getSkin());
-        lbBuildingPrice = new Label(String.format("%03d", BuildingManager.newBuildingType.getPrice()),skin);
 
         textBuilding = new Label("Building: ",skin);
         textBuildingprice = new Label("Price: ",skin);
-        textmaxLife = new Label("Life: ",skin);
+        textLife = new Label("Life: ",skin);
         textarmor= new Label("Armor: ",skin);
         textspeed= new Label("Speed: ",skin);
         textdamage= new Label("Damage: ",skin);
@@ -80,34 +72,19 @@ public class BuildingInfoMenu {
         textspecial= new Label("Special Abilities: ",skin);
         img = new Image(u.getSkin());
 
-        lbmaxLife = new Label(String.format("%03d",u.getMaxLife()),skin);
-        lbarmor= new Label(String.format("%03d",u.getArmor()),skin);
+        lbLife = new Label(String.format("%03d",u.getLife()),skin);
+        lbarmor= new Label(String.format("%03d", u.getArmor()),skin);
         lbspeed= new Label(Float.toString(u.getMovementspeed()),skin);
         lbdamage= new Label(String.format("%03d",u.getDamage()),skin);
-        lbdamageType= new Label(String.format("%03d",u.getDamageType()),skin);
+        //lbdamageType= new Label(String.format("%03d",u.getDamageType()),skin);
         lbattackSpeed= new Label(Float.toString(u.getAttackspeed()),skin);
 
-        btnBuild.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                    switch(BuildingManager.newBuildingType){
-                        case BARRACKS:
-                            if (GameInfo.getMoneyPlayer() >= BuildingManager.newBuildingType.getPrice()) {
-                                Gdx.app.log("Clicked Button", "Build...");
-                                Menu.setDialogPlacement(true);
-                            } else {
-                                Gdx.app.log("Warning:", "Not enough Money");
-                            }
-                            break;
-                    }
-            }
-        });
 
         btnReturn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Menu.setMenuStateChanged(true);
-                Menu.setMenuState(1);
+                Menu.menuState = Menu.MENUSTATES.GAME;
                 Gdx.app.log("Button:", "Return");
                 Menu.setRet(true);
             }
@@ -127,8 +104,8 @@ public class BuildingInfoMenu {
         table.row();
         table.add(unitName).center();
         table.row();
-        table.add(textmaxLife).expandX().left();
-        table.add(lbmaxLife).expandX();
+        table.add(textLife).expandX().left();
+        table.add(lbLife).expandX();
         table.row();
         table.add(textspeed).expandX().left();
         table.add(lbspeed).expandX();
@@ -146,7 +123,10 @@ public class BuildingInfoMenu {
         table.add(lbarmor).expandX();
         table.row();
         table.add(img).center();
-        table.row();
-        table.add(btnBuild).center();
     }
+
+    public void update(float dt){
+        lbLife.setText(String.format("%03d",u.getLife()));
+    }
+
 }

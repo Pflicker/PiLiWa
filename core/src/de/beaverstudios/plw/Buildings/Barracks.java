@@ -1,4 +1,4 @@
-package de.beaverstudios.plw.Buildings.Races.Types;
+package de.beaverstudios.plw.Buildings;
 
 import de.beaverstudios.plw.Buildings.Building;
 import de.beaverstudios.plw.Buildings.BuildingManager;
@@ -14,7 +14,8 @@ public class Barracks extends Building {
     public Barracks(int slot, int player) {
         this.slot = slot;
         this.player = player;
-        name = "Barracks";
+        thisType = BuildingTypes.BARRACKS;
+        create();
 
     }
 
