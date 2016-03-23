@@ -3,11 +3,16 @@ package de.beaverstudios.plw.Units;
 /**
  * Created by Grass on 3/2/2016.
  */
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.util.ArrayList;
+
+import de.beaverstudios.plw.Screens.GameScreen;
 import de.beaverstudios.plw.Units.Healthbar.HealthBar;
 import de.beaverstudios.plw.PlwGame;
+
 
 public abstract class Unit {
 
@@ -21,6 +26,9 @@ public abstract class Unit {
     float dy;
     Integer maxLife;
     Integer life;
+    static ArrayList<Unit> NNtable = new ArrayList<Unit>();
+    static float[] vec =new float[2];
+
 
     public void setDx(float dx) {
         this.dx = dx;
@@ -74,9 +82,131 @@ public abstract class Unit {
     Boolean buildung;
     float rotate;
     HealthBar healthBar;
+
+    public boolean isFight() {
+        return fight;
+    }
+
+    public void setFight(boolean fight) {
+        this.fight = fight;
+    }
+
     int slot;
     Unit target;
     float distTarget;
+    boolean fight;
+
+
+    public void update(float dt) {
+
+
+        //if (rangeCheck(this)) {
+            if (!buildung) {
+
+                Path.findPath(this);
+                x += dx * movementspeed * dt;
+                y += dy * movementspeed * dt;
+
+            }
+            if (fight){
+                fight();
+            }
+
+        //} else {
+        //    fight();
+        //}
+    }
+
+    public boolean rangeCheck(Unit u){
+
+        int row;
+        int col;
+        int size;
+        int rowMax;
+        int colMax;
+        double dist;
+        Boolean trigger1 = false;
+        Boolean trigger2 = false;
+
+        Unit unit_ptr;
+
+        row = u.getgridX() - 1;
+        col = u.getgridY() - 1;
+        rowMax = u.getgridX() + 1;
+        colMax = u.getgridY() + 1;
+
+        if (gridX == 0){
+            row = gridX;
+        }
+
+        if (gridX == PlwGame.GRID_RES){
+            rowMax = u.gridX;
+        }
+
+        if (gridY == 0){
+            col = gridY;
+        }
+
+        if (gridY == PlwGame.GRID_RES){
+            colMax = u.getgridY();
+        }
+        for (int i = row; i < rowMax; i++) {
+            for (int j = col; j < colMax; j++) {
+
+                size = Grid.gridTable.get(i).get(j).size();
+
+                for (int k = 0; k < size; k++) {
+                    unit_ptr = Grid.gridTable.get(i).get(j).get(k);
+                    if (unit_ptr.getPlayer() != player) {
+                        dist = java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - unit_ptr.getX(), 2) + java.lang.Math.pow(u.getY() - unit_ptr.getY(), 2));
+                        if (dist < PlwGame.DET_RANGE) {
+                            u.setTarget(unit_ptr);
+                            trigger1 = true;
+                            if (dist < range) {
+                                trigger2 = true;
+                                if (dist < u.distTarget) {
+                                    distTarget = (float) dist;
+                                    target = unit_ptr;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (trigger2) {
+                return false;
+
+            }
+
+        }
+        if (!trigger1) {
+            if (u.getPlayer() == 1) {
+                u.setTarget(UnitManager.comUnits.get(0));
+                u.setDistTarget((float) java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - u.getTarget().getX(), 2) + java.lang.Math.pow(u.getY() - u.getTarget().getY(), 2)));
+
+            }
+            if (u.getPlayer() == 0) {
+                u.setTarget(UnitManager.playerUnits.get(0));
+                u.setDistTarget((float) java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - u.getTarget().getX(), 2) + java.lang.Math.pow(u.getY() - u.getTarget().getY(), 2)));
+            }
+        }
+        return true;
+    }
+
+    public void fight() {
+        //vllt rausnehmen für performence
+        double dist = java.lang.Math.sqrt(java.lang.Math.pow(x - target.x, 2 ) + java.lang.Math.pow(y - target.y, 2 ));
+        if (dist < range){
+            timeSinceAttack += Gdx.graphics.getDeltaTime();
+            if (timeSinceAttack > attackspeed) {
+                target.setLife(target.getLife() - damage);
+                timeSinceAttack = 0;
+                //System.out.println("Live: " + target.getLife() + " " + this + " " + this.target);
+            }
+        }
+    }
+
 
     public float getSpawnPointX(int player, int slot) {
         float x = 300f;

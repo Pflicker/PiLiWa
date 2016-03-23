@@ -24,7 +24,7 @@ public class Marine extends Unit implements Physical {
         buildung = false;
         name = "Marine";
         armor = 1;
-        range = 50;
+        range = 10;
         attackspeed = 1;
         flying = false;
         attackFlying = true;

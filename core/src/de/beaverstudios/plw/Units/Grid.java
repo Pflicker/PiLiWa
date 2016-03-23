@@ -11,7 +11,7 @@ import de.beaverstudios.plw.PlwGame;
  *///
 public class Grid {
 
-    ArrayList<ArrayList<ArrayList<Unit>>> gridTable = new ArrayList<ArrayList<ArrayList<Unit>>>();
+    static ArrayList<ArrayList<ArrayList<Unit>>> gridTable = new ArrayList<ArrayList<ArrayList<Unit>>>();
 
     public Grid() {
 
