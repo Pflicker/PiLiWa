@@ -13,6 +13,7 @@ public class PlwGame extends Game {
 	public static final int V_HEIGHT = 480;
 	public static final int GRID_RES = 10;
 	public static final int MELE_RANGE = 15;
+	public static final int DET_RANGE = 80;
 	public static MainMenuScreen mainMenu;
 
 

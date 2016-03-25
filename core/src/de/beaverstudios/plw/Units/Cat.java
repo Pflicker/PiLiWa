@@ -1,20 +1,24 @@
 package de.beaverstudios.plw.Units;
 
+import de.beaverstudios.plw.Player.Player;
+import de.beaverstudios.plw.Techs.Types.ArmorType;
+import de.beaverstudios.plw.Techs.Types.DamageType;
 import de.beaverstudios.plw.TextureManager;
-import de.beaverstudios.plw.Units.Healthbar.HealthBar;
 
 /**
  * Created by Grass on 3/21/2016.
  */
 public class Cat extends Unit{
 
-    public Cat(int p, int slot) {
+    public Cat(Player p, int slot) {
         name = "Cat";
         player = p;
         maxLife = 200;
         w = 20;
         h = 20;
         damage = 20;
+        damageType = DamageType.PHYSICAL;
+        armorType = ArmorType.PHYSICAL;
         skin = TextureManager.CAT;
         buildung = false;
         value = 2;

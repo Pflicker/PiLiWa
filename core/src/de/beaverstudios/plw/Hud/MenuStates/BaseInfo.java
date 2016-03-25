@@ -13,6 +13,7 @@ import de.beaverstudios.plw.Buildings.BuildingManager;
 import de.beaverstudios.plw.Hud.GameInfo;
 import de.beaverstudios.plw.Hud.Hud;
 import de.beaverstudios.plw.Hud.Menu;
+import de.beaverstudios.plw.Player.Game;
 import de.beaverstudios.plw.Units.Unit;
 import de.beaverstudios.plw.Units.UnitManager;
 
@@ -25,7 +26,6 @@ public class BaseInfo {
     private static TextButton btnReturn;
 
     private static Label lbBuilding;
-    private static Label lbBuildingPrice;
 
     private static Label lbLife;
     private static Label lbarmor;
@@ -33,7 +33,7 @@ public class BaseInfo {
     private static Label lbdamage;
     private static Label lbdamageType;
     private static Label lbattackSpeed;
-    private static Label special;
+    private static Label lbShield;
 
     private static Label textBuilding;
     private static Label textBuildingprice;
@@ -44,7 +44,7 @@ public class BaseInfo {
     private static Label textdamage;
     private static Label textdamageType;
     private static Label textattackSpeed;
-    private static Label textspecial;
+    private static Label textShield;
 
     private String buildingName;
     private String unitName;
@@ -54,7 +54,7 @@ public class BaseInfo {
     public BaseInfo(){
 
         skin = Hud.getSkin();
-                u = UnitManager.playerUnits.get(0);
+                u = Game.player2.getUnits().get(0);
 
 
         btnBuild = new TextButton("Build...", Hud.getSkin());
@@ -62,6 +62,7 @@ public class BaseInfo {
         lbBuilding = new Label(buildingName, Hud.getSkin());
 
         textBuilding = new Label("Building: ",skin);
+        textShield = new Label("Shield ", skin);
         textBuildingprice = new Label("Price: ",skin);
         textLife = new Label("Life: ",skin);
         textarmor= new Label("Armor: ",skin);
@@ -69,15 +70,15 @@ public class BaseInfo {
         textdamage= new Label("Damage: ",skin);
         textdamageType= new Label("Damage Type:",skin);
         textattackSpeed= new Label("Attackspeed: ",skin);
-        textspecial= new Label("Special Abilities: ",skin);
         img = new Image(u.getSkin());
 
-        lbLife = new Label(String.format("%03d",u.getLife()),skin);
+        lbLife = new Label(String.format("%03d", u.getLife()),skin);
         lbarmor= new Label(String.format("%03d", u.getArmor()),skin);
         lbspeed= new Label(Float.toString(u.getMovementspeed()),skin);
-        lbdamage= new Label(String.format("%03d",u.getDamage()),skin);
-        //lbdamageType= new Label(String.format("%03d",u.getDamageType()),skin);
+        lbdamage= new Label(String.format("%03d", u.getDamage()),skin);
+        lbdamageType= new Label(u.getDamageType().toString(),skin);
         lbattackSpeed= new Label(Float.toString(u.getAttackspeed()),skin);
+        lbShield = new Label(String.format("%04d", u.getShieldValue()),skin);
 
 
         btnReturn.addListener(new ClickListener() {
@@ -99,8 +100,6 @@ public class BaseInfo {
         table.row();
         table.add(lbBuilding);
         table.row();
-        table.add(textBuildingprice).expandX().left();
-        table.add(lbBuildingPrice).expandX();
         table.row();
         table.add(unitName).center();
         table.row();
@@ -122,11 +121,14 @@ public class BaseInfo {
         table.add(textarmor).expandX().left();
         table.add(lbarmor).expandX();
         table.row();
+        table.add(textShield).expandX().left();
+        table.add(lbShield).expandX();
         table.add(img).center();
     }
 
     public void update(float dt){
         lbLife.setText(String.format("%03d",u.getLife()));
+        lbShield.setText(String.format("%04d",u.getShieldValue()));
     }
 
 }

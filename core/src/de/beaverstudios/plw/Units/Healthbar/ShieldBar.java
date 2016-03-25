@@ -11,20 +11,22 @@ import com.badlogic.gdx.graphics.g2d.Batch;
  */
 public class ShieldBar {
     private Texture shieldBar;
+    private Color color;
+    private Texture shieldBarBackground;
 
-    public ShieldBar(float x, float y, float width, float height, int shield) {
-        createTexture((int)width, (int)height, getColor(shield));
+    public ShieldBar(float x, float y, float width, float height, int shieldValue, int maxShieldValue) {
+        color = new Color(Color.BLUE);
+        createTexture((int)width, (int)height, color);
+        createBackgroundTexture((int) width, (int) height);
+
     }
 
-    public Color getColor(int shield){
-        Color color;
-        color = new Color();
-        if (shield >= 50){
-            color.set(Color.BLUE);
-        } else {
-            color.set(Color.NAVY);
-        }
-        return color;
+    private void createBackgroundTexture(int width, int height) {
+        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.BLACK);
+        pixmap.fillRectangle(0, 0, width, height);
+        shieldBarBackground = new Texture(pixmap);
+        pixmap.dispose();
     }
 
     private void createTexture(int width, int height, Color color) {
@@ -35,12 +37,9 @@ public class ShieldBar {
         pixmap.dispose();
     }
 
-    public void draw(Batch batch, float parentAlpha, float x, float y, float w, float h, int life) {
-        Color ret = batch.getColor();
-        Color color = getColor(life);
-        batch.setColor(color);
-        batch.draw(shieldBar, x, y, w, h);
-        batch.setColor(ret);
+    public void draw(Batch batch, float parentAlpha, float x, float y, float w, float h, int shieldValue, int maxShieldValue) {
+        batch.draw(shieldBarBackground, x, y, w, h);
+        batch.draw(shieldBar, x, y, (float) w * (float) shieldValue/ (float) maxShieldValue, h);
     }
 
     public void dispose(){

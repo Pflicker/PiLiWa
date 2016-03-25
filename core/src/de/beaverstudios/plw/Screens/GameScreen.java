@@ -69,12 +69,12 @@ public class GameScreen implements Screen,InputProcessor {
     final PlwGame gam;
 
     boolean keyPressed;
+    public static boolean gameOver;
 
 
     public GameScreen(PlwGame game) {
 
         this.gam = game;
-        world = new Game();
 
         state = STATE.RUN;
         speed = 0;
@@ -93,11 +93,12 @@ public class GameScreen implements Screen,InputProcessor {
         textureManager = new TextureManager();
         font = new BitmapFont();
 
+        world = new Game();
+
         um = new UnitManager();
         bm = new BuildingManager();
         hud = new Hud();
         techs = new Techs();
-        ki = new KI();
 
         gameCamX = gamePort.getWorldWidth() / 2;
         gameCamY = gamePort.getWorldHeight() / 2;
@@ -109,22 +110,23 @@ public class GameScreen implements Screen,InputProcessor {
 
 
     public void update(float dt) {
-        world.update(dt);
-        goRight();
-        float deltaTime = state == STATE.PAUSE ? 0 : Gdx.graphics.getDeltaTime();
-        if (speed == 1) dt = dt * 2;
-        gamecam.update();
-        gamecam.position.set(gameCamX, gameCamY, 0);
-        renderer.setView(gamecam);
-        hud.update(dt);
-        bm.update(dt);
-        um.update(dt);
-        if (UnitManager.comUnits.get(0).getLife() < 1) {
-            System.out.println("Player2 Wins");
-        }
-        if (UnitManager.playerUnits.get(0).getLife() < 1) {
-        }
 
+            world.update(dt);
+            goRight();
+            float deltaTime = state == STATE.PAUSE ? 0 : Gdx.graphics.getDeltaTime();
+            if (speed == 1) dt = dt * 2;
+            gamecam.update();
+            gamecam.position.set(gameCamX, gameCamY, 0);
+            renderer.setView(gamecam);
+            hud.update(dt);
+            bm.update(dt);
+            um.update(dt);
+
+        if (gameOver) {
+            gameOver = false;
+            gam.setScreen(new de.beaverstudios.plw.Screens.GameOverScreen(gam));
+           // dispose(); Fehler
+        }
 
     }
     @Override
@@ -167,12 +169,12 @@ public class GameScreen implements Screen,InputProcessor {
 
     @Override
     public void pause() {
-        this.state = STATE.PAUSE;
+        state = STATE.PAUSE;
     }
 
     @Override
     public void resume() {
-        this.state = STATE.RUN;
+        state = STATE.RUN;
     }
 
     @Override

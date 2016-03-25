@@ -55,6 +55,7 @@ public class TechMenu {
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.log("Clicked Button", "Specific Techs");
                 Menu.setMenuStateChanged(true);
+                Menu.specificTechsMenu.update(Menu.table);
                 Menu.menuState = Menu.MENUSTATES.SPECIFICTECH;
             }
         });

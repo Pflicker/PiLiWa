@@ -3,6 +3,8 @@ package de.beaverstudios.plw.Buildings;
 import de.beaverstudios.plw.Buildings.Building;
 import de.beaverstudios.plw.Buildings.BuildingManager;
 import de.beaverstudios.plw.Interfaces.Buyable;
+import de.beaverstudios.plw.Player.Game;
+import de.beaverstudios.plw.Player.Player;
 import de.beaverstudios.plw.Units.Marine;
 import de.beaverstudios.plw.Units.UnitManager;
 
@@ -11,7 +13,7 @@ import de.beaverstudios.plw.Units.UnitManager;
  */
 public class Barracks extends Building {
 
-    public Barracks(int slot, int player) {
+    public Barracks(int slot, Player player) {
         this.slot = slot;
         this.player = player;
         thisType = BuildingTypes.BARRACKS;
@@ -20,12 +22,6 @@ public class Barracks extends Building {
     }
 
     public void spawnUnit() {
-        if (player == 0) {
-            UnitManager.comUnits.add(new Marine(0,slot));
-        }
-        if (player == 1) {
-            UnitManager.playerUnits.add(new Marine(1,slot));
-        }
-
+        player.getUnits().add(new Marine(player,slot));
     }
 }

@@ -60,7 +60,7 @@ public class BuildingInfoMenu {
     public BuildingInfoMenu(){
 
         skin = Hud.getSkin();
-        switch(BuildingManager.newBuildingType){
+        switch(BuildingManager.getNewBuildingType()){
             case BARRACKS:
             u = UnitManager.ghostMarine;
                 break;
@@ -68,15 +68,15 @@ public class BuildingInfoMenu {
                 u = UnitManager.ghostCat;
         }
 
-        this.buildingName = BuildingManager.newBuildingType.getBuildingName();
+        this.buildingName = BuildingManager.getNewBuildingType().getBuildingName();
         System.out.println(this.buildingName);
-        this.unitName = BuildingManager.newBuildingType.getUnitName();
+        this.unitName = BuildingManager.getNewBuildingType().getUnitName();
 
         btnBuild = new TextButton("Build...", Hud.getSkin());
         btnReturn = new TextButton("Return", Hud.getSkin());
         lbBuilding = new Label(this.buildingName, Hud.getSkin());
-        lbBuildingPrice = new Label(String.format("%03d", BuildingManager.newBuildingType.getPrice()),skin);
-        lbUnitName = new Label(BuildingManager.newBuildingType.getUnitName(),skin);
+        lbBuildingPrice = new Label(String.format("%03d", BuildingManager.getNewBuildingType().getPrice()),skin);
+        lbUnitName = new Label(BuildingManager.getNewBuildingType().getUnitName(),skin);
 
         textBuilding = new Label("Building: ",skin);
         textBuildingprice = new Label("Price: ",skin);
@@ -99,9 +99,9 @@ public class BuildingInfoMenu {
         btnBuild.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                    switch(BuildingManager.newBuildingType){
+                    switch(BuildingManager.getNewBuildingType()){
                         case BARRACKS:
-                            if (Game.player2.getMoney() >= BuildingManager.newBuildingType.getPrice()) {
+                            if (Game.player2.getMoney() >= BuildingManager.getNewBuildingType().getPrice()) {
                                 Gdx.app.log("Clicked Button", "Build...");
                                 Menu.setDialogPlacement(true);
                             } else {
@@ -109,9 +109,9 @@ public class BuildingInfoMenu {
                             }
                             break;
                         case FACTORY:
-                            if (Game.player2.getMoney() >= BuildingManager.newBuildingType.getPrice()) {
+                            if (Game.player2.getMoney() >= BuildingManager.getNewBuildingType().getPrice()) {
                                 Gdx.app.log("Clicked Button", "Build...");
-                                System.out.println(BuildingManager.newBuildingType);
+                                System.out.println(BuildingManager.getNewBuildingType());
                                 Menu.setDialogPlacement(true);
                             } else {
                                 Gdx.app.log("Warning:", "Not enough Money");
@@ -133,22 +133,22 @@ public class BuildingInfoMenu {
     }
 
     public void update(float dt){
-        switch(BuildingManager.newBuildingType){
+        switch(BuildingManager.getNewBuildingType()){
             case BARRACKS:
                 u = UnitManager.ghostMarine;
                 System.out.println("Marine now");
-                BuildingManager.buildingTypeChanged = false;
+                BuildingManager.setBuildingTypeChanged(false);
                 break;
             case FACTORY:
                 u = UnitManager.ghostCat;
                 System.out.println("Cat now");
-                BuildingManager.buildingTypeChanged = false;
+                BuildingManager.setBuildingTypeChanged(false);
                 break;
         }
 
-        lbBuilding.setText(BuildingManager.newBuildingType.getBuildingName());
-        lbBuildingPrice.setText(String.format("%03d", BuildingManager.newBuildingType.getPrice()));
-        lbUnitName.setText(BuildingManager.newBuildingType.getUnitName());
+        lbBuilding.setText(BuildingManager.getNewBuildingType().getBuildingName());
+        lbBuildingPrice.setText(String.format("%03d", BuildingManager.getNewBuildingType().getPrice()));
+        lbUnitName.setText(BuildingManager.getNewBuildingType().getUnitName());
         lbmaxLife.setText(String.format("%03d", u.getLife()));
         lbspeed.setText(Float.toString(u.getMovementspeed()));
         lbdamage.setText(String.format("%03d", u.getDamage()));

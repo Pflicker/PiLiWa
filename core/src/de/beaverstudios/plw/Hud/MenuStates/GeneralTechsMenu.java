@@ -79,6 +79,32 @@ public class GeneralTechsMenu {
                 Gdx.app.log("Clicked Button", lbTechs.get(i).getName());
                 if (Game.player2.getMoney() >= generalTech.getPrice()) {
                     Game.player2.addGeneralTech(generalTech);
+                    if(generalTech.getDamageType() != null){
+                    switch (generalTech.getDamageType()) {
+                        case PHYSICAL:
+                            Game.player2.addPhysicalDamage();
+                            break;
+                        case ELEMENTAL:
+                            Game.player2.addElementalDamage();
+                            break;
+                        case ENERGY:
+                            Game.player2.addEnergyDamage();
+                            break;
+                    }
+                    }
+                    if(generalTech.getArmorType() != null){
+                        switch (generalTech.getArmorType()){
+                            case PHYSICAL:
+                                Game.player2.addPhysicalArmor();
+                                break;
+                            case SHIELD:
+                                Game.player2.addShieldArmor();
+                                break;
+                            case ANGSTROM:
+                                Game.player2.addAngstromArmor();
+                                break;
+                        }
+                    }
                     Game.player2.addMoney(-generalTech.getPrice());
                     Hud.menu.generalTechsMenu.update(Menu.table);
                 } else {

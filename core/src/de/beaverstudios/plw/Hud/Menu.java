@@ -23,7 +23,7 @@ public class Menu implements InputProcessor {
     private static de.beaverstudios.plw.Hud.MenuStates.BuildingInfoMenu buildingInfoMenu;
     private static TechMenu techMenu;
     public static GeneralTechsMenu generalTechsMenu;
-    private static SpecificTechsMenu specificTechsMenu;
+    public static SpecificTechsMenu specificTechsMenu;
     private static BaseInfo baseInfo;
     public static DialogPlacement dialog;
 
@@ -60,9 +60,9 @@ public class Menu implements InputProcessor {
     }
 
     public void update(float dt) {
-        if (BuildingManager.buildingTypeChanged) {
+        if (BuildingManager.isBuildingTypeChanged()) {
             buildingInfoMenu.update(dt);
-            BuildingManager.buildingTypeChanged =false;
+            BuildingManager.setBuildingTypeChanged(false);
         }
             baseInfo.update(dt);
 

@@ -5,28 +5,26 @@ import java.util.ArrayList;
 import de.beaverstudios.plw.Buildings.BuildingManager;
 import de.beaverstudios.plw.Buildings.BuildingTypes;
 import de.beaverstudios.plw.Player.Game;
+import de.beaverstudios.plw.Player.Player;
 
 /**
  * Created by Grass on 3/20/2016.
  */
 public class Techs {
 
-
-    public ArrayList<SpecificTechs> checkSpecificTechsAvailability(){
+    public ArrayList<SpecificTechs> checkSpecificTechsAvailability(Player player){
         ArrayList<SpecificTechs> availableTechs = new ArrayList<SpecificTechs>();
         BuildingTypes req;
 
         for (SpecificTechs s : SpecificTechs.values()){
-            if(!Game.player2.hasSpecificTech(s)){
+            if(!player.hasSpecificTech(s)){
 
                     req = s.getRequirements();
                     // check if Player has Building
 
-                    if (BuildingManager.hasBuilding(req, 1)) {
+                    if (player.hasBuilding(req)) {
                         availableTechs.add(s);
                     }
-
-
             }
         }
 

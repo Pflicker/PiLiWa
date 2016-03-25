@@ -1,5 +1,7 @@
 package de.beaverstudios.plw.Buildings;
 
+import de.beaverstudios.plw.Player.Game;
+import de.beaverstudios.plw.Player.Player;
 import de.beaverstudios.plw.Units.Cat;
 import de.beaverstudios.plw.Units.Marine;
 import de.beaverstudios.plw.Units.UnitManager;
@@ -9,7 +11,7 @@ import de.beaverstudios.plw.Units.UnitManager;
  */
 public class Factory extends Building {
 
-    public Factory(int slot, int player) {
+    public Factory(int slot, Player player) {
         this.slot = slot;
         this.player = player;
         thisType =BuildingTypes.FACTORY;
@@ -17,14 +19,6 @@ public class Factory extends Building {
     }
 
     public void spawnUnit() {
-        if (player == 0) {
-            UnitManager.comUnits.add(new Cat(0,slot));
-            System.out.println(buildingName);
-            System.out.println(unitName);
-        }
-        if (player == 1) {
-            UnitManager.playerUnits.add(new Cat(1,slot));
-        }
-
+        player.getUnits().add(new Cat(player,slot));
     }
 }

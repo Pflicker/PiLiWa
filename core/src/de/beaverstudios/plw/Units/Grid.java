@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 
 import java.util.ArrayList;
 
+import de.beaverstudios.plw.Player.Game;
+import de.beaverstudios.plw.Player.Player;
 import de.beaverstudios.plw.PlwGame;
 
 /**
@@ -11,7 +13,7 @@ import de.beaverstudios.plw.PlwGame;
  *///
 public class Grid {
 
-    ArrayList<ArrayList<ArrayList<Unit>>> gridTable = new ArrayList<ArrayList<ArrayList<Unit>>>();
+    static ArrayList<ArrayList<ArrayList<Unit>>> gridTable = new ArrayList<ArrayList<ArrayList<Unit>>>();
 
     public Grid() {
 
@@ -19,7 +21,7 @@ public class Grid {
         create_new_grid();
     }
 
-    public void create_new_grid(){
+    public void create_new_grid() {
 
         this.gridTable.clear();
         for (int i = 0; i < PlwGame.GRID_RES; i++) {
@@ -30,7 +32,6 @@ public class Grid {
 
             }
         }
-        return;
     }
 
     public void update() {
@@ -40,35 +41,20 @@ public class Grid {
 
         create_new_grid();
 
-        for (int i = 0; i < UnitManager.playerUnits.size(); i++) {
+        for (Player p : Game.players) {
+            for (int i = 0; i < p.getUnits().size(); i++) {
 
-            x = UnitManager.playerUnits.get(i).getX();
-            y = UnitManager.playerUnits.get(i).getY();
-            if (x==800){
-                x = 799;
+                x = p.getUnits().get(i).getX();
+                y = p.getUnits().get(i).getY();
+                if (x == 800) {
+                    x = 799;
+                }
+                p.getUnits().get(i).setGridX((int) ((x) / PlwGame.V_WIDTH * PlwGame.GRID_RES));
+                p.getUnits().get(i).setGridY((int) ((y) / PlwGame.V_HEIGHT * PlwGame.GRID_RES));
+                //System.out.println("plyer: " + UnitManager.playerUnits.get(i).getPlayer() + " " + UnitManager.comUnits.get(i) + " " + x + " " + y + " " + (int) (x / (PlwGame.V_WIDTH + 1) * (PlwGame.GRID_RES + 1)) + " " + ((int) (y / (PlwGame.V_HEIGHT + 1) * PlwGame.GRID_RES)));
+                this.gridTable.get((int) (x / (PlwGame.V_WIDTH) * PlwGame.GRID_RES)).get((int) (y / (PlwGame.V_HEIGHT) * PlwGame.GRID_RES)).add(p.getUnits().get(i));
             }
-            UnitManager.playerUnits.get(i).setgridX((int) ((x) / PlwGame.V_WIDTH*PlwGame.GRID_RES));
-            UnitManager.playerUnits.get(i).setgridY((int) ((y) / PlwGame.V_HEIGHT * PlwGame.GRID_RES));
-            //System.out.println("plyer: " + UnitManager.playerUnits.get(i).getPlayer() + " " + UnitManager.comUnits.get(i) + " " + x + " " + y + " " + (int) (x / (PlwGame.V_WIDTH + 1) * (PlwGame.GRID_RES + 1)) + " " + ((int) (y / (PlwGame.V_HEIGHT + 1) * PlwGame.GRID_RES)));
-            this.gridTable.get((int)(x/ (PlwGame.V_WIDTH)*PlwGame.GRID_RES)).get((int) (y / (PlwGame.V_HEIGHT) * PlwGame.GRID_RES)).add(UnitManager.playerUnits.get(i));
-        }
-        for (int i = 0; i < UnitManager.comUnits.size(); i++) {
-
-            x = UnitManager.comUnits.get(i).getX();
-            y = UnitManager.comUnits.get(i).getY();
-            if (x==800){
-                x = 799;
-            }
-            UnitManager.comUnits.get(i).setgridX((int) ((x) / PlwGame.V_WIDTH * PlwGame.GRID_RES));
-            UnitManager.comUnits.get(i).setgridY((int) ((y) / PlwGame.V_HEIGHT * PlwGame.GRID_RES));
-            //System.out.println("plyer: " + UnitManager.comUnits.get(i).getPlayer() + " " + UnitManager.comUnits.get(i) +" " + x + " " + y + " " + (int)(x/ (PlwGame.V_WIDTH+1)*(PlwGame.GRID_RES+1)) + " " + ((int) (y / (PlwGame.V_HEIGHT + 1) * PlwGame.GRID_RES)));
-            this.gridTable.get((int) (x / (PlwGame.V_WIDTH) * (PlwGame.GRID_RES))).get((int) (y / (PlwGame.V_HEIGHT) * PlwGame.GRID_RES)).add(UnitManager.comUnits.get(i));
-            //System.out.println(UnitManager.comUnits.get(i) + " " + this.gridTable.get((int) (x / (PlwGame.V_WIDTH) * (PlwGame.GRID_RES))).get((int) (y / (PlwGame.V_HEIGHT) * PlwGame.GRID_RES)).size());
         }
 
-
-    return;
     }
-
-
 }

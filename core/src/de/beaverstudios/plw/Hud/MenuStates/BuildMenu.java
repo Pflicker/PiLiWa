@@ -20,6 +20,8 @@ import de.beaverstudios.plw.Buildings.BuildingManager;
 import de.beaverstudios.plw.Buildings.BuildingTypes;
 import de.beaverstudios.plw.Hud.Hud;
 import de.beaverstudios.plw.Hud.Menu;
+import de.beaverstudios.plw.Player.Game;
+import de.beaverstudios.plw.Player.Player;
 import de.beaverstudios.plw.Screens.GameScreen;
 import de.beaverstudios.plw.TextureManager;
 
@@ -34,7 +36,6 @@ public class BuildMenu {
     private ArrayList<Label> lbBuildings;
 
     private Skin skin;
-
 
     public BuildMenu() {
 
@@ -51,7 +52,6 @@ public class BuildMenu {
             }
 
         });
-
 
         btnBuildings = new ArrayList<Button>();
         lbBuildings = new ArrayList<Label>();
@@ -72,8 +72,9 @@ public class BuildMenu {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 Gdx.app.log("Clicked Button", lbBuildings.get(i).getName());
-                BuildingManager.newBuildingType = BuildingTypes.getNameByIndex(i);
-                BuildingManager.buildingTypeChanged = true;
+                BuildingManager.setNewBuildingType(BuildingTypes.getNameByIndex(i));
+                BuildingManager.setBuildingTypeChanged(true);
+                BuildingManager.setBuildPlayer(Game.player2);
                 Menu.setMenuStateChanged(true);
                 Menu.menuState = Menu.MENUSTATES.BUILDINFO;
             }
@@ -104,6 +105,5 @@ public class BuildMenu {
             table.add(lbBuildings.get(i)).left().expandX().padLeft(10);
         }
         table.row();
-
     }
 }

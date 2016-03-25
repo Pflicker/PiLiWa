@@ -1,5 +1,8 @@
 package de.beaverstudios.plw.Units;
 
+import de.beaverstudios.plw.Player.Game;
+import de.beaverstudios.plw.Player.Player;
+import de.beaverstudios.plw.Techs.Types.DamageType;
 import de.beaverstudios.plw.Units.Healthbar.HealthBar;
 import de.beaverstudios.plw.PlwGame;
 import de.beaverstudios.plw.TextureManager;
@@ -9,17 +12,18 @@ import de.beaverstudios.plw.TextureManager;
  */
 public class Base extends Unit {
 
-
-    public Base(int p) {
+    public Base(Player p) {
 
         w = 20;
         h = 20;
-
         maxLife = 1000;
         armor = 50;
         damage = 200;
-        range = 80;
-        player = p;
+        range = 200;
+        this.player = p;
+        damage = 100;
+        damageType = DamageType.PHYSICAL;
+        armorType = armorType.SHIELD;
         stealthDetect = true;
         attackGround = true;
         attackFlying = true;
@@ -27,24 +31,25 @@ public class Base extends Unit {
         attackspeed = 1;
         buildung = true;
         value = 20;
+        maxShieldValue = 1000;
+        shieldReloadValue = 50;
 
         skin = TextureManager.BASE;
 
         FRAME_COLS =1;
         FRAME_ROWS =1;
+
         create();
 
-        if (p == 0) {
+        if (player == Game.player1) {
             x = 0;
             direction = false;
-        } else {
+        }
+        if (player == Game.player2) {
             x = PlwGame.V_WIDTH * 0.8f - w;
             direction = true;
         }
-
-
         y = PlwGame.V_HEIGHT / 2;
-
     }
 }
 

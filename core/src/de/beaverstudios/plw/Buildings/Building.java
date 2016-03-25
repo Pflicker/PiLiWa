@@ -6,12 +6,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import java.lang.reflect.Constructor;
 
+import de.beaverstudios.plw.Player.Player;
 import de.beaverstudios.plw.TextureManager;
 import de.beaverstudios.plw.Units.Marine;
 import de.beaverstudios.plw.Units.Unit;
 import de.beaverstudios.plw.Units.UnitManager;
-
-import static de.beaverstudios.plw.Units.Unit.createObject;
 
 /**
  * Created by Grass on 3/3/2016.
@@ -21,7 +20,7 @@ public abstract class Building {
     public Integer price;
     public String buildingName;
     public Integer incomeRaise;
-    public Integer player;
+    public Player player;
     public Integer slot;
     public String unitName;
     public BuildingTypes thisType;
@@ -39,7 +38,7 @@ public abstract class Building {
         incomeRaise = thisType.getIncomeRaise();
         unitName = thisType.getUnitName();
         buildingImage = thisType.getImage();
-        unit = thisType.getUnit();
+        //unit = thisType.getUnit();
 
     }
 
@@ -51,22 +50,6 @@ public abstract class Building {
 
     }
 
-    /*public void spawnUnit(){
-        if (player == 0) {
-            Class[] intArgsClass = new Class[] {int.class, int.class};
-            Object[] intArgs = new Object[] {player, slot};
-            Constructor intArgsConstructor = null;
-            try {
-                intArgsConstructor =
-                        unitDefinition.getConstructor(intArgsClass);
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            }
-            unitDefinition = (Class) createObject(intArgsConstructor, intArgs);
-            //unit.getClass().getDeclaredConstructors(intArgs).newInstance(0, slot);
-        }
-    }*/
-
     public int getSlot() {
         return slot;
     }
@@ -77,4 +60,6 @@ public abstract class Building {
     public String getUnitName() {
         return unitName;
     }
+
+    public BuildingTypes getThisType(){ return thisType; }
 }

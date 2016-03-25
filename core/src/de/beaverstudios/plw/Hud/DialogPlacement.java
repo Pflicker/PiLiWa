@@ -157,7 +157,7 @@ public class DialogPlacement {
         BuildingManager.setBuildNewB(1);
         slotTable.get(BuildingManager.getBuildNewSlot()).clearChildren();
         slotTable.get(BuildingManager.getBuildNewSlot()).setSkin(Hud.getSkin());
-        slotTable.get(BuildingManager.getBuildNewSlot()).add(BuildingManager.newBuildingType.getBuildingName()).expandX().expandY();
+        slotTable.get(BuildingManager.getBuildNewSlot()).add(BuildingManager.getNewBuildingType().getBuildingName()).expandX().expandY();
         slotTable.get(BuildingManager.getBuildNewSlot()).row();
         slotTable.get(BuildingManager.getBuildNewSlot()).add(build.get(BuildingManager.getBuildNewSlot())).expandX().expandY();
         System.out.println(BuildingManager.getBuildNewSlot());

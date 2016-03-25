@@ -57,39 +57,46 @@ public class SpecificTechsMenu {
         lbTechs.clear();
         specificTechs.clear();
 
-        specificTechs = GameScreen.techs.checkSpecificTechsAvailability();
-        System.out.println("GeneralTechs:");
+        for(SpecificTechs s :SpecificTechs.values()){
+
+            if(!Game.player2.hasSpecificTech(s)){specificTechs.add(s);}
+        }
+        //Make Image redish if Player doesnt have building
+        //specificTechs = GameScreen.techs.checkSpecificTechsAvailability();
+
+        System.out.println("SpecificTechs :");
         System.out.println(specificTechs);
-/*
-        for (GeneralTechs g : generalTechs){
-            btnTechs.add(new Button(g.getImage().getDrawable()));
-            lbTechs.add(new Label(g.getTechName(), skin));
+
+        for (SpecificTechs s : specificTechs){
+            btnTechs.add(new Button(s.getImage().getDrawable()));
+            lbTechs.add(new Label(s.getTechName(), skin));
+            System.out.println(s);
         }
 
-        for (int i = 0; generalTechs.size() > i; i++ ) {
+        for (int i = 0; specificTechs.size() > i; i++ ) {
             generateClickListener(i);
         }
-        create(table);*/
+        create(table);
     }
-/*
+
     public void generateClickListener(final int i){
         btnTechs.get(i).setSkin(skin);
         btnTechs.get(i).addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                generalTech = generalTechs.get(i);
+                specificTech = specificTechs.get(i);
                 Gdx.app.log("Clicked Button", lbTechs.get(i).getName());
-                if (Game.player2.getMoney() >= generalTech.getPrice()) {
-                    Game.player2.addGeneralTech(generalTech);
-                    Game.player2.addMoney(-generalTech.getPrice());
-                    Hud.menu.generalTechsMenu.update(Menu.table);
+                if (Game.player2.getMoney() >= specificTech.getPrice()) {
+                    Game.player2.addSpecificTech(specificTech);
+                    Game.player2.addMoney(-specificTech.getPrice());
+                    update(Menu.table);
                 } else {
                     Gdx.app.log("Clicked Button", "Insufficient Funds");
                 }
             }
         });
     }
-*/
+
     public void create(Table table) {
         int i;
         table.clear();
