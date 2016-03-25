@@ -1,5 +1,8 @@
 package de.beaverstudios.plw.Units;
 
+import de.beaverstudios.plw.Player.Player;
+import de.beaverstudios.plw.Techs.Types.ArmorType;
+import de.beaverstudios.plw.Techs.Types.DamageType;
 import de.beaverstudios.plw.Units.Healthbar.HealthBar;
 import de.beaverstudios.plw.TextureManager;
 
@@ -9,7 +12,7 @@ import de.beaverstudios.plw.TextureManager;
 public class Marine extends Unit {
 
 
-    public Marine(int p, int slot) {
+    public Marine(Player p, int slot) {
         player = p;
         maxLife = 100;
         w = 10;
@@ -20,10 +23,11 @@ public class Marine extends Unit {
         skin = TextureManager.MARINE;
         life = maxLife;
         value = 1;
-        buildung = false;
         name = "Marine";
         armor = 1;
-        range = 50;
+        range = 10;
+        damageType = DamageType.PHYSICAL;
+        armorType = ArmorType.ANGSTROM;
         attackspeed = 1;
         flying = false;
         attackFlying = true;

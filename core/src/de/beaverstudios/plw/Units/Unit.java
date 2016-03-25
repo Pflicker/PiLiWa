@@ -3,50 +3,77 @@ package de.beaverstudios.plw.Units;
 /**
  * Created by Grass on 3/2/2016.
  */
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 
-import de.beaverstudios.plw.TextureManager;
+import de.beaverstudios.plw.Player.Game;
+import de.beaverstudios.plw.Player.Player;
+import de.beaverstudios.plw.Techs.Types.ArmorType;
+import de.beaverstudios.plw.Techs.Types.DamageType;
 import de.beaverstudios.plw.Units.Healthbar.HealthBar;
 import de.beaverstudios.plw.PlwGame;
+import de.beaverstudios.plw.Units.Healthbar.ShieldBar;
 
 public abstract class Unit {
 
     String name;
+    Player player;
+
     float x;
     float y;
-    Integer player;
+    Float dx;
+    Float dy;
+    int gridX;
+    int gridY;
     Integer w;
     Integer h;
-    Integer dx;
-    Integer dy;
+
     Integer maxLife;
     Integer life;
     Integer armor;
-    int gridX;
-    int gridY;
-    float movementspeed;
-    float range;
+    ArmorType armorType;
+    HealthBar healthBar;
+
+    ShieldBar shieldBar;
+    Integer maxShieldValue;
+    Integer shieldValue;
+    Integer shieldReloadValue;
+    float timeSinceDamageTaken;
+    float shieldReloadTimer = 2f;
+    float shieldReloadStep;
+
     Integer damage;
+    DamageType damageType;
     float timeSinceAttack;
     float attackspeed;
+    float movementspeed;
+    float range;
+    Unit target;
+    float distTarget;
+    boolean fight;
+    static ArrayList<Unit> NNtable = new ArrayList<Unit>();
+    static float[] vec =new float[2];
+
     Integer value;
     Texture skin;
-    Boolean invisible;
-    Boolean flying;
-    Boolean attackFlying;
-    Boolean attackGround;
-    Boolean stealthDetect;
+    Boolean invisible = false;
+    Boolean flying = false;
+    Boolean attackFlying = true;
+    Boolean attackGround = true;
+    Boolean stealthDetect = false;
     Boolean direction;
-    Boolean buildung;
+    Boolean buildung = false;
     float rotate;
-    HealthBar healthBar;
+
     int slot;
+
+    //Animation vars
     int        FRAME_COLS;
     int        FRAME_ROWS;
     Animation walkAnimation;
@@ -57,9 +84,17 @@ public abstract class Unit {
 
     public void create() {
         life = maxLife;
-        healthBar = new HealthBar(x, y + h + 1, w, 1, life, maxLife);
-        x = getSpawnPointX(player, slot);
-        y = getSpawnPointY(player, slot);
+        healthBar = new HealthBar(x, y + h + 1, w, 2, life, maxLife);
+
+        if(!buildung){
+            x = getSpawnPointX(player, slot);
+            y = getSpawnPointY(player, slot);
+        }
+
+        if(armorType == ArmorType.SHIELD){
+            shieldValue = maxShieldValue;
+            shieldBar = new ShieldBar(x,y+h+2,w,2,shieldValue,maxShieldValue);
+        }
 
         walkSheet = skin;
         TextureRegion[][] tmp = TextureRegion.split(this.walkSheet, this.walkSheet.getWidth()/this.FRAME_COLS, this.walkSheet.getHeight()/this.FRAME_ROWS);
@@ -72,38 +107,129 @@ public abstract class Unit {
         }
         this.walkAnimation = new Animation(0.125f, this.walkFrames);
         this.stateTime = 0f;
-        if (player == 0){
-            direction =false;
+    }
+
+    public void update(float dt) {
+        //if (rangeCheck(this)) {
+        if (armorType == ArmorType.SHIELD){
+            checkShield(dt);
         }
-        if (player == 1){
-            direction = true;
+        if (!buildung) {
+            Path.findPath(this);
+            x += dx * movementspeed * dt;
+            y += dy * movementspeed * dt;
+        }
+        if (fight){
+            fight();
+        }timeSinceDamageTaken +=dt;
+    }
+
+    public void checkShield(float dt){
+        if (timeSinceDamageTaken >= shieldReloadTimer) {
+            shieldReloadStep += dt;
+            if (shieldValue + shieldReloadValue >= maxShieldValue) {
+                shieldValue = maxShieldValue;
+                shieldReloadStep = 0;
+            } else {
+                shieldValue += shieldReloadValue;
+                System.out.println("Shield reloaded by" + shieldReloadValue);
+                shieldReloadStep = 0;
+            }
+        }
+    }
+    public boolean rangeCheck(Unit u){
+
+        int row;
+        int col;
+        int size;
+        int rowMax;
+        int colMax;
+        double dist;
+        Boolean trigger1 = false;
+        Boolean trigger2 = false;
+
+        Unit unit_ptr;
+
+        row = u.getGridX() - 1;
+        col = u.getGridY() - 1;
+        rowMax = u.getGridX() + 1;
+        colMax = u.getGridY() + 1;
+
+        if (gridX == 0){
+            row = gridX;
+        }
+
+        if (gridX == PlwGame.GRID_RES){
+            rowMax = u.gridX;
+        }
+
+        if (gridY == 0){
+            col = gridY;
+        }
+
+        if (gridY == PlwGame.GRID_RES){
+            colMax = u.getGridY();
+        }
+        for (int i = row; i < rowMax; i++) {
+            for (int j = col; j < colMax; j++) {
+
+                size = Grid.gridTable.get(i).get(j).size();
+
+                for (int k = 0; k < size; k++) {
+                    unit_ptr = Grid.gridTable.get(i).get(j).get(k);
+                    if (unit_ptr.getPlayer() != player) {
+                        dist = java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - unit_ptr.getX(), 2) + java.lang.Math.pow(u.getY() - unit_ptr.getY(), 2));
+                        if (dist < PlwGame.DET_RANGE) {
+                            u.setTarget(unit_ptr);
+                            trigger1 = true;
+                            if (dist < range) {
+                                trigger2 = true;
+                                if (dist < u.distTarget) {
+                                    distTarget = (float) dist;
+                                    target = unit_ptr;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (trigger2) {
+                return false;
+
+            }
+
+        }
+        if (!trigger1) {
+            if (u.getPlayer() == Game.player2) {
+                u.setTarget(Game.opponent(player).getUnits().get(0));
+                u.setDistTarget((float) java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - u.getTarget().getX(), 2) + java.lang.Math.pow(u.getY() - u.getTarget().getY(), 2)));
+
+            }
+            if (u.getPlayer() == Game.player1) {
+                u.setTarget(Game.opponent(player).getUnits().get(0));
+                u.setDistTarget((float) java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - u.getTarget().getX(), 2) + java.lang.Math.pow(u.getY() - u.getTarget().getY(), 2)));
+            }
+        }
+        return true;
+    }
+
+    public void fight() {
+        //vllt rausnehmen für performence
+        double dist = java.lang.Math.sqrt(java.lang.Math.pow(x - target.x, 2 ) + java.lang.Math.pow(y - target.y, 2 ));
+        if (dist < range){
+            timeSinceAttack += Gdx.graphics.getDeltaTime();
+            if (timeSinceAttack > attackspeed) {
+                target.takeDamage(damage,damageType,target.armorType,player);
+                timeSinceAttack = 0;
+                //System.out.println("Live: " + target.getLife() + " " + this + " " + this.target);
+            }
         }
     }
 
-    public static Object createObject(Constructor constructor,
-                                      Object[] arguments) {
-        System.out.println ("Constructor: " + constructor.toString());
-        Object object = null;
-
-        try {
-            object = constructor.newInstance(arguments);
-            System.out.println ("Object: " + object.toString());
-            return object;
-        } catch (InstantiationException e) {
-            System.out.println(e);
-        } catch (IllegalAccessException e) {
-            System.out.println(e);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e);
-        } catch (InvocationTargetException e) {
-            System.out.println(e);
-        }
-        return object;
-    }
-
-    public float getSpawnPointX(int player, int slot) {
+    public float getSpawnPointX(Player player, int slot) {
         float x = 300f;
-        if (player == 0) {
+        if (player == Game.player1) {
             if (slot == 0 || slot == 3 || slot == 6) {
                 x = 30f;
             }
@@ -115,7 +241,7 @@ public abstract class Unit {
             }
         }
 
-        if (player == 1) {
+        if (player == Game.player2) {
             if (slot == 0 || slot == 3 || slot == 6) {
                 x = 560f;
             }
@@ -130,9 +256,9 @@ public abstract class Unit {
         return x;
     }
 
-    public float getSpawnPointY(int player, int slot){
+    public float getSpawnPointY(Player player, int slot){
         float y = 0f;
-        if (player == 0) {
+        if (player == Game.player1) {
             if (slot <= 2) {
                 y = (float)((PlwGame.V_HEIGHT/2) + 20);
             }
@@ -143,7 +269,7 @@ public abstract class Unit {
                 y = (float)((PlwGame.V_HEIGHT/2) - 20);
             }
         }
-        if (player == 1) {
+        if (player == Game.player2) {
             if (slot <= 2) {
                 y = (float)((PlwGame.V_HEIGHT/2) +20);
             }
@@ -158,12 +284,28 @@ public abstract class Unit {
         return y;
     }
 
-    public void dispose() {
-        this.healthBar.dispose();
+    public void takeDamage(int baseDamage,DamageType damageType,ArmorType armorType,Player attackingPlayer){
+        timeSinceDamageTaken = 0;
+        int damageTaken = 0;
+        int damage = Math.round(baseDamage * DamageType.calculateDamage(damageType,armorType,attackingPlayer));
+
+        if(armorType == armorType.SHIELD){
+            if (shieldValue < damage){
+                damageTaken = shieldValue;
+                shieldValue = 0;
+                life = life - (damage - damageTaken);
+            } else {
+                shieldValue = shieldValue - damage;
+            }
+        } else {
+            life = life - damage;
+        }
     }
 
-    public TextureRegion getCurrentFrame() {
-        return currentFrame;
+    public void dispose() {
+        this.healthBar.dispose();
+        if(armorType == ArmorType.SHIELD){ this.shieldBar.dispose();}
+
     }
 
     public String getName() {
@@ -172,14 +314,6 @@ public abstract class Unit {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setPlayer(Integer player) {
-        this.player = player;
-    }
-
-    public Integer getPlayer() {
-        return player;
     }
 
     public float getX() {
@@ -198,51 +332,35 @@ public abstract class Unit {
         this.y = y;
     }
 
-    public Integer getgridX() {
-        return gridX;
+    public Player getPlayer() {
+        return player;
     }
 
-    public void setgridX(Integer gridX) {
-        this.gridX = gridX;
-    }
-
-    public Integer getgridY() {
-        return gridY;
-    }
-
-    public void setgridY(Integer gridY) {
-        this.gridY = gridY;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     public Integer getW() {
         return w;
     }
 
-    public void setW(Integer w) {
-        this.w = w;
-    }
-
     public Integer getH() {
         return h;
     }
 
-    public void setH(Integer h) {
-        this.h = h;
-    }
-
-    public Integer getDx() {
+    public Float getDx() {
         return dx;
     }
 
-    public void setDx(Integer dx) {
+    public void setDx(Float dx) {
         this.dx = dx;
     }
 
-    public Integer getDy() {
+    public Float getDy() {
         return dy;
     }
 
-    public void setDy(Integer dy) {
+    public void setDy(Float dy) {
         this.dy = dy;
     }
 
@@ -270,6 +388,22 @@ public abstract class Unit {
         this.armor = armor;
     }
 
+    public int getGridX() {
+        return gridX;
+    }
+
+    public void setGridX(int gridX) {
+        this.gridX = gridX;
+    }
+
+    public int getGridY() {
+        return gridY;
+    }
+
+    public void setGridY(int gridY) {
+        this.gridY = gridY;
+    }
+
     public float getMovementspeed() {
         return movementspeed;
     }
@@ -294,14 +428,6 @@ public abstract class Unit {
         this.damage = damage;
     }
 
-    public int getGridX() {
-        return gridX;
-    }
-
-    public float getAttackspeed() {
-        return attackspeed;
-    }
-
     public float getTimeSinceAttack() {
         return timeSinceAttack;
     }
@@ -310,8 +436,20 @@ public abstract class Unit {
         this.timeSinceAttack = timeSinceAttack;
     }
 
+    public float getAttackspeed() {
+        return attackspeed;
+    }
+
     public void setAttackspeed(float attackspeed) {
         this.attackspeed = attackspeed;
+    }
+
+    public Integer getValue() {
+        return value;
+    }
+
+    public void setValue(Integer value) {
+        this.value = value;
     }
 
     public Texture getSkin() {
@@ -370,6 +508,14 @@ public abstract class Unit {
         this.direction = direction;
     }
 
+    public Boolean getBuildung() {
+        return buildung;
+    }
+
+    public void setBuildung(Boolean buildung) {
+        this.buildung = buildung;
+    }
+
     public float getRotate() {
         return rotate;
     }
@@ -378,7 +524,167 @@ public abstract class Unit {
         this.rotate = rotate;
     }
 
-    public Integer getValue() {
-        return value;
+    public int getSlot() {
+        return slot;
+    }
+
+    public void setSlot(int slot) {
+        this.slot = slot;
+    }
+
+    public Unit getTarget() {
+        return target;
+    }
+
+    public void setTarget(Unit target) {
+        this.target = target;
+    }
+
+    public float getDistTarget() {
+        return distTarget;
+    }
+
+    public void setDistTarget(float distTarget) {
+        this.distTarget = distTarget;
+    }
+
+    public boolean isFight() {
+        return fight;
+    }
+
+    public void setFight(boolean fight) {
+        this.fight = fight;
+    }
+
+    public int getFRAME_COLS() {
+        return FRAME_COLS;
+    }
+
+    public void setFRAME_COLS(int FRAME_COLS) {
+        this.FRAME_COLS = FRAME_COLS;
+    }
+
+    public int getFRAME_ROWS() {
+        return FRAME_ROWS;
+    }
+
+    public void setFRAME_ROWS(int FRAME_ROWS) {
+        this.FRAME_ROWS = FRAME_ROWS;
+    }
+
+    public Animation getWalkAnimation() {
+        return walkAnimation;
+    }
+
+    public void setWalkAnimation(Animation walkAnimation) {
+        this.walkAnimation = walkAnimation;
+    }
+
+    public Texture getWalkSheet() {
+        return walkSheet;
+    }
+
+    public void setWalkSheet(Texture walkSheet) {
+        this.walkSheet = walkSheet;
+    }
+
+    public TextureRegion[] getWalkFrames() {
+        return walkFrames;
+    }
+
+    public void setWalkFrames(TextureRegion[] walkFrames) {
+        this.walkFrames = walkFrames;
+    }
+
+    public TextureRegion getCurrentFrame() {
+        return currentFrame;
+    }
+
+    public void setCurrentFrame(TextureRegion currentFrame) {
+        this.currentFrame = currentFrame;
+    }
+
+    public float getStateTime() {
+        return stateTime;
+    }
+
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
+    }
+
+    public static ArrayList<Unit> getNNtable() {
+        return NNtable;
+    }
+
+    public static void setNNtable(ArrayList<Unit> NNtable) {
+        Unit.NNtable = NNtable;
+    }
+
+    public static float[] getVec() {
+        return vec;
+    }
+
+    public static void setVec(float[] vec) {
+        Unit.vec = vec;
+    }
+
+    public DamageType getDamageType() {
+        return damageType;
+    }
+
+    public void setDamageType(DamageType damageType) {
+        this.damageType = damageType;
+    }
+
+    public ArmorType getArmorType() {
+        return armorType;
+    }
+
+    public void setArmorType(ArmorType armorType) {
+        this.armorType = armorType;
+    }
+
+    public ShieldBar getShieldBar() {
+        return shieldBar;
+    }
+
+    public void setShieldBar(ShieldBar shieldBar) {
+        this.shieldBar = shieldBar;
+    }
+
+    public Integer getMaxShieldValue() {
+        return maxShieldValue;
+    }
+
+    public void setMaxShieldValue(Integer maxShieldValue) {
+        this.maxShieldValue = maxShieldValue;
+    }
+
+    public Integer getShieldValue() {
+        return shieldValue;
+    }
+
+    public void setShieldValue(Integer shieldValue) {
+        this.shieldValue = shieldValue;
+    }
+
+    public Integer getShieldReloadValue() {
+        return shieldReloadValue;
+    }
+
+    public float getTimeSinceDamageTaken() {
+        return timeSinceDamageTaken;
+    }
+
+    public void setShieldReloadValue(Integer shieldReloadValue) {
+        this.shieldReloadValue = shieldReloadValue;
+    }
+
+    public void setTimeSinceDamageTaken(float timeSinceDamageTaken) {
+        this.timeSinceDamageTaken = timeSinceDamageTaken;
+    }
+
+    public void setShieldReloadTimer(Integer shieldReloadTimer) {
+        this.shieldReloadTimer = shieldReloadTimer;
     }
 }
