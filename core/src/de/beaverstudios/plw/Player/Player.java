@@ -16,8 +16,8 @@ import de.beaverstudios.plw.Units.Unit;
  */
 public class Player {
 
-    private KI ki;
     private int income;
+    private boolean com;
     private int money;
     private ArrayList<GeneralTechs> generalTechs;
     private ArrayList<SpecificTechs> specificTechs;
@@ -45,11 +45,10 @@ public class Player {
             units = new ArrayList<Unit>();
             buildings = new ArrayList<Building>();
             this.flip = flip;
-         if (computer) {
-             ki = new KI(Player .this);
 
-         }
+            this.com = computer;
     }
+
 
     public int getIncome() {
         return income;
@@ -142,14 +141,6 @@ public class Player {
         return shieldArmor;
     }
 
-    public KI getKi() {
-        return ki;
-    }
-
-    public void setKi(KI ki) {
-        this.ki = ki;
-    }
-
     public void setIncome(int income) {
         this.income = income;
     }
@@ -221,6 +212,10 @@ public class Player {
         } else {
             return false;
         }
+    }
+
+    public boolean isCom() {
+        return com;
     }
 
     public Integer getTotalToughness() {

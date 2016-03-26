@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import de.beaverstudios.plw.Buildings.BuildingManager;
+import de.beaverstudios.plw.Buildings.BuildingTypes;
 import de.beaverstudios.plw.Hud.MenuStates.BaseInfo;
 import de.beaverstudios.plw.Hud.MenuStates.GeneralTechsMenu;
 import de.beaverstudios.plw.Hud.MenuStates.SpecificTechsMenu;
@@ -27,6 +28,10 @@ public class Menu implements InputProcessor {
     private static BaseInfo baseInfo;
     public static DialogPlacement dialog;
 
+    private static BuildingTypes menuBuildingType;
+    private static boolean menuBuildingTypeChanged;
+    private static Integer menuBuildingSlot;
+
     private static String name;
     private static boolean dialogPlacement;
     private static boolean ret;
@@ -46,6 +51,9 @@ public class Menu implements InputProcessor {
         menuState = MENUSTATES.GAME;
         dialogPlacement = false;
 
+        menuBuildingType = BuildingTypes.BARRACKS;
+        menuBuildingSlot = 0;
+
         gameMenu = new de.beaverstudios.plw.Hud.MenuStates.GameMenu();
         buildMenu = new de.beaverstudios.plw.Hud.MenuStates.BuildMenu();
         buildingInfoMenu = new de.beaverstudios.plw.Hud.MenuStates.BuildingInfoMenu();
@@ -60,9 +68,9 @@ public class Menu implements InputProcessor {
     }
 
     public void update(float dt) {
-        if (BuildingManager.isBuildingTypeChanged()) {
+        if (isMenuBuildingTypeChanged()) {
             buildingInfoMenu.update(dt);
-            BuildingManager.setBuildingTypeChanged(false);
+            setMenuBuildingTypeChanged(false);
         }
             baseInfo.update(dt);
 
@@ -137,6 +145,30 @@ public class Menu implements InputProcessor {
     public static String getName() {
 
         return name;
+    }
+
+    public static BuildingTypes getMenuBuildingType() {
+        return menuBuildingType;
+    }
+
+    public static void setMenuBuildingType(BuildingTypes menuBuildingType) {
+        Menu.menuBuildingType = menuBuildingType;
+    }
+
+    public static boolean isMenuBuildingTypeChanged() {
+        return menuBuildingTypeChanged;
+    }
+
+    public static void setMenuBuildingTypeChanged(boolean menuBuildingTypeChanged) {
+        Menu.menuBuildingTypeChanged = menuBuildingTypeChanged;
+    }
+
+    public static Integer getMenuBuildingSlot() {
+        return menuBuildingSlot;
+    }
+
+    public static void setMenuBuildingSlot(Integer menuBuildingSlot) {
+        Menu.menuBuildingSlot = menuBuildingSlot;
     }
 
     public static boolean isRet() {

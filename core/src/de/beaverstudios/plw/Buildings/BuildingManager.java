@@ -12,26 +12,15 @@ import de.beaverstudios.plw.Player.Player;
 
 public class BuildingManager {
 
-    private static boolean buildNew;
-    private static int buildNewB;
-    private static int buildNewSlot;
-    private static BuildingTypes newBuildingType;
-    private static boolean buildingTypeChanged;
     private float timeSinceSpawn;
-    private static Player buildPlayer;
 
     public BuildingManager() {
-        newBuildingType = BuildingTypes.BARRACKS;
-        buildingTypeChanged = false;
-        buildNew = false;
     }
 
     public void update(float dt) {
-        if (buildNew) {
-            createBuilding();
-        }
+
         timeSinceSpawn += dt;
-        if (timeSinceSpawn > 5) {
+        if (timeSinceSpawn > 10) {
             for (Player p : Game.players) {
                 for (de.beaverstudios.plw.Buildings.Building b : p.getBuildings()) {
                     b.spawnUnit();
@@ -42,80 +31,51 @@ public class BuildingManager {
         }
     }
 
-    public void createBuilding(){
-        for (int i = 0; i < buildPlayer.getBuildings().size(); i++){
-            if(buildPlayer.getBuildings().get(i).getSlot() == buildNewSlot){
-                buildPlayer.getBuildings().remove(i);
-                Gdx.app.log("BuildingManager: ", "Building on Slot " + String.format("%01d",buildNewSlot) + " removed @ Player" + buildPlayer);
+    public static Boolean buyBuilding(BuildingTypes buildingType, Integer slot, Player p){
+
+        if (p.getMoney() >= buildingType.getPrice()){
+            createBuilding(buildingType, slot, p);
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+    public static void createBuilding(BuildingTypes buildingType, Integer slot, Player p){
+        for (int i = 0; i < p.getBuildings().size(); i++){
+            if(p.getBuildings().get(i).getSlot() == slot){
+                p.getBuildings().remove(i);
+                Gdx.app.log("BuildingManager: ", "Building on Slot " + String.format("%01d",slot) + " removed @ Player" + p);
             }
         }
-        switch(newBuildingType){
+        switch(buildingType){
             case BARRACKS:
-                buildPlayer.getBuildings().add(new Barracks(buildNewSlot, Game.player2));
+                p.getBuildings().add(new Barracks(slot, p));
                 Gdx.app.log("BuildingManager: ", "Barracks added");
-                setBuildNew(false);
                 break;
-            case FACTORY:
-                buildPlayer.getBuildings().add(new Factory(buildNewSlot, Game.player2));
-                Gdx.app.log("BuildingManager: ", "Factory added");
-                setBuildNew(false);
+            case BUILDING2:
+                p.getBuildings().add(new Building2(slot, p));
+                Gdx.app.log("BuildingManager: ", "Building 2 added");
+                break;
+            case BUILDING3:
+                p.getBuildings().add(new Building3(slot, p));
+                Gdx.app.log("BuildingManager: ", "Building 3 added");
+                break;
+            case BUILDING4:
+                p.getBuildings().add(new Building4(slot, p));
+                Gdx.app.log("BuildingManager: ", "Building 4 added");
+                break;
+            case BUILDING5:
+                p.getBuildings().add(new Building5(slot, p));
+                Gdx.app.log("BuildingManager: ", "Building 5 added");
                 break;
             default:
                 Gdx.app.log("BuildingManager: ", "No Building found");
         }
 
-        Game.player2.addIncome(newBuildingType.getIncomeRaise());
-        Game.player2.addMoney(-newBuildingType.getPrice());
-        Gdx.app.log("BuildingManager: ", "Slot " + String.format("%01d", buildNewSlot));
-        Gdx.app.log("BuildingManager: ", "playerBuildingsSize " + String.format("%01d", buildPlayer.getBuildings().size()));
-    }
-
-    public static int getBuildNewSlot() {
-        return buildNewSlot;
-    }
-
-    public static void setBuildNewSlot(int buildNewSlot) {
-        BuildingManager.buildNewSlot = buildNewSlot;
-    }
-
-    public static boolean isBuildNew() {
-        return buildNew;
-    }
-
-    public static void setBuildNew(boolean buildNew) {
-        BuildingManager.buildNew = buildNew;
-    }
-
-    public static int getBuildNewB() {
-        return buildNewB;
-    }
-
-    public static void setBuildNewB(int buildNewB) {
-        BuildingManager.buildNewB = buildNewB;
-    }
-
-    public static Player getBuildPlayer() {
-        return buildPlayer;
-    }
-
-    public static void setBuildPlayer(Player buildPlayer) {
-        BuildingManager.buildPlayer = buildPlayer;
-    }
-
-    public static BuildingTypes getNewBuildingType() {
-        return newBuildingType;
-    }
-
-    public static void setNewBuildingType(BuildingTypes newBuildingType) {
-        BuildingManager.newBuildingType = newBuildingType;
-    }
-
-    public static boolean isBuildingTypeChanged() {
-        return buildingTypeChanged;
-    }
-
-    public static void setBuildingTypeChanged(boolean buildingTypeChanged) {
-        BuildingManager.buildingTypeChanged = buildingTypeChanged;
+        p.addMoney(-buildingType.getPrice());
+        //Gdx.app.log("BuildingManager: ", "Slot " + String.format("%01d", slot));
+        //Gdx.app.log("BuildingManager: ", "playerBuildingsSize " + String.format("%01d", p.getBuildings().size()));
     }
 
     public float getTimeSinceSpawn() {

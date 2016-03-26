@@ -72,9 +72,7 @@ public class BuildMenu {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 Gdx.app.log("Clicked Button", lbBuildings.get(i).getName());
-                BuildingManager.setNewBuildingType(BuildingTypes.getNameByIndex(i));
-                BuildingManager.setBuildingTypeChanged(true);
-                BuildingManager.setBuildPlayer(Game.player2);
+                Menu.setMenuBuildingType(BuildingTypes.getNameByIndex(i));
                 Menu.setMenuStateChanged(true);
                 Menu.menuState = Menu.MENUSTATES.BUILDINFO;
             }

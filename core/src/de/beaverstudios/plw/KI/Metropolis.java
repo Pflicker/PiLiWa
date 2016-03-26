@@ -14,6 +14,7 @@ public class Metropolis {
     static int power;
     static int toughness;
     static double rnd;
+    static BuildingTypes buildingType;
     static int building;
     static int slot;
     Metropolis(){
@@ -37,7 +38,8 @@ public class Metropolis {
 
         slot = randInt(0, 9);
         building = randInt(0, p.getBuildings().size());
-        System.out.println(p.getTotalPower());
+        buildingType = BuildingTypes.getNameByIndex(building);
+        //System.out.println(p.getTotalPower());
         power = p.getTotalPower() + BuildingTypes.getNameByIndex(building).getPower();
         toughness = p.getTotalToughness() + BuildingTypes.getNameByIndex(building).getToughness();
     }
@@ -55,7 +57,7 @@ public class Metropolis {
         rnd = Math.random();
 
         if(calcProb(p) > rnd){
-            System.out.println("prob" + calcProb(p));
+            //System.out.println("prob" + calcProb(p));
             return true;
         }
         else{
@@ -68,7 +70,7 @@ public class Metropolis {
         double tpp;
         double prob;
         double offset = 1.1;
-        System.out.println((Game.opponent(p).getTotalPower()*offset)+ " " +power);
+        //System.out.println((Game.opponent(p).getTotalPower()*offset)+ " " +power);
         ppp = (Game.opponent(p).getTotalPower()*offset)/power;
         tpp = (Game.opponent(p).getTotalToughness()+offset)/toughness;
         prob = 0.5*(ppp+tpp);
@@ -77,10 +79,13 @@ public class Metropolis {
     }
 
     static void update(Player p){
-        BuildingManager.setBuildNew(true);
-        BuildingManager.setBuildNewB(building);
-        BuildingManager.setBuildNewSlot(slot);
-        BuildingManager.setBuildPlayer(p);
+
+        if(BuildingManager.buyBuilding(buildingType,slot,p)){
+            System.out.println("New ComBuilding");
+        } else {
+            System.out.println("Com No Money");
+        }
+
     }
 
 }

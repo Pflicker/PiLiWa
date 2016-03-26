@@ -2,6 +2,7 @@ package de.beaverstudios.plw.Player;
 
 import java.util.ArrayList;
 
+import de.beaverstudios.plw.KI.KI;
 import de.beaverstudios.plw.Techs.Techs;
 import de.beaverstudios.plw.Units.Base;
 
@@ -41,10 +42,16 @@ public class Game {
         gameTime += dt;
         gameTimeInt = (int)gameTime;
         timeSinceInc += dt;
-        if (timeSinceInc >= +5) {
+        if (timeSinceInc >= 10) {
             player1.addMoney(player1.getIncome());
             player2.addMoney(player2.getIncome());
             timeSinceInc = 0;
+            if(player1.isCom()){
+                KI.comTurn(player1);
+            }
+            if(player2.isCom()){
+                KI.comTurn(player2);
+            }
         }
     }
 

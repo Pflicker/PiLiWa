@@ -3,7 +3,6 @@ package de.beaverstudios.plw.KI;
 import de.beaverstudios.plw.Buildings.BuildingManager;
 import de.beaverstudios.plw.Buildings.Barracks;
 import de.beaverstudios.plw.Buildings.BuildingTypes;
-import de.beaverstudios.plw.Buildings.Factory;
 import de.beaverstudios.plw.Player.Game;
 import de.beaverstudios.plw.Player.Player;
 

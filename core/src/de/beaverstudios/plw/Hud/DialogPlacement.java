@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 
 import de.beaverstudios.plw.Buildings.BuildingManager;
+import de.beaverstudios.plw.Player.Game;
 
 /**
  * Created by Grass on 3/5/2016.
@@ -60,7 +61,7 @@ public class DialogPlacement {
                                       @Override
                                       public void clicked(InputEvent event, float x, float y) {
                                           Gdx.app.log("Dialog Table", "Slot 0");
-                                          BuildingManager.setBuildNewSlot(0);
+                                          Menu.setMenuBuildingSlot(0);
                                           buildGeneral();
                                       }
                                   }
@@ -69,7 +70,7 @@ public class DialogPlacement {
                                       @Override
                                       public void clicked(InputEvent event, float x, float y) {
                                           Gdx.app.log("Dialog Table", "Slot 1");
-                                          BuildingManager.setBuildNewSlot(1);
+                                          Menu.setMenuBuildingSlot(1);
                                           buildGeneral();
                                       }
                                   }
@@ -78,7 +79,7 @@ public class DialogPlacement {
                                       @Override
                                       public void clicked(InputEvent event, float x, float y) {
                                           Gdx.app.log("Dialog Table", "Slot 2");
-                                          BuildingManager.setBuildNewSlot(2);
+                                          Menu.setMenuBuildingSlot(2);
                                           buildGeneral();
                                       }
                                   }
@@ -88,7 +89,7 @@ public class DialogPlacement {
                                       @Override
                                       public void clicked(InputEvent event, float x, float y) {
                                           Gdx.app.log("Dialog Table", "Slot 3");
-                                          BuildingManager.setBuildNewSlot(3);
+                                          Menu.setMenuBuildingSlot(3);
                                           buildGeneral();
                                       }
                                   }
@@ -97,7 +98,7 @@ public class DialogPlacement {
                                       @Override
                                       public void clicked(InputEvent event, float x, float y) {
                                           Gdx.app.log("Dialog Table", "Slot 4");
-                                          BuildingManager.setBuildNewSlot(4);
+                                          Menu.setMenuBuildingSlot(4);
                                           buildGeneral();
                                       }
                                   }
@@ -106,7 +107,7 @@ public class DialogPlacement {
                                       @Override
                                       public void clicked(InputEvent event, float x, float y) {
                                           Gdx.app.log("Dialog Table", "Slot 5");
-                                          BuildingManager.setBuildNewSlot(5);
+                                          Menu.setMenuBuildingSlot(5);
                                           buildGeneral();
                                       }
                                   }
@@ -115,7 +116,7 @@ public class DialogPlacement {
                                       @Override
                                       public void clicked(InputEvent event, float x, float y) {
                                           Gdx.app.log("Dialog Table", "Slot 6");
-                                          BuildingManager.setBuildNewSlot(6);
+                                          Menu.setMenuBuildingSlot(6);
                                           buildGeneral();
                                       }
                                   }
@@ -124,7 +125,7 @@ public class DialogPlacement {
                                       @Override
                                       public void clicked(InputEvent event, float x, float y) {
                                           Gdx.app.log("Dialog Table", "Slot 7");
-                                          BuildingManager.setBuildNewSlot(7);
+                                          Menu.setMenuBuildingSlot(7);
                                           buildGeneral();
                                       }
                                   }
@@ -133,7 +134,7 @@ public class DialogPlacement {
                                       @Override
                                       public void clicked(InputEvent event, float x, float y) {
                                           Gdx.app.log("Dialog Table", "Slot 8");
-                                          BuildingManager.setBuildNewSlot(8);
+                                          Menu.setMenuBuildingSlot(8);
                                           buildGeneral();
                                       }
                                   }
@@ -153,14 +154,13 @@ public class DialogPlacement {
 
     }
     public void buildGeneral(){
-        BuildingManager.setBuildNew(true);
-        BuildingManager.setBuildNewB(1);
-        slotTable.get(BuildingManager.getBuildNewSlot()).clearChildren();
-        slotTable.get(BuildingManager.getBuildNewSlot()).setSkin(Hud.getSkin());
-        slotTable.get(BuildingManager.getBuildNewSlot()).add(BuildingManager.getNewBuildingType().getBuildingName()).expandX().expandY();
-        slotTable.get(BuildingManager.getBuildNewSlot()).row();
-        slotTable.get(BuildingManager.getBuildNewSlot()).add(build.get(BuildingManager.getBuildNewSlot())).expandX().expandY();
-        System.out.println(BuildingManager.getBuildNewSlot());
+        slotTable.get(Menu.getMenuBuildingSlot()).clearChildren();
+        slotTable.get(Menu.getMenuBuildingSlot()).setSkin(Hud.getSkin());
+        slotTable.get(Menu.getMenuBuildingSlot()).add(Menu.getMenuBuildingType().getBuildingName()).expandX().expandY();
+        slotTable.get(Menu.getMenuBuildingSlot()).row();
+        slotTable.get(Menu.getMenuBuildingSlot()).add(build.get(Menu.getMenuBuildingSlot())).expandX().expandY();
+        System.out.println(Menu.getMenuBuildingSlot());
+        BuildingManager.buyBuilding(Menu.getMenuBuildingType(),Menu.getMenuBuildingSlot(), Game.player2);
         Menu.setRet(true);
     }
 
@@ -175,13 +175,3 @@ public class DialogPlacement {
     }
 
 }
-     /* table.clearChildren();
-
-            for (int size = 0;BuildingManager.getPlayerBuildings().size > size ; size++) {
-                if (BuildingManager.getPlayerBuildings().get(size).getSlot() == i) {
-                   // Gdx.app.log("Dialog:", "Slot = " + String.format("%01d", BuildingManager.getPlayerBuildings().get(size).getSlot()));
-                   // slotTable.get(i).clearChildren();
-                   // slotTable.get(i).add(BuildingManager.playerBuildings.get(i).getUnitName()).expandX().expandY();
-                   // slotTable.get(i).row();
-                }
-      */

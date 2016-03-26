@@ -133,7 +133,7 @@ public abstract class Unit {
                 shieldReloadStep = 0;
             } else {
                 shieldValue += shieldReloadValue;
-                System.out.println("Shield reloaded by" + shieldReloadValue);
+                //System.out.println("Shield reloaded by" + shieldReloadValue);
                 shieldReloadStep = 0;
             }
         }

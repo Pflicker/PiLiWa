@@ -72,7 +72,7 @@ public class UnitManager {
         for (int i = 1; i < p.getUnits().size(); i++) {
             if (p.getUnits().get(i).getLife() < 1){
                 unitValues.add(new UnitValue(p.getUnits().get(i).x+p.getUnits().get(i).getW()/2,p.getUnits().get(i).y+p.getUnits().get(i).getH(),p.getUnits().get(i).value));
-                Game.player1.addMoney(p.getUnits().get(i).getValue());
+                Game.opponent(p).addMoney(p.getUnits().get(i).getValue());
                 p.getUnits().remove(i);
                 System.out.println(p + " Unit killed");
             }
@@ -99,9 +99,9 @@ public class UnitManager {
                 }
                 batch.draw(u.getCurrentFrame(), u.getX(), u.getY(), u.getW(), u.getH());
                 u.healthBar.draw(batch, 1, u.getX(), u.getY() + u.getH() + 1, u.getW(), 1, u.getLife(), u.getMaxLife());
-                /*if (u.getArmorType() == ArmorType.SHIELD) {
+                if (u.getArmorType() == ArmorType.SHIELD) {
                     u.shieldBar.draw(batch, 1, u.getX(), u.getY() + u.getH() + 2, u.getW(), 2, u.getShieldValue(), u.getMaxShieldValue());
-                }*/
+                }
             }
         }
         for (int i = 0;unitValues.size() > i;i++){
