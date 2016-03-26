@@ -19,7 +19,6 @@ public abstract class Building {
     public Image buildingImage;
     public Integer price;
     public String buildingName;
-    public Integer incomeRaise;
     public Player player;
     public Integer slot;
     public String unitName;
@@ -35,7 +34,6 @@ public abstract class Building {
     public void create(){
         buildingName = thisType.getBuildingName();
         price = thisType.getPrice();
-        incomeRaise = thisType.getIncomeRaise();
         unitName = thisType.getUnitName();
         buildingImage = thisType.getImage();
         //unit = thisType.getUnit();

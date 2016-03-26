@@ -15,7 +15,7 @@ public class BuildingManager {
     private static boolean buildNew;
     private static int buildNewB;
     private static int buildNewSlot;
-    private static BuildingTypes newBuildingType;
+    public static BuildingTypes newBuildingType;
     private static boolean buildingTypeChanged;
     private float timeSinceSpawn;
     private static Player buildPlayer;
@@ -31,7 +31,7 @@ public class BuildingManager {
             createBuilding();
         }
         timeSinceSpawn += dt;
-        if (timeSinceSpawn > 5) {
+        if (timeSinceSpawn > 10) {
             for (Player p : Game.players) {
                 for (de.beaverstudios.plw.Buildings.Building b : p.getBuildings()) {
                     b.spawnUnit();
@@ -55,16 +55,30 @@ public class BuildingManager {
                 Gdx.app.log("BuildingManager: ", "Barracks added");
                 setBuildNew(false);
                 break;
-            case FACTORY:
-                buildPlayer.getBuildings().add(new Factory(buildNewSlot, Game.player2));
-                Gdx.app.log("BuildingManager: ", "Factory added");
+            case BUILDING2:
+                buildPlayer.getBuildings().add(new Building2(buildNewSlot, Game.player2));
+                Gdx.app.log("BuildingManager: ", "Building 2 added");
+                setBuildNew(false);
+                break;
+            case BUILDING3:
+                buildPlayer.getBuildings().add(new Building3(buildNewSlot, Game.player2));
+                Gdx.app.log("BuildingManager: ", "Building 3 added");
+                setBuildNew(false);
+                break;
+            case BUILDING4:
+                buildPlayer.getBuildings().add(new Building4(buildNewSlot, Game.player2));
+                Gdx.app.log("BuildingManager: ", "Building 4 added");
+                setBuildNew(false);
+                break;
+            case BUILDING5:
+                buildPlayer.getBuildings().add(new Building5(buildNewSlot, Game.player2));
+                Gdx.app.log("BuildingManager: ", "Building 5 added");
                 setBuildNew(false);
                 break;
             default:
                 Gdx.app.log("BuildingManager: ", "No Building found");
         }
 
-        Game.player2.addIncome(newBuildingType.getIncomeRaise());
         Game.player2.addMoney(-newBuildingType.getPrice());
         Gdx.app.log("BuildingManager: ", "Slot " + String.format("%01d", buildNewSlot));
         Gdx.app.log("BuildingManager: ", "playerBuildingsSize " + String.format("%01d", buildPlayer.getBuildings().size()));

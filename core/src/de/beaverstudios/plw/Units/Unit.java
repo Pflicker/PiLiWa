@@ -41,9 +41,9 @@ public abstract class Unit {
     HealthBar healthBar;
 
     ShieldBar shieldBar;
-    Integer maxShieldValue;
+    Integer maxShieldValue = 1;
     Integer shieldValue;
-    Integer shieldReloadValue;
+    Integer shieldReloadValue = 0;
     float timeSinceDamageTaken;
     float shieldReloadTimer = 2f;
     float shieldReloadStep;

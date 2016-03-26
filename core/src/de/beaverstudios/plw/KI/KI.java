@@ -1,8 +1,8 @@
 package de.beaverstudios.plw.KI;
 
+import de.beaverstudios.plw.Buildings.Building5;
 import de.beaverstudios.plw.Buildings.BuildingManager;
 import de.beaverstudios.plw.Buildings.Barracks;
-import de.beaverstudios.plw.Buildings.Factory;
 import de.beaverstudios.plw.Player.Game;
 import de.beaverstudios.plw.Player.Player;
 
@@ -12,7 +12,7 @@ import de.beaverstudios.plw.Player.Player;
 public class KI {
 
     public KI(Player com){
-        com.getBuildings().add(new Factory(0,com));
+        com.getBuildings().add(new Barracks(0,com));
         // add com Income
     }
 }

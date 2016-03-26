@@ -3,28 +3,27 @@ package de.beaverstudios.plw.Units;
 import de.beaverstudios.plw.Player.Player;
 import de.beaverstudios.plw.Techs.Types.ArmorType;
 import de.beaverstudios.plw.Techs.Types.DamageType;
-import de.beaverstudios.plw.Units.Healthbar.HealthBar;
 import de.beaverstudios.plw.TextureManager;
 
 /**
- * Created by Grass on 3/2/2016.
+ * Created by root on 26.03.16.
  */
-public class Marine extends Unit {
+public class Melee extends Unit{
 
-    public Marine(Player p,int slot){
+    public Melee(Player p,int slot){
         player = p;
-        name = "marine" ;
+        name =  "melee";
         w = 10 ;
         h = 10 ;
-        maxLife = 140 ;
-        armorType = ArmorType.PHYSICAL ;
-        armor = 5 ;
+        maxLife = 160 ;
+        armorType = ArmorType.SHIELD ;
+        armor = 10 ;
         movementspeed = 10 ;
         damage = 25 ;
         damageType = DamageType.PHYSICAL ;
         attackspeed = 1 ;
-        range = 50 ;
-        skin = TextureManager.MARINE ;
+        range = 0 ;
+        skin = TextureManager.MELEE ;
 
 
 
@@ -37,6 +36,5 @@ public class Marine extends Unit {
 
         create();
     }
-
 
 }
