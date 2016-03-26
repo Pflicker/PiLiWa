@@ -40,6 +40,7 @@ public abstract class Unit {
     ArmorType armorType;
     HealthBar healthBar;
 
+
     ShieldBar shieldBar;
     Integer maxShieldValue;
     Integer shieldValue;

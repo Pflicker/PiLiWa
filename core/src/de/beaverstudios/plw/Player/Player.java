@@ -24,6 +24,9 @@ public class Player {
     private ArrayList<Unit> units;
     private ArrayList<Building> buildings;
 
+    private Integer totalToughness;
+    private Integer totalPower;
+
     private boolean flip;
 
     private int physicalDamage;
@@ -219,4 +222,23 @@ public class Player {
             return false;
         }
     }
+
+    public Integer getTotalToughness() {
+        return totalToughness;
+    }
+
+    public void setTotalToughness(Integer totalToughness) {
+        this.totalToughness = totalToughness;
+    }
+
+    public Integer getTotalPower() {
+        return totalPower;
+    }
+
+    public void setTotalPower(Integer totalPower) {
+        this.totalPower = totalPower;
+    }
+
+
+
 }

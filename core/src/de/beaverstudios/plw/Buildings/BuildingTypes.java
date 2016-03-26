@@ -13,8 +13,8 @@ import de.beaverstudios.plw.Units.UnitManager;
  * Created by Grass on 3/3/2016.
  */
 public enum BuildingTypes{
-    BARRACKS(0,"Barracks","Marine",20,2, TextureManager.IMGBARRACKS),
-    FACTORY(1,"Factory","Cat",20,2,  TextureManager.IMGFACTORY);
+    BARRACKS(0,"Barracks","Marine",20,2, TextureManager.IMGBARRACKS,150,150),
+    FACTORY(1,"Factory","Cat",20,2,  TextureManager.IMGFACTORY,150,150);
 
     private final String buildingName;
     private final String unitName;
@@ -22,15 +22,21 @@ public enum BuildingTypes{
     private final Integer incomeRaise;
     private final Image image;
     private final Integer index;
+    private final Integer toughness;
+    private final Integer power;
+
     //private final Unit unit;
 
-    BuildingTypes(Integer index, String buildingName, String unitName, Integer price, Integer incomeRaise, Image image){
+    BuildingTypes(Integer index, String buildingName, String unitName, Integer price, Integer incomeRaise, Image image, Integer toughness, Integer power){
         this.buildingName = buildingName;
         this.unitName = unitName;
         this.price = price;
         this.incomeRaise =incomeRaise;
         this.image = image;
         this.index = index;
+        this.toughness = toughness;
+        this.power = power;
+
         //this.unit = unit;
     }
 
@@ -63,7 +69,16 @@ public enum BuildingTypes{
     public Image getImage() {
         return image;
     }
-/*
+
+    public Integer getToughness() {
+        return toughness;
+    }
+
+    public Integer getPower() {
+        return power;
+    }
+
+    /*
     public Unit getUnit() {
         return unit;
     }*/

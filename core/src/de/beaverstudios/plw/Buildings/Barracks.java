@@ -24,4 +24,6 @@ public class Barracks extends Building {
     public void spawnUnit() {
         player.getUnits().add(new Marine(player,slot));
     }
+
+
 }

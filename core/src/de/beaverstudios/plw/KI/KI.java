@@ -2,6 +2,7 @@ package de.beaverstudios.plw.KI;
 
 import de.beaverstudios.plw.Buildings.BuildingManager;
 import de.beaverstudios.plw.Buildings.Barracks;
+import de.beaverstudios.plw.Buildings.BuildingTypes;
 import de.beaverstudios.plw.Buildings.Factory;
 import de.beaverstudios.plw.Player.Game;
 import de.beaverstudios.plw.Player.Player;
@@ -11,8 +12,39 @@ import de.beaverstudios.plw.Player.Player;
  */
 public class KI {
 
-    public KI(Player com){
-        com.getBuildings().add(new Factory(0,com));
+    public KI(Player p){
+
         // add com Income
+
     }
-}
+
+    public static void comTurn(Player p){
+        calcPowerValue(p);
+        calcToughnessValue(p);
+        calcPowerValue(Game.opponent(p));
+        calcToughnessValue(Game.opponent(p));
+        Metropolis.runMetropolis(p);
+    }
+
+     static void calcPowerValue(Player p) {
+
+         Integer power = 100;
+         for (int i = 0; i < p.getBuildings().size(); i++) {
+             power += p.getBuildings().get(i).getPower();
+         }
+         p.setTotalPower(power);
+
+     }
+
+    static void calcToughnessValue(Player p){
+        Integer toughness = 100;
+        for (int i = 0; i < p.getBuildings().size(); i++) {
+            toughness += p.getBuildings().get(i).getPower();
+        }
+        p.setTotalToughness(toughness);
+
+    }
+
+
+
+ }

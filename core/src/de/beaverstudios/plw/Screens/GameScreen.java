@@ -121,6 +121,7 @@ public class GameScreen implements Screen,InputProcessor {
             hud.update(dt);
             bm.update(dt);
             um.update(dt);
+            ki.comTurn(Game.player1);
 
         if (gameOver) {
             gameOver = false;

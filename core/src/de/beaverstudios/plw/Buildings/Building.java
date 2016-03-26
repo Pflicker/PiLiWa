@@ -26,7 +26,8 @@ public abstract class Building {
     public BuildingTypes thisType;
     public Unit ghostUnit;
     public Unit unit;
-
+    Integer toughness;
+    Integer power;
 
 
     public Building() {
@@ -38,7 +39,10 @@ public abstract class Building {
         incomeRaise = thisType.getIncomeRaise();
         unitName = thisType.getUnitName();
         buildingImage = thisType.getImage();
+        power = thisType.getPower();
+        power = thisType.getToughness();
         //unit = thisType.getUnit();
+
 
     }
 
@@ -62,4 +66,13 @@ public abstract class Building {
     }
 
     public BuildingTypes getThisType(){ return thisType; }
+
+
+    public Integer getToughness() {
+        return toughness;
+    }
+
+    public Integer getPower() {
+        return power;
+    }
 }
