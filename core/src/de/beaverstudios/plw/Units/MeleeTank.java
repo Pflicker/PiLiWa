@@ -3,28 +3,26 @@ package de.beaverstudios.plw.Units;
 import de.beaverstudios.plw.Player.Player;
 import de.beaverstudios.plw.Techs.Types.ArmorType;
 import de.beaverstudios.plw.Techs.Types.DamageType;
-import de.beaverstudios.plw.Units.Healthbar.HealthBar;
 import de.beaverstudios.plw.TextureManager;
 
 /**
- * Created by Grass on 3/2/2016.
+ * Created by root on 26.03.16.
  */
-public class Marine extends Unit {
-
-    public Marine(Player p,int slot){
+public class MeleeTank extends Unit {
+    public MeleeTank(Player p,int slot){
         player = p;
-        name = "marine" ;
+        name =  "meleetank";
         w = 10 ;
         h = 10 ;
-        maxLife = 140 ;
+        maxLife = 250 ;
         armorType = ArmorType.PHYSICAL ;
-        armor = 5 ;
+        armor = 10 ;
         movementspeed = 10 ;
-        damage = 25 ;
-        damageType = DamageType.PHYSICAL ;
+        damage = 5 ;
+        damageType = DamageType.ENERGY ;
         attackspeed = 1 ;
-        range = 50 ;
-        skin = TextureManager.MARINE ;
+        range = 0 ;
+        skin = TextureManager.MELEETANK ;
 
 
 
@@ -37,6 +35,5 @@ public class Marine extends Unit {
 
         create();
     }
-
 
 }

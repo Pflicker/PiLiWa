@@ -15,11 +15,10 @@ public class BuildingManager {
     private static boolean buildNew;
     private static int buildNewB;
     private static int buildNewSlot;
-    private static Player buildPlayer;
     private static BuildingTypes newBuildingType;
     private static boolean buildingTypeChanged;
     private float timeSinceSpawn;
-
+    private static Player buildPlayer;
 
     public BuildingManager() {
         newBuildingType = BuildingTypes.BARRACKS;

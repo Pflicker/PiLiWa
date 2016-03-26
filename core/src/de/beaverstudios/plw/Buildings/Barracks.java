@@ -18,7 +18,6 @@ public class Barracks extends Building {
         this.player = player;
         thisType = BuildingTypes.BARRACKS;
         create();
-
     }
 
     public void spawnUnit() {

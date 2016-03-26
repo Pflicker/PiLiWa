@@ -9,7 +9,7 @@ import de.beaverstudios.plw.Units.UnitManager;
 /**
  * Created by Grass on 3/21/2016.
  */
-public class Factory extends Building {
+/*public class Factory extends Building {
 
     public Factory(int slot, Player player) {
         this.slot = slot;
@@ -21,4 +21,4 @@ public class Factory extends Building {
     public void spawnUnit() {
         player.getUnits().add(new Cat(player,slot));
     }
-}
+}*/

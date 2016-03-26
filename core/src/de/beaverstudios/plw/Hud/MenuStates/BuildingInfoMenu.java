@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 
 import de.beaverstudios.plw.Buildings.BuildingManager;
+import de.beaverstudios.plw.Buildings.BuildingTypes;
 import de.beaverstudios.plw.Hud.GameInfo;
 import de.beaverstudios.plw.Hud.Hud;
 import de.beaverstudios.plw.Hud.Menu;
@@ -60,13 +61,7 @@ public class BuildingInfoMenu {
     public BuildingInfoMenu(){
 
         skin = Hud.getSkin();
-        switch(BuildingManager.getNewBuildingType()){
-            case BARRACKS:
-            u = UnitManager.ghostMarine;
-                break;
-            case FACTORY:
-                u = UnitManager.ghostCat;
-        }
+        u = UnitManager.ghostMarine;
 
         this.buildingName = BuildingManager.getNewBuildingType().getBuildingName();
         System.out.println(this.buildingName);
@@ -89,35 +84,24 @@ public class BuildingInfoMenu {
         textspecial= new Label("Special Abilities: ",skin);
         img = new Image(u.getSkin());
 
-        lbmaxLife = new Label(String.format("%03d",u.getMaxLife()),skin);
+        lbmaxLife = new Label(String.format("%03d", u.getMaxLife()),skin);
         lbarmor= new Label(String.format("%03d", u.getArmor()),skin);
         lbspeed= new Label(Float.toString(u.getMovementspeed()),skin);
-        lbdamage= new Label(String.format("%03d",u.getDamage()),skin);
+        lbdamage= new Label(String.format("%03d", u.getDamage()),skin);
         //lbdamageType= new Label(String.format("%03d",u.getDamageType()),skin);
         lbattackSpeed= new Label(Float.toString(u.getAttackspeed()),skin);
 
         btnBuild.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                    switch(BuildingManager.getNewBuildingType()){
-                        case BARRACKS:
-                            if (Game.player2.getMoney() >= BuildingManager.getNewBuildingType().getPrice()) {
-                                Gdx.app.log("Clicked Button", "Build...");
-                                Menu.setDialogPlacement(true);
-                            } else {
-                                Gdx.app.log("Warning:", "Not enough Money");
-                            }
-                            break;
-                        case FACTORY:
-                            if (Game.player2.getMoney() >= BuildingManager.getNewBuildingType().getPrice()) {
-                                Gdx.app.log("Clicked Button", "Build...");
-                                System.out.println(BuildingManager.getNewBuildingType());
-                                Menu.setDialogPlacement(true);
-                            } else {
-                                Gdx.app.log("Warning:", "Not enough Money");
-                            }
-                            break;
-                    }
+
+                if (Game.player2.getMoney() >= BuildingManager.getNewBuildingType().getPrice()) {
+                    Gdx.app.log("Clicked Button", "Build...");
+                    Menu.setDialogPlacement(true);
+                 } else {
+                    Gdx.app.log("Warning:", "Not enough Money");
+                }
+
             }
         });
 
@@ -133,18 +117,10 @@ public class BuildingInfoMenu {
     }
 
     public void update(float dt){
-        switch(BuildingManager.getNewBuildingType()){
-            case BARRACKS:
-                u = UnitManager.ghostMarine;
-                System.out.println("Marine now");
-                BuildingManager.setBuildingTypeChanged(false);
-                break;
-            case FACTORY:
-                u = UnitManager.ghostCat;
-                System.out.println("Cat now");
-                BuildingManager.setBuildingTypeChanged(false);
-                break;
-        }
+        System.out.println(BuildingManager.getNewBuildingType().getUnit());
+        BuildingTypes b;
+        b = BuildingManager.getNewBuildingType();
+        u = b.getUnitByIndex(b.getIndex());
 
         lbBuilding.setText(BuildingManager.getNewBuildingType().getBuildingName());
         lbBuildingPrice.setText(String.format("%03d", BuildingManager.getNewBuildingType().getPrice()));
@@ -154,8 +130,6 @@ public class BuildingInfoMenu {
         lbdamage.setText(String.format("%03d", u.getDamage()));
         lbattackSpeed.setText(Float.toString(u.getAttackspeed()));
         lbarmor.setText(String.format("%03d", u.getArmor()));
-
-
 
     }
 
