@@ -6,10 +6,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TooltipManager;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import de.beaverstudios.plw.Hud.Help.TechTree.TechTree;
 import de.beaverstudios.plw.PlwGame;
 import de.beaverstudios.plw.Screens.GameScreen;
 
@@ -18,7 +20,7 @@ import de.beaverstudios.plw.Screens.GameScreen;
  */
 public class Hud implements InputProcessor {
 
-    public Stage hudStage;
+    public static Stage hudStage;
     public Viewport hudPort;
     private OrthographicCamera hudCam;
     private TextureAtlas hudAtlas;
@@ -26,6 +28,10 @@ public class Hud implements InputProcessor {
     public static Menu menu;
     private static Skin skin;
     private static TooltipManager tooltipManager;
+    private static UnitInfo unitInfo;
+    private static Notice notice;
+    private static de.beaverstudios.plw.Hud.Help.TechTree.TechTree techTree;
+    private static boolean help;
 
     public Hud() {
 
@@ -38,15 +44,32 @@ public class Hud implements InputProcessor {
 
         gameInfo = new GameInfo(skin);
         menu = new Menu();
+        unitInfo = new UnitInfo();
+        notice = new Notice();
+        techTree = new TechTree();
 
         hudStage.addActor(gameInfo.infoTable);
         hudStage.addActor(menu.table);
-        hudStage.addActor(menu.dialog.table);
+        hudStage.addActor(menu.dialog.table); //muss allein stehen
+        hudStage.addActor(unitInfo.table);
+        hudStage.addActor(Notice.noticeWindow);
+        hudStage.addActor(techTree.treeTable);
     }
 
     public void update(float dt) {
+
+        if (help){
+            techTree.treeTable.setVisible(true);
+            help = false;
+            GameScreen.state = GameScreen.STATE.PAUSE;
+        }
+
         gameInfo.update(dt);
         menu.update(dt);
+        notice.update(dt);
+        unitInfo.update(dt);
+
+        hudStage.act(dt);
     }
 
     public static Skin getSkin() {
@@ -55,6 +78,14 @@ public class Hud implements InputProcessor {
 
 
     public void dispose() {
+    }
+
+    public static boolean isHelp() {
+        return help;
+    }
+
+    public static void setHelp(boolean help) {
+        Hud.help = help;
     }
 
     @Override
@@ -94,7 +125,8 @@ public class Hud implements InputProcessor {
 
     @Override
     public boolean scrolled(int amount) {
-        return false;
+        hudCam.zoom += 0.1*amount;
+        return true;
     }
 
 }

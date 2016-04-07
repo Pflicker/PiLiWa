@@ -15,6 +15,7 @@ import de.beaverstudios.plw.Buildings.BuildingTypes;
 import de.beaverstudios.plw.Hud.GameInfo;
 import de.beaverstudios.plw.Hud.Hud;
 import de.beaverstudios.plw.Hud.Menu;
+import de.beaverstudios.plw.Hud.Notice;
 import de.beaverstudios.plw.Player.Game;
 import de.beaverstudios.plw.Units.Unit;
 import de.beaverstudios.plw.Units.UnitManager;
@@ -99,6 +100,7 @@ public class BuildingInfoMenu {
                     Gdx.app.log("Clicked Button", "Build...");
                     Menu.setDialogPlacement(true);
                  } else {
+                    Notice.noticeVisible = true;
                     Gdx.app.log("Warning:", "Not enough Money");
                 }
 

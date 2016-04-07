@@ -1,7 +1,10 @@
 package de.beaverstudios.plw.Buildings;
 
 import de.beaverstudios.plw.Player.Player;
+import de.beaverstudios.plw.Techs.Types.ArmorType;
+import de.beaverstudios.plw.Techs.Types.DamageType;
 import de.beaverstudios.plw.Units.Melee;
+import de.beaverstudios.plw.Units.Unit;
 import de.beaverstudios.plw.Units.UnitManager;
 
 /**
@@ -13,7 +16,9 @@ public class Building2 extends Building {
         this.slot =slot;
         this.player = player;
         this.thisType = BuildingTypes.BUILDING2;
+        Unit unitPtr = UnitManager.getGhostMelee();
         create();
+
     }
 
     public void spawnUnit(){

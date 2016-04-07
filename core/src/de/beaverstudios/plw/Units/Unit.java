@@ -688,4 +688,12 @@ public abstract class Unit {
     public void setShieldReloadTimer(Integer shieldReloadTimer) {
         this.shieldReloadTimer = shieldReloadTimer;
     }
+
+    public HealthBar getHealthBar() {
+        return healthBar;
+    }
+
+    public void setHealthBar(HealthBar healthBar) {
+        this.healthBar = healthBar;
+    }
 }

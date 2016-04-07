@@ -12,9 +12,6 @@ import de.beaverstudios.plw.Player.Player;
 public class KI {
 
     public KI(Player p){
-
-        // add com Income
-
     }
 
     public static void comTurn(Player p){
@@ -44,6 +41,15 @@ public class KI {
 
     }
 
+    static void calcPowerDamageType(Player p) {
 
+        Integer power = 100;
+        for (int i = 0; i < p.getBuildings().size(); i++) {
+            //if(p.getBuildings().get(i).getUnitPtr().getArmorType().;
+            //power += p.getBuildings().get(i).getPower();
+        }
+        p.setTotalPower(power);
+
+    }
 
  }

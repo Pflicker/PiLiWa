@@ -14,20 +14,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.beaverstudios.plw.Hud.Hud;
-import de.beaverstudios.plw.KI.KI;
-import de.beaverstudios.plw.Hud.Menu;
 import de.beaverstudios.plw.Player.Game;
-import de.beaverstudios.plw.Player.Player;
 import de.beaverstudios.plw.PlwGame;
 import de.beaverstudios.plw.Buildings.BuildingManager;
 import de.beaverstudios.plw.Techs.Techs;
@@ -46,6 +38,7 @@ public class GameScreen implements Screen,InputProcessor {
     public static BitmapFont font;
 
     private static OrthographicCamera gamecam;
+    private static Stage gameStage;
     private static Viewport gamePort;
     private static float gameCamX;
     private static float gameCamY;
@@ -63,7 +56,6 @@ public class GameScreen implements Screen,InputProcessor {
     public static Hud hud;
     public static UnitManager um;
     public static BuildingManager bm;
-    public static KI ki;
     public static Techs techs;
 
     final PlwGame gam;
@@ -71,27 +63,25 @@ public class GameScreen implements Screen,InputProcessor {
     boolean keyPressed;
     public static boolean gameOver;
 
-
     public GameScreen(PlwGame game) {
-
         this.gam = game;
-
         state = STATE.RUN;
         speed = 0;
-
-        // create the camera and the SpriteBatch
-        gamecam = new OrthographicCamera();
-        gamePort = new FitViewport(PlwGame.V_WIDTH, PlwGame.V_HEIGHT, gamecam);
-
-        // create Map and Maprenderer
-        mapLoader = new TmxMapLoader();
-        map = mapLoader.load("map2.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map, 1);
 
         // create Batch
         batch = new SpriteBatch();
         textureManager = new TextureManager();
         font = new BitmapFont();
+
+        // create the camera and the SpriteBatch
+        gamecam = new OrthographicCamera();
+        gamePort = new FitViewport(PlwGame.V_WIDTH, PlwGame.V_HEIGHT, gamecam);
+        gameStage = new Stage(gamePort,batch);
+
+        // create Map and Maprenderer
+        mapLoader = new TmxMapLoader();
+        map = mapLoader.load("map2.tmx");
+        renderer = new OrthogonalTiledMapRenderer(map, 1);
 
         world = new Game();
 
@@ -104,7 +94,7 @@ public class GameScreen implements Screen,InputProcessor {
         gameCamY = gamePort.getWorldHeight() / 2;
         gamecam.position.set(gameCamX, gameCamY, 0);
 
-        InputMultiplexer im = new InputMultiplexer(hud.hudStage, this);
+        InputMultiplexer im = new InputMultiplexer(hud.hudStage,gameStage);
         Gdx.input.setInputProcessor(im);
     }
 
@@ -132,25 +122,25 @@ public class GameScreen implements Screen,InputProcessor {
     }
     @Override
     public void render(float dt) {
+
         switch(state) {
             case RUN:
                 update(dt);
-                gamePort.apply();
-                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-                renderer.render();
-                batch.setProjectionMatrix(gamecam.combined);
-                batch.begin();
-                um.render(batch);
-                batch.end();
-                batch.setProjectionMatrix(hud.hudStage.getCamera().combined);
-                hud.hudStage.draw();
                 break;
             case PAUSE:
-                batch.setProjectionMatrix(hud.hudStage.getCamera().combined);
-                hud.hudStage.draw();
                 break;
         }
+
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        gamePort.apply();
+        renderer.render();
+        batch.setProjectionMatrix(gamecam.combined);
+        batch.begin();
+        um.render(batch);
+        batch.end();
+        batch.setProjectionMatrix(hud.hudStage.getCamera().combined);
+        hud.hudStage.draw();
+
     }
 
     @Override
@@ -251,6 +241,6 @@ public class GameScreen implements Screen,InputProcessor {
     @Override
     public boolean scrolled(int amount) {
             gamecam.zoom += 0.1*amount;
-        return true;
+        return false;
     }
 }

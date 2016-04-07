@@ -108,4 +108,45 @@ public class UnitManager {
             unitValues.get(i).render(batch, new BitmapFont());
         }
     }
+
+    public static Marine getGhostMarine() {
+        return ghostMarine;
+    }
+
+    public static void setGhostMarine(Marine ghostMarine) {
+        UnitManager.ghostMarine = ghostMarine;
+    }
+
+
+    public static DarkTemplar getGhostDarkTemplar() {
+        return ghostDarkTemplar;
+    }
+
+    public static void setGhostDarkTemplar(DarkTemplar ghostDarkTemplar) {
+        UnitManager.ghostDarkTemplar = ghostDarkTemplar;
+    }
+
+    public static MeleeTank getGhostMeleeTank() {
+        return ghostMeleeTank;
+    }
+
+    public static void setGhostMeleeTank(MeleeTank ghostMeleeTank) {
+        UnitManager.ghostMeleeTank = ghostMeleeTank;
+    }
+
+    public static Sniper getGhostSniper() {
+        return ghostSniper;
+    }
+
+    public static void setGhostSniper(Sniper ghostSniper) {
+        UnitManager.ghostSniper = ghostSniper;
+    }
+
+    public static Melee getGhostMelee() {
+        return ghostMelee;
+    }
+
+    public static void setGhostMelee(Melee ghostMelee) {
+        UnitManager.ghostMelee = ghostMelee;
+    }
 }

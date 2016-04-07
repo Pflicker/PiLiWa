@@ -1,7 +1,9 @@
 package de.beaverstudios.plw;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -49,6 +51,7 @@ public class TextureManager {
         hudAtlas = new TextureAtlas(Gdx.files.internal("hudtest.atlas"));
 
         IMGBARRACKS = new Image(BARRACKS);
+        IMGBARRACKS.setSize(30,30);
         IMGBARRACKS.setDrawable(new SpriteDrawable(new Sprite(BARRACKS)));
 
         IMGFACTORY = new Image(FACTORY);
@@ -71,8 +74,6 @@ public class TextureManager {
 
         IMGBUILDING5 = new Image(BUILDING5);
         IMGBUILDING5.setDrawable(new SpriteDrawable(new Sprite(BUILDING5)));
-
-
 
         //  white = new Image(this.hudAtlas.findRegion("white"));
 

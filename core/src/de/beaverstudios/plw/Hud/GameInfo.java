@@ -32,6 +32,7 @@ public class GameInfo {
     private Button btnPause;
     private Button btnResume;
     private TextButton btnSpeed;
+    private TextButton btnHelp;
 
     public Table infoTable;
 
@@ -40,6 +41,7 @@ public class GameInfo {
 
         btnState = new TextButton("Pause",skin);
         btnSpeed = new TextButton("Double",skin);
+        btnHelp = new TextButton("Help",skin);
 
         btnPause = new Button(TextureManager.IMGBTNPAUSE.getDrawable());
 
@@ -87,6 +89,16 @@ public class GameInfo {
             }
         });
 
+        btnHelp.addListener(new ClickListener() {
+            @Override
+        public void clicked(InputEvent event, float x, float y) {
+
+                Hud.setHelp(true);
+                System.out.println("Help clicked");
+
+            }
+        });
+
         incomeComLabel= new Label("Income Com: ", skin);
         incomeComValue =new Label(String.format("%03d", Game.player1.getIncome()), skin);
         incomePlayerLabel = new Label("Income Player: ",skin);
@@ -105,6 +117,7 @@ public class GameInfo {
         infoTable.row();
         infoTable.add(btnState).left();
         infoTable.add(btnSpeed);
+        infoTable.add(btnHelp);
         infoTable.add();
         infoTable.add(gameTimeLabel);
         infoTable.add(gameTimeValue);

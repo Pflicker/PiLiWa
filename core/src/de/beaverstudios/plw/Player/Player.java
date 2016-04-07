@@ -45,7 +45,6 @@ public class Player {
             units = new ArrayList<Unit>();
             buildings = new ArrayList<Building>();
             this.flip = flip;
-
             this.com = computer;
     }
 

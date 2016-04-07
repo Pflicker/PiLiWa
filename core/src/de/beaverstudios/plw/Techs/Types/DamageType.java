@@ -65,4 +65,8 @@ public enum DamageType {
         //System.out.println("Multiplicator" + multiplicator);
         return multiplicator;
     }
+
+    public void getIndexByName(){
+
+    }
 }

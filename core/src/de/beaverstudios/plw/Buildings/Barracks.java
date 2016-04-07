@@ -6,6 +6,7 @@ import de.beaverstudios.plw.Interfaces.Buyable;
 import de.beaverstudios.plw.Player.Game;
 import de.beaverstudios.plw.Player.Player;
 import de.beaverstudios.plw.Units.Marine;
+import de.beaverstudios.plw.Units.Unit;
 import de.beaverstudios.plw.Units.UnitManager;
 
 /**
@@ -16,6 +17,7 @@ public class Barracks extends Building {
     public Barracks(int slot, Player player) {
         this.slot = slot;
         this.player = player;
+        Unit unitPtr = UnitManager.getGhostMarine();
         thisType = BuildingTypes.BARRACKS;
         create();
     }

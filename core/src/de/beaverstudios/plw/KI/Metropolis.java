@@ -23,7 +23,7 @@ public class Metropolis {
 
     static void runMetropolis(Player p) {
 
-        for(int i = 0; i<100; i++) {
+        for(int i = 0; i<1; i++) {
             suggestStep(p);
             if(checkUpdate(p)){
                 update(p);
@@ -37,6 +37,7 @@ public class Metropolis {
 
 
         slot = randInt(0, 9);
+
         building = randInt(0, p.getBuildings().size());
         buildingType = BuildingTypes.getNameByIndex(building);
         //System.out.println(p.getTotalPower());
@@ -48,7 +49,8 @@ public class Metropolis {
 
         Random rand;
 
-        int randomNum = (int)Math.random()*((max - min) + 1) + min;
+        int randomNum =(int) Math.floor(Math.random()*((max - min) + 1) + min);
+        System.out.println(randomNum);
         return randomNum;
     }
 

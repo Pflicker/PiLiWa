@@ -25,6 +25,7 @@ public abstract class Building {
     public BuildingTypes thisType;
     public Unit ghostUnit;
     public Unit unit;
+    Unit unitPtr;
     Integer toughness;
     Integer power;
 
@@ -72,5 +73,13 @@ public abstract class Building {
 
     public Integer getPower() {
         return power;
+    }
+
+    public Unit getUnitPtr() {
+        return unitPtr;
+    }
+
+    public void setUnitPtr(Unit unitPtr) {
+        this.unitPtr = unitPtr;
     }
 }

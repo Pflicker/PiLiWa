@@ -2,6 +2,8 @@ package de.beaverstudios.plw.Buildings;
 
 import de.beaverstudios.plw.Player.Player;
 import de.beaverstudios.plw.Units.Sniper;
+import de.beaverstudios.plw.Units.Unit;
+import de.beaverstudios.plw.Units.UnitManager;
 
 /**
  * Created by root on 26.03.16.
@@ -11,6 +13,7 @@ public class Building3 extends Building {
         this.slot =slot;
         this.player = player;
         this.thisType = BuildingTypes.BUILDING3;
+        Unit unitPtr = UnitManager.getGhostSniper();
         create();
     }
 
