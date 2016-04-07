@@ -26,11 +26,6 @@ public class Marine extends Unit {
         range = 50 ;
         skin = TextureManager.MARINE ;
 
-
-
-
-
-
         value = 1 ;
         FRAME_COLS = 1 ;
         FRAME_ROWS = 1 ;

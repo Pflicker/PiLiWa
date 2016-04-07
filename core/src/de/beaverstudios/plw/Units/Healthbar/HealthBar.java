@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 /**
  * Created by Grass on 3/3/2016.
  */
-public class HealthBar {
+public class HealthBar extends Actor{
 
     private Texture healthBar;
     private Color color;
