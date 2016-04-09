@@ -59,10 +59,10 @@ public class GameMenu {
     }
 
             public void create(Table table) {
-                table.add(btnBuildMenu);
+                table.add(btnBuildMenu).left();
                 table.row();
-                table.add(btnTechMenu);
+                table.add(btnTechMenu).left();
                 table.row();
-                table.add(btnBaseInfo);
+                table.add(btnBaseInfo).left();
             }
         }

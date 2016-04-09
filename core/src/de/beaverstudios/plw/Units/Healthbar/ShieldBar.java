@@ -4,12 +4,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 
 /**
  * Created by Grass on 3/20/2016.
  */
-public class ShieldBar {
+public class ShieldBar extends Actor {
     private Texture shieldBar;
     private Color color;
     private Texture shieldBarBackground;
@@ -39,7 +40,7 @@ public class ShieldBar {
 
     public void draw(Batch batch, float parentAlpha, float x, float y, float w, float h, int shieldValue, int maxShieldValue) {
         batch.draw(shieldBarBackground, x, y, w, h);
-        batch.draw(shieldBar, x, y, (float) w * (float) shieldValue/ (float) maxShieldValue, h);
+        batch.draw(shieldBar, x, y, w * (float) shieldValue/ (float) maxShieldValue, h);
     }
 
     public void dispose(){

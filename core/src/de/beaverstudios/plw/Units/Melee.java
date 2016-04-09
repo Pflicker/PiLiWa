@@ -25,11 +25,6 @@ public class Melee extends Unit{
         range = 0 ;
         skin = TextureManager.MELEE ;
 
-
-
-
-
-
         value = 1 ;
         FRAME_COLS = 1 ;
         FRAME_ROWS = 1 ;

@@ -1,5 +1,6 @@
 package de.beaverstudios.plw.Hud;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 
 import de.beaverstudios.plw.PlwGame;
@@ -9,15 +10,15 @@ import de.beaverstudios.plw.PlwGame;
  */
 public class Notice{
 
-    public static boolean noticeVisible;
     private static String notice;
-    public static Window noticeWindow;
+    public static Table noticeWindow;
     private static float visibleTimer;
 
     public Notice(){
 
         notice = "Not enough Money";
-        noticeWindow = new Window("Notice",Hud.getSkin());
+        noticeWindow = new Table();
+        noticeWindow.setSkin(Hud.getSkin());
         noticeWindow.center();
         noticeWindow.padTop(20);
         noticeWindow.setVisible(false);
@@ -28,10 +29,11 @@ public class Notice{
     }
 
     public void update(float dt){
-        if(noticeVisible){
+        if(noticeWindow.isVisible()){
             visibleTimer += dt;
+            System.out.println(visibleTimer);
             if (visibleTimer >= 5){
-                noticeVisible = false;
+                noticeWindow.setVisible(false);
                 visibleTimer = 0;
             }
         }

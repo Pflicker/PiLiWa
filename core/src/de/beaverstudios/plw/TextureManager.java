@@ -44,11 +44,15 @@ public class TextureManager {
     public static Image IMGBUILDING3;
     public static Image IMGBUILDING4;
     public static Image IMGBUILDING5;
+    public static Image IMGHUDBACK;
 
 
 
     public TextureManager() {
-        hudAtlas = new TextureAtlas(Gdx.files.internal("hudtest.atlas"));
+//        hudAtlas = new TextureAtlas(Gdx.files.internal("hudtest.atlas"));
+
+        IMGHUDBACK = new Image(HUDBACK);
+        IMGHUDBACK.setDrawable(new SpriteDrawable(new Sprite(HUDBACK)));
 
         IMGBARRACKS = new Image(BARRACKS);
         IMGBARRACKS.setSize(30,30);

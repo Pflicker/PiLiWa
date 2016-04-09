@@ -2,16 +2,20 @@ package de.beaverstudios.plw.Hud;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
+import static com.badlogic.gdx.math.Interpolation.*;
 
-import de.beaverstudios.plw.Buildings.BuildingManager;
 import de.beaverstudios.plw.Buildings.BuildingTypes;
 import de.beaverstudios.plw.Hud.MenuStates.BaseInfo;
 import de.beaverstudios.plw.Hud.MenuStates.GeneralTechsMenu;
 import de.beaverstudios.plw.Hud.MenuStates.SpecificTechsMenu;
 import de.beaverstudios.plw.Hud.MenuStates.TechMenu;
 import de.beaverstudios.plw.PlwGame;
-import de.beaverstudios.plw.Techs.SpecificTechs;
+import de.beaverstudios.plw.Screens.GameScreen;
+import de.beaverstudios.plw.TextureManager;
 
 /**
  * Created by Grass on 3/5/2016.
@@ -39,12 +43,14 @@ public class Menu implements InputProcessor {
         GAME,BUILD,BUILDINFO,TECH,GENERALTECH,SPECIFICTECH,BASEINFO
     }
     public static MENUSTATES menuState;
+    private static Rectangle btnExpand;
+    private static boolean isExpanded;
 
     public Menu() {
 
-        table = new Table();
+        table = new Table(Hud.getSkin());
         table.setBounds(PlwGame.V_WIDTH * 0.8f, 0, PlwGame.V_WIDTH * 0.2f, PlwGame.V_HEIGHT);
-        table.setBackground(Hud.getSkin().getDrawable("default-scroll"));
+        table.setBackground(TextureManager.IMGHUDBACK.getDrawable());
         table.top();
 
         menuStateChanged = true;
@@ -53,6 +59,8 @@ public class Menu implements InputProcessor {
 
         menuBuildingType = BuildingTypes.BARRACKS;
         menuBuildingSlot = 0;
+
+        btnExpand = new Rectangle(PlwGame.V_WIDTH*0.8f-20,PlwGame.V_HEIGHT*0.8f-20,50,50);
 
         gameMenu = new de.beaverstudios.plw.Hud.MenuStates.GameMenu();
         buildMenu = new de.beaverstudios.plw.Hud.MenuStates.BuildMenu();
@@ -124,6 +132,42 @@ public class Menu implements InputProcessor {
             ret = false;
         }
 
+    }
+
+    public static void setExpand(){
+        if(isExpanded){
+            MoveToAction action = new MoveToAction();
+            action.setPosition(table.getX() + (table.getWidth() / 2), table.getY());
+            action.setDuration(1f);
+            table.addAction(action);
+            table.addAction(sequence(fadeIn(1), run(new Runnable() {
+                public void run() {
+                 //   System.out.println("Action complete");
+                    btnExpand.setX(table.getX());
+                    btnExpand.setY(btnExpand.getY());
+                    isExpanded = false;
+                    table.setSize(PlwGame.V_WIDTH*0.2f,PlwGame.V_HEIGHT);
+                    //GameScreen.gameCamX = PlwGame.V_WIDTH*0.2f;
+                }
+            })));
+        } else {
+            MoveToAction action = new MoveToAction();
+            action.setPosition(table.getX() - (table.getWidth()), table.getY());
+            action.setDuration(1f);
+            table.addAction(action);
+            table.addAction(sequence(fadeIn(1), run(new Runnable() {
+                public void run() {
+                 //   System.out.println("Action complete");
+                    btnExpand.setX(table.getX());
+                    btnExpand.setY(btnExpand.getY());
+                 //   System.out.println("Table X:" + btnExpand.getX() + " Table Y:" + btnExpand.getY());
+                    isExpanded = true;
+                    table.setSize(PlwGame.V_WIDTH*0.4f,PlwGame.V_HEIGHT);
+                    //GameScreen.gamecam.zoom += 0.75;
+                    //GameScreen.gameCamX -= Gdx.graphics.getWidth()*0.2f;
+                }
+            })));
+        }
     }
 
     public boolean isDialogPlacement() {
@@ -221,6 +265,14 @@ public class Menu implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    public static Rectangle getBtnExpand() {
+        return btnExpand;
+    }
+
+    public static void setBtnExpand(Rectangle expandMenu) {
+        Menu.btnExpand = expandMenu;
     }
 }
 

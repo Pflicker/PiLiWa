@@ -100,7 +100,7 @@ public class BuildingInfoMenu {
                     Gdx.app.log("Clicked Button", "Build...");
                     Menu.setDialogPlacement(true);
                  } else {
-                    Notice.noticeVisible = true;
+                    Notice.noticeWindow.setVisible(true);
                     Gdx.app.log("Warning:", "Not enough Money");
                 }
 

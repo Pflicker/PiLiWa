@@ -2,13 +2,10 @@ package de.beaverstudios.plw.Screens;
 
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -19,6 +16,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.beaverstudios.plw.Hud.Hud;
+import de.beaverstudios.plw.InputProcessor.GameInputProcessor;
 import de.beaverstudios.plw.Player.Game;
 import de.beaverstudios.plw.PlwGame;
 import de.beaverstudios.plw.Buildings.BuildingManager;
@@ -26,7 +24,7 @@ import de.beaverstudios.plw.Techs.Techs;
 import de.beaverstudios.plw.TextureManager;
 import de.beaverstudios.plw.Units.UnitManager;
 
-public class GameScreen implements Screen,InputProcessor {
+public class GameScreen implements Screen {
 
 
     private static TmxMapLoader mapLoader;
@@ -37,11 +35,11 @@ public class GameScreen implements Screen,InputProcessor {
     public static TextureManager textureManager;
     public static BitmapFont font;
 
-    private static OrthographicCamera gamecam;
-    private static Stage gameStage;
-    private static Viewport gamePort;
-    private static float gameCamX;
-    private static float gameCamY;
+    public static OrthographicCamera gamecam;
+    public static Stage gameStage;
+    public static Viewport gamePort;
+    public static float gameCamX;
+    public static float gameCamY;
     public Integer p;
 
     public enum STATE{
@@ -94,7 +92,10 @@ public class GameScreen implements Screen,InputProcessor {
         gameCamY = gamePort.getWorldHeight() / 2;
         gamecam.position.set(gameCamX, gameCamY, 0);
 
-        InputMultiplexer im = new InputMultiplexer(hud.hudStage,gameStage);
+        InputMultiplexer im = new InputMultiplexer();
+        im.addProcessor(Hud.hudStage);
+        im.addProcessor(gameStage);
+        im.addProcessor(new GameInputProcessor());
         Gdx.input.setInputProcessor(im);
     }
 
@@ -102,7 +103,6 @@ public class GameScreen implements Screen,InputProcessor {
     public void update(float dt) {
 
             world.update(dt);
-            goRight();
             float deltaTime = state == STATE.PAUSE ? 0 : Gdx.graphics.getDeltaTime();
             if (speed == 1) dt = dt * 2;
             gamecam.update();
@@ -111,7 +111,6 @@ public class GameScreen implements Screen,InputProcessor {
             hud.update(dt);
             bm.update(dt);
             um.update(dt);
-            //ki.comTurn(Game.player1);
 
         if (gameOver) {
             gameOver = false;
@@ -140,6 +139,9 @@ public class GameScreen implements Screen,InputProcessor {
         batch.end();
         batch.setProjectionMatrix(hud.hudStage.getCamera().combined);
         hud.hudStage.draw();
+        batch.begin();
+        hud.draw(batch);
+        batch.end();
 
     }
 
@@ -176,71 +178,9 @@ public class GameScreen implements Screen,InputProcessor {
         font.dispose();
     }
 
-    public void goRight(){
-        if(keyPressed){
-            gameCamX +=1;
-        }
-    }
     public static SpriteBatch getBatch() {
         return batch;
     }
 
-    @Override
-    public boolean keyDown(int keycode) {
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-            gameCamX -= 1;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-            keyPressed = true;
-//            gameCamX += 1;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)){
-            gameCamY += 1;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-            gameCamY -= 1;
-        }
 
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        if(keycode == Input.Keys.RIGHT){
-            keyPressed = false;
-//            gameCamX += 1;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-            gamecam.zoom += 0.1*amount;
-        return false;
-    }
 }

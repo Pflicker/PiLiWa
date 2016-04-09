@@ -3,6 +3,7 @@ package de.beaverstudios.plw.Units;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.ArrayList;
 
@@ -71,8 +72,9 @@ public class UnitManager {
 
         for (int i = 1; i < p.getUnits().size(); i++) {
             if (p.getUnits().get(i).getLife() < 1){
-                unitValues.add(new UnitValue(p.getUnits().get(i).x+p.getUnits().get(i).getW()/2,p.getUnits().get(i).y+p.getUnits().get(i).getH(),p.getUnits().get(i).value));
+                unitValues.add(new UnitValue(p.getUnits().get(i).x + p.getUnits().get(i).getW() / 2, p.getUnits().get(i).y + p.getUnits().get(i).getH(), p.getUnits().get(i).value));
                 Game.opponent(p).addMoney(p.getUnits().get(i).getValue());
+                //p.getUnits().get(i).remove();
                 p.getUnits().remove(i);
                 System.out.println(p + " Unit killed");
             }

@@ -3,7 +3,9 @@ package de.beaverstudios.plw.Hud;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -33,9 +35,11 @@ public class Hud implements InputProcessor {
     private static de.beaverstudios.plw.Hud.Help.TechTree.TechTree techTree;
     private static boolean help;
 
+
     public Hud() {
 
         skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+        skin.getFont("default-font").getData().setScale(0.8f);
         hudCam = new OrthographicCamera();
         hudPort = new FitViewport(PlwGame.V_WIDTH, PlwGame.V_HEIGHT, hudCam);
         hudStage = new Stage(hudPort, GameScreen.getBatch());
@@ -67,9 +71,12 @@ public class Hud implements InputProcessor {
         gameInfo.update(dt);
         menu.update(dt);
         notice.update(dt);
-        unitInfo.update(dt);
-
         hudStage.act(dt);
+        unitInfo.update(dt);
+    }
+
+    public void draw(SpriteBatch batch){
+        unitInfo.draw(batch);
     }
 
     public static Skin getSkin() {

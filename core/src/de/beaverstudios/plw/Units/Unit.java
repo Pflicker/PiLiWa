@@ -7,13 +7,23 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
+import de.beaverstudios.plw.Hud.Hud;
+import de.beaverstudios.plw.Hud.Menu;
+import de.beaverstudios.plw.Hud.UnitInfo;
 import de.beaverstudios.plw.Player.Game;
 import de.beaverstudios.plw.Player.Player;
+import de.beaverstudios.plw.Screens.GameScreen;
 import de.beaverstudios.plw.Techs.Types.ArmorType;
 import de.beaverstudios.plw.Techs.Types.DamageType;
 import de.beaverstudios.plw.Units.Healthbar.HealthBar;
@@ -39,7 +49,6 @@ public abstract class Unit {
     Integer armor;
     ArmorType armorType;
     HealthBar healthBar;
-
 
     ShieldBar shieldBar;
     Integer maxShieldValue = 1;
@@ -83,22 +92,24 @@ public abstract class Unit {
     TextureRegion currentFrame;
     float stateTime;
 
+    Rectangle bounds;
+
     public void create() {
         life = maxLife;
         healthBar = new HealthBar(x, y + h + 1, w, 2, life, maxLife);
 
-        if(!buildung){
+        if (!buildung) {
             x = getSpawnPointX(player, slot);
             y = getSpawnPointY(player, slot);
         }
 
-        if(armorType == ArmorType.SHIELD){
+        if (armorType == ArmorType.SHIELD) {
             shieldValue = maxShieldValue;
-            shieldBar = new ShieldBar(x,y+h+2,w,2,shieldValue,maxShieldValue);
+            shieldBar = new ShieldBar(x, y + h + 2, w, 2, shieldValue, maxShieldValue);
         }
 
         walkSheet = skin;
-        TextureRegion[][] tmp = TextureRegion.split(this.walkSheet, this.walkSheet.getWidth()/this.FRAME_COLS, this.walkSheet.getHeight()/this.FRAME_ROWS);
+        TextureRegion[][] tmp = TextureRegion.split(this.walkSheet, this.walkSheet.getWidth() / this.FRAME_COLS, this.walkSheet.getHeight() / this.FRAME_ROWS);
         walkFrames = new TextureRegion[this.FRAME_COLS * this.FRAME_ROWS];
         int index = 0;
         for (int i = 0; i < this.FRAME_ROWS; i++) {
@@ -108,10 +119,12 @@ public abstract class Unit {
         }
         this.walkAnimation = new Animation(0.125f, this.walkFrames);
         this.stateTime = 0f;
+
+        bounds = new Rectangle(x,y,w,h);
     }
 
     public void update(float dt) {
-        //if (rangeCheck(this)) {
+
         if (armorType == ArmorType.SHIELD){
             checkShield(dt);
         }
@@ -120,10 +133,18 @@ public abstract class Unit {
             x += dx * movementspeed * dt;
             y += dy * movementspeed * dt;
         }
+
         if (fight){
             fight();
-        }timeSinceDamageTaken +=dt;
+        }
+
+        bounds.setX(x);
+        bounds.setY(y);
+
+        timeSinceDamageTaken +=dt;
     }
+
+
 
     public void checkShield(float dt){
         if (timeSinceDamageTaken >= shieldReloadTimer) {
@@ -137,82 +158,6 @@ public abstract class Unit {
                 shieldReloadStep = 0;
             }
         }
-    }
-    public boolean rangeCheck(Unit u){
-
-        int row;
-        int col;
-        int size;
-        int rowMax;
-        int colMax;
-        double dist;
-        Boolean trigger1 = false;
-        Boolean trigger2 = false;
-
-        Unit unit_ptr;
-
-        row = u.getGridX() - 1;
-        col = u.getGridY() - 1;
-        rowMax = u.getGridX() + 1;
-        colMax = u.getGridY() + 1;
-
-        if (gridX == 0){
-            row = gridX;
-        }
-
-        if (gridX == PlwGame.GRID_RES){
-            rowMax = u.gridX;
-        }
-
-        if (gridY == 0){
-            col = gridY;
-        }
-
-        if (gridY == PlwGame.GRID_RES){
-            colMax = u.getGridY();
-        }
-        for (int i = row; i < rowMax; i++) {
-            for (int j = col; j < colMax; j++) {
-
-                size = Grid.gridTable.get(i).get(j).size();
-
-                for (int k = 0; k < size; k++) {
-                    unit_ptr = Grid.gridTable.get(i).get(j).get(k);
-                    if (unit_ptr.getPlayer() != player) {
-                        dist = java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - unit_ptr.getX(), 2) + java.lang.Math.pow(u.getY() - unit_ptr.getY(), 2));
-                        if (dist < PlwGame.DET_RANGE) {
-                            u.setTarget(unit_ptr);
-                            trigger1 = true;
-                            if (dist < range) {
-                                trigger2 = true;
-                                if (dist < u.distTarget) {
-                                    distTarget = (float) dist;
-                                    target = unit_ptr;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (trigger2) {
-                return false;
-
-            }
-
-        }
-        if (!trigger1) {
-            if (u.getPlayer() == Game.player2) {
-                u.setTarget(Game.opponent(player).getUnits().get(0));
-                u.setDistTarget((float) java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - u.getTarget().getX(), 2) + java.lang.Math.pow(u.getY() - u.getTarget().getY(), 2)));
-
-            }
-            if (u.getPlayer() == Game.player1) {
-                u.setTarget(Game.opponent(player).getUnits().get(0));
-                u.setDistTarget((float) java.lang.Math.sqrt(java.lang.Math.pow(u.getX() - u.getTarget().getX(), 2) + java.lang.Math.pow(u.getY() - u.getTarget().getY(), 2)));
-            }
-        }
-        return true;
     }
 
     public void fight() {
@@ -695,5 +640,21 @@ public abstract class Unit {
 
     public void setHealthBar(HealthBar healthBar) {
         this.healthBar = healthBar;
+    }
+
+    public void setW(Integer w) {
+        this.w = w;
+    }
+
+    public void setH(Integer h) {
+        this.h = h;
+    }
+
+    public Rectangle getBounds() {
+        return bounds;
+    }
+
+    public void setBounds(Rectangle bounds) {
+        this.bounds = bounds;
     }
 }

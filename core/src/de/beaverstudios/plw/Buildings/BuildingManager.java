@@ -7,8 +7,10 @@ import java.util.ArrayList;
 
 import de.beaverstudios.plw.Hud.DialogPlacement;
 import de.beaverstudios.plw.Hud.GameInfo;
+import de.beaverstudios.plw.Hud.Notice;
 import de.beaverstudios.plw.Player.Game;
 import de.beaverstudios.plw.Player.Player;
+import de.beaverstudios.plw.Screens.GameScreen;
 
 public class BuildingManager {
 
@@ -24,6 +26,7 @@ public class BuildingManager {
             for (Player p : Game.players) {
                 for (de.beaverstudios.plw.Buildings.Building b : p.getBuildings()) {
                     b.spawnUnit();
+
                 }
                 //Gdx.app.log("Unit spawned", String.format("%03f", timeSinceSpawn));
                 timeSinceSpawn = 0;
@@ -37,10 +40,14 @@ public class BuildingManager {
             createBuilding(buildingType, slot, p);
             return true;
         } else {
+            if(!p.isCom()) {
+                Notice.noticeWindow.setVisible(true);
+            }
             return false;
         }
 
     }
+
     public static void createBuilding(BuildingTypes buildingType, Integer slot, Player p){
         for (int i = 0; i < p.getBuildings().size(); i++){
             if(p.getBuildings().get(i).getSlot() == slot){

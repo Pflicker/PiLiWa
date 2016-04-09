@@ -1,6 +1,8 @@
 package de.beaverstudios.plw.Hud;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -25,23 +27,70 @@ public class UnitInfo {
     private Integer life;
     private Integer maxLife;
     private ShieldBar shieldBar;
+    private Integer shield;
+    private Integer maxShield;
+    private static Label lbShield;
+    private static Label lbLife;
 
     public UnitInfo(){
 
-        unit = Game.player1.getUnits().get(0);
-        life = unit.getLife();
-        maxLife = unit.getMaxLife();
+
         table = new Table(Hud.getSkin());
         table.setBounds(PlwGame.V_WIDTH * 0.8f, 0, PlwGame.V_WIDTH * 0.2f, PlwGame.V_HEIGHT * 0.2f);
         table.setBackground(TextureManager.IMGFACTORY.getDrawable());
+        table.padTop(table.getHeight() * 0.4f);
+
+        unit = Game.player2.getUnits().get(0);
+        life = unit.getLife();
+        maxLife = unit.getMaxLife();
+        lbLife = new Label("Life: " + life + " / " + maxLife,Hud.getSkin());
+        lbLife.setSize(table.getWidth()*0.5f, table.getHeight()*0.05f);
         healthBar = new HealthBar(table.getX(),table.getY(),table.getWidth(),table.getHeight(),life,maxLife);
-        table.add(healthBar);
+
+
+        if (unit.getArmorType() == ArmorType.SHIELD){
+            shield = unit.getShieldValue();
+            maxShield = unit.getMaxShieldValue();
+            lbShield= new Label("Shield: " + shield + " / " + maxShield,Hud.getSkin());
+            shieldBar = new ShieldBar(table.getX(),table.getY(),table.getWidth(),table.getHeight(),shield,maxShield);
+            table.add(lbShield).center().top().setActorHeight(table.getHeight()*0.2f);
+            table.row();
+        }
+        table.add(lbLife);
     }
 
     public void update(float dt){
-        life = unit.getLife();
-        maxLife = unit.getMaxLife();
-        //healthBar.draw(GameScreen.getBatch(),0,table.getX(),table.getY(),table.getWidth(),table.getHeight(),unit.getLife(),unit.getMaxLife());
+        if(unit != null) {
+            if (unit.getArmorType() == ArmorType.SHIELD) {
+                shield = unit.getShieldValue();
+                maxShield = unit.getMaxShieldValue();
+                lbShield.setText("Shield: " + shield + " / " + maxShield);
+            }
+
+            life = unit.getLife();
+            maxLife = unit.getMaxLife();
+            lbLife.setText("Life: " + life + " / " + maxLife);
+        }
     }
 
+    public void draw(SpriteBatch batch) {
+        if (unit != null) {
+            if (unit.getArmorType() == ArmorType.SHIELD) {
+                shieldBar.draw(batch, 0, table.getX(), table.getY() + table.getHeight() * 0.8f, table.getWidth(), table.getHeight() * 0.2f, shield, maxShield);
+            }
+            healthBar.draw(batch, 0, table.getX(), table.getY() + table.getHeight() * 0.6f, table.getWidth(), table.getHeight() * 0.2f, life, maxLife);
+        }
+    }
+
+    public static void setUnit(Unit unit) {
+        lbShield.setText("");
+        lbLife.setText("");
+        UnitInfo.unit = unit;
+    }
+
+    public static void clearInfo() {
+        unit = null;
+        lbShield.setText("");
+        lbLife.setText("");
+    }
 }
