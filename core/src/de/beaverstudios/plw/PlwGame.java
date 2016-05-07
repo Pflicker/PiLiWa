@@ -3,6 +3,8 @@ package de.beaverstudios.plw;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import de.beaverstudios.plw.Screens.LoadingScreen;
 import de.beaverstudios.plw.Screens.MainMenuScreen;
 
 
@@ -14,13 +16,13 @@ public class PlwGame extends Game {
 	public static final int GRID_RES = 10;
 	public static final int MELE_RANGE = 15;
 	public static final int DET_RANGE = 80;
-	public static MainMenuScreen mainMenu;
+	private MainMenuScreen mainMenuScreen;
 
 
 	public void create() {
 
-		mainMenu = new MainMenuScreen(this);
-		setScreen(mainMenu);
+        mainMenuScreen = new MainMenuScreen(this);
+        setScreen(mainMenuScreen);
 	}
 
 	public void render() {

@@ -1,109 +1,154 @@
 package de.beaverstudios.plw.Units;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.ArrayList;
 
+import de.beaverstudios.plw.Animations.UnitValue;
+import de.beaverstudios.plw.Player.Game;
+import de.beaverstudios.plw.Player.Player;
 import de.beaverstudios.plw.PlwGame;
+import de.beaverstudios.plw.Screens.GameOverScreen;
+import de.beaverstudios.plw.Screens.GameScreen;
+import de.beaverstudios.plw.Techs.Types.ArmorType;
 
 /**
  * Created by Grass on 3/3/2016.
  */
 public class UnitManager {
 
-    public static ArrayList<Unit> comUnits = new ArrayList<Unit>();
-    public static ArrayList<Unit> playerUnits = new ArrayList<Unit>();
     private static Grid grid;
-    public static int unitsSpawned;
     public static Marine ghostMarine;
+    public static Melee ghostMelee;
+    public static Sniper ghostSniper;
+    public static MeleeTank ghostMeleeTank;
+    public static DarkTemplar ghostDarkTemplar;
+    public static Cat ghostCat;
+    public static ArrayList<UnitValue> unitValues = new ArrayList<UnitValue>();
     public static Path path;
-    public static Unit u;
 
     public UnitManager() {
 
-        ghostMarine = new Marine(2,9);
 
         grid = new Grid();
         path = new Path();
-        playerUnits.add(new Base(1));
-        comUnits.add(new Base(0));
+
+
+        ghostMarine = new Marine(Game.ghostPlayer,9);
+        ghostCat = new Cat(Game.ghostPlayer,8);
+        ghostMelee = new Melee(Game.ghostPlayer,7);
+        ghostSniper = new Sniper(Game.ghostPlayer,7);
+        ghostMeleeTank = new MeleeTank(Game.ghostPlayer,7);
+        ghostDarkTemplar = new DarkTemplar(Game.ghostPlayer,7);
     }
-
-
-
 
     public void update(float dt) {
-
         grid.update();
-
-        for (Unit u : comUnits) {
-            u.update(dt);
+        for (Player p : Game.players){
+            for (Unit u : p.getUnits()) {
+                u.update(dt);
+                u.stateTime += dt;
+            }
+            killUnits(p);
         }
 
-        for (Unit u : playerUnits) {
-            u.update(dt);
+        for (int i = 0;unitValues.size() > i;i++){
+            unitValues.get(i).update(dt);
+            if (unitValues.get(i).getTimer() > 2f){
+                unitValues.remove(i);
+            }
         }
-
-        killUnits();
     }
 
-    public void killUnits() {
-        for (int i = 0; i < playerUnits.size(); i++) {
-            if (playerUnits.get(i).getLife() < 1){
-                playerUnits.remove(i);
-                System.out.println("PlayerUnit killed");
-            }
-            else if (playerUnits.get(i).getX() < 0 || playerUnits.get(i).getX() > PlwGame.V_WIDTH){
-                playerUnits.remove(i);
-                System.out.println("PlayerUnit disposed0");
-            }
-            else if (playerUnits.get(i).getY() < 0 || playerUnits.get(i).getY() > PlwGame.V_HEIGHT){
-                playerUnits.remove(i);
-                System.out.println("PlayerUnit disposed1");
-            }
+    public void killUnits(Player p) {
+
+        if(p.getUnits().get(0).getLife() < 1){
+            GameScreen.gameOver = true;
+            System.out.println("Game Over");
         }
-        for (int i = 0; i < comUnits.size(); i++) {
-            if (comUnits.get(i).getLife() < 1) {
-                comUnits.remove(i);
-                System.out.println("ComUnit killed");
+
+        for (int i = 1; i < p.getUnits().size(); i++) {
+            if (p.getUnits().get(i).getLife() < 1){
+                unitValues.add(new UnitValue(p.getUnits().get(i).x + p.getUnits().get(i).getW() / 2, p.getUnits().get(i).y + p.getUnits().get(i).getH(), p.getUnits().get(i).value));
+                Game.opponent(p).addMoney(p.getUnits().get(i).getValue());
+                //p.getUnits().get(i).remove();
+                p.getUnits().remove(i);
+                System.out.println(p + " Unit killed");
             }
-            else if (comUnits.get(i).getX() < 0 || comUnits.get(i).getX() > PlwGame.V_WIDTH){
-                comUnits.remove(i);
-                System.out.println("ComUnit disposed0");
+            else if (p.getUnits().get(i).getX() < 0 || p.getUnits().get(i).getX() > PlwGame.V_WIDTH){
+                p.getUnits().remove(i);
+                System.out.println(p + " Unit disposed");
             }
-            else if (comUnits.get(i).getY() < 0 || comUnits.get(i).getY() > PlwGame.V_HEIGHT){
-                comUnits.remove(i);
-                System.out.println("ComUnit disposed1");
+            else if (p.getUnits().get(i).getY() < 0 || p.getUnits().get(i).getY() > PlwGame.V_HEIGHT){
+                p.getUnits().remove(i);
+                System.out.println(p + " Unit disposed");
             }
         }
     }
 
     public void render(SpriteBatch batch) {
-        for (Unit u : playerUnits){
-            batch.draw(u.getSkin(), u.getX(), u.getY(), u.getW(), u.getH());
-            u.healthBar.draw(batch, 1, u.getX(), u.getY() + u.getH()+ 1, u.getW(), 1,u.getLife(), u.getMaxLife());
+        for (Player p : Game.players) {
+            for (Unit u : p.getUnits()) {
+                //System.out.println("Player " + p + "Unit "+ u);
+                u.currentFrame = u.walkAnimation.getKeyFrame(u.stateTime, true);
+                if (p.isFlip()) {
+                    if (!u.currentFrame.isFlipX()) {
+                        u.currentFrame.flip(true, false);
+                    }
+                }
+                batch.draw(u.getCurrentFrame(), u.getX(), u.getY(), u.getW(), u.getH());
+                u.healthBar.draw(batch, 1, u.getX(), u.getY() + u.getH() + 1, u.getW(), 1, u.getLife(), u.getMaxLife());
+                if (u.getArmorType() == ArmorType.SHIELD) {
+                    u.shieldBar.draw(batch, 1, u.getX(), u.getY() + u.getH() + 2, u.getW(), 2, u.getShieldValue(), u.getMaxShieldValue());
+                }
+            }
         }
-        for (Unit u : comUnits){
-            batch.draw(u.getSkin(), u.getX(), u.getY(), u.getW(), u.getH());
-            u.healthBar.draw(batch, 1, u.getX(), u.getY() + u.getH()+ 1, u.getW(), 1,u.getLife(), u.getMaxLife());
+        for (int i = 0;unitValues.size() > i;i++){
+            unitValues.get(i).render(batch, new BitmapFont());
         }
     }
 
-    public static ArrayList<Unit> getComUnits() {
-        return comUnits;
+    public static Marine getGhostMarine() {
+        return ghostMarine;
     }
 
-    public static void setComUnits(ArrayList<Unit> comUnits) {
-        UnitManager.comUnits = comUnits;
+    public static void setGhostMarine(Marine ghostMarine) {
+        UnitManager.ghostMarine = ghostMarine;
     }
 
-    public static ArrayList<Unit> getPlayerUnits() {
-        return playerUnits;
+
+    public static DarkTemplar getGhostDarkTemplar() {
+        return ghostDarkTemplar;
     }
 
-    public static void setPlayerUnits(ArrayList<Unit> playerUnits) {
-        UnitManager.playerUnits = playerUnits;
+    public static void setGhostDarkTemplar(DarkTemplar ghostDarkTemplar) {
+        UnitManager.ghostDarkTemplar = ghostDarkTemplar;
     }
 
+    public static MeleeTank getGhostMeleeTank() {
+        return ghostMeleeTank;
+    }
+
+    public static void setGhostMeleeTank(MeleeTank ghostMeleeTank) {
+        UnitManager.ghostMeleeTank = ghostMeleeTank;
+    }
+
+    public static Sniper getGhostSniper() {
+        return ghostSniper;
+    }
+
+    public static void setGhostSniper(Sniper ghostSniper) {
+        UnitManager.ghostSniper = ghostSniper;
+    }
+
+    public static Melee getGhostMelee() {
+        return ghostMelee;
+    }
+
+    public static void setGhostMelee(Melee ghostMelee) {
+        UnitManager.ghostMelee = ghostMelee;
+    }
 }
