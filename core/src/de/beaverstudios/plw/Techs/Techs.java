@@ -2,10 +2,7 @@ package de.beaverstudios.plw.Techs;
 
 import java.util.ArrayList;
 
-import de.beaverstudios.plw.Buildings.BuildingManager;
-import de.beaverstudios.plw.Buildings.BuildingTypes;
 import de.beaverstudios.plw.Player.Game;
-import de.beaverstudios.plw.Player.Player;
 
 /**
  * Created by Grass on 3/20/2016.

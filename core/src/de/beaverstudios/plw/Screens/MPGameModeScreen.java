@@ -25,7 +25,7 @@ import de.beaverstudios.plw.PlwGame;
 /**
  * Created by Grass on 3/21/2016.
  */
-public class GameModeScreen implements Screen, InputProcessor {
+public class MPGameModeScreen implements Screen, InputProcessor {
 
     private Skin skin;
     private Stage stage;
@@ -43,7 +43,7 @@ public class GameModeScreen implements Screen, InputProcessor {
 
     final PlwGame game;
 
-    public GameModeScreen(PlwGame gam) {
+    public MPGameModeScreen(PlwGame gam) {
 
         skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
         this.game = gam;

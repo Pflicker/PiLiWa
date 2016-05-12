@@ -1,0 +1,96 @@
+
+soldier.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+10
+  rotate: false
+  xy: 1, 103
+  size: 17, 18
+  orig: 17, 18
+  offset: 0, 0
+  index: -1
+8
+  rotate: false
+  xy: 1, 103
+  size: 17, 18
+  orig: 17, 18
+  offset: 0, 0
+  index: -1
+9
+  rotate: false
+  xy: 1, 83
+  size: 17, 18
+  orig: 17, 18
+  offset: 0, 0
+  index: -1
+1
+  rotate: false
+  xy: 1, 63
+  size: 14, 18
+  orig: 14, 18
+  offset: 0, 0
+  index: -1
+3
+  rotate: false
+  xy: 1, 63
+  size: 14, 18
+  orig: 14, 18
+  offset: 0, 0
+  index: -1
+11
+  rotate: false
+  xy: 17, 63
+  size: 14, 18
+  orig: 14, 18
+  offset: 0, 0
+  index: -1
+7
+  rotate: false
+  xy: 17, 63
+  size: 14, 18
+  orig: 14, 18
+  offset: 0, 0
+  index: -1
+12
+  rotate: false
+  xy: 1, 42
+  size: 13, 19
+  orig: 13, 19
+  offset: 0, 0
+  index: -1
+13
+  rotate: false
+  xy: 16, 43
+  size: 14, 18
+  orig: 14, 18
+  offset: 0, 0
+  index: -1
+5
+  rotate: false
+  xy: 16, 43
+  size: 14, 18
+  orig: 14, 18
+  offset: 0, 0
+  index: -1
+6
+  rotate: false
+  xy: 1, 21
+  size: 13, 19
+  orig: 13, 19
+  offset: 0, 0
+  index: -1
+4
+  rotate: false
+  xy: 16, 23
+  size: 14, 18
+  orig: 14, 18
+  offset: 0, 0
+  index: -1
+2
+  rotate: false
+  xy: 1, 1
+  size: 13, 18
+  orig: 13, 18
+  offset: 0, 0
+  index: -1

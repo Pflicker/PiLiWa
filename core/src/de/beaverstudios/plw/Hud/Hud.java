@@ -21,6 +21,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import de.beaverstudios.plw.Buildings.BuildingTypes;
@@ -34,6 +36,8 @@ import de.beaverstudios.plw.TextureManager;
 import de.beaverstudios.plw.Units.Healthbar.HealthBar;
 import de.beaverstudios.plw.Units.Healthbar.ShieldBar;
 import de.beaverstudios.plw.Units.Unit;
+import de.beaverstudios.plw.Units.UnitManager;
+import de.beaverstudios.plw.Units.UnitTypes;
 
 /**
  * Created by Grass on 3/2/2016.
@@ -76,10 +80,9 @@ public class Hud {
 
     //UnitInfo
     private Unit unit;
-    private Table tableOverlay;
     private Table unitInfoTable;
-    private HealthBar healthBar;
-    private ShieldBar shieldBar;
+    private de.beaverstudios.plw.Hud.HealthBar healthBar;
+    private de.beaverstudios.plw.Hud.ShieldBar shieldBar;
     private WidgetGroup unitInfoGroup;
     private Table advancedTable;
     private Button btnAdvance;
@@ -133,7 +136,7 @@ public class Hud {
     private Label lbattackSpeed;
     private Label special;
     private BuildingTypes buildingType;
-    private Unit u;
+    private Integer unitID;
     private TextButton btnBuild;
 
     //BuildingOverview
@@ -196,7 +199,7 @@ public class Hud {
         menuTable.top();
         menuTable.setTouchable(Touchable.enabled);
         menuTable.setVisible(false);
-        menuBuildingType=BuildingTypes.BARRACKS;
+        menuBuildingType=Game.player2.getBuildingIDs().get(0);
         menuBuildingSlot = 0;
         //</editor-fold>
 
@@ -205,7 +208,7 @@ public class Hud {
 
         buildingInfoTable = new Table(skin);
         buildingInfoTable.setBounds(PlwGame.V_WIDTH*0.6f,PlwGame.V_HEIGHT*0.2f,PlwGame.V_WIDTH*0.2f,PlwGame.V_HEIGHT*0.6f);
-        buildingInfoTable.setBackground(TextureManager.IMGBARRACKS.getDrawable());
+        buildingInfoTable.setBackground(TextureManager.IMGBTNPAUSE.getDrawable());
         buildingInfoTable.setVisible(false);
         buildingInfoTable.columnDefaults(0);
         buildingInfoTable.columnDefaults(1);
@@ -217,7 +220,7 @@ public class Hud {
         btnBuild.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                GameScreen.bm.buyBuilding(buildingType,menuBuildingSlot, Game.player2);
+                Game.player2.buyBuilding(buildingType,menuBuildingSlot);
                 updateBuildingOverview();
                 updateBuildingDialog();
                 building = buildingType;
@@ -227,18 +230,17 @@ public class Hud {
         });
 
         this.buildingType = getMenuBuildingType();
-        u = this.buildingType.getUnitByIndex(this.buildingType.getIndex());
+        unitID = this.buildingType.getUnits().get(0);
 
         lbBuilding = new Label(" " + buildingType.getBuildingName(), skin);
         lbBuildingPrice = new Label("Price: " + buildingType.getPrice(),skin);
 
-        lbUnitName = new Label(u.getName(),skin);
-        lbmaxLife = new Label("Life: " + u.getMaxLife(),skin);
-        lbarmor= new Label(" " + u.getArmor(),skin);
-        lbspeed= new Label(" " + u.getMovementspeed(),skin);
-        lbdamage= new Label(" " +  u.getDamage(),skin);
-        lbdamageType= new Label(" " + u.getDamageType().getTypeName(),skin);
-        lbattackSpeed= new Label("AS: " + u.getAttackspeed(),skin);
+        lbUnitName = new Label(Game.getThisPlayer().unitIDs.get(unitID).getName(),skin);
+        lbmaxLife = new Label("Life: " + Game.getThisPlayer().unitIDs.get(unitID).getMaxLife(),skin);
+        lbarmor= new Label(" " + Game.getThisPlayer().unitIDs.get(unitID).getArmor(),skin);
+        lbdamage= new Label(" " +  Game.getThisPlayer().unitIDs.get(unitID).getDamage(),skin);
+        lbdamageType= new Label(" " + Game.getThisPlayer().unitIDs.get(unitID).getDamageType().getTypeName(),skin);
+        lbattackSpeed= new Label("AS: " + Game.getThisPlayer().unitIDs.get(unitID).getAttackspeed(),skin);
 
         Integer height = (int)buildingInfoTable.getHeight()/10;
         buildingInfoTable.row().height(height).colspan(3);
@@ -289,12 +291,12 @@ public class Hud {
         buildingTypes = new ArrayList<BuildingTypes>();
         dnd = new DragAndDrop();
 
-        for (BuildingTypes b : BuildingTypes.values()){
-            if(b.getReq() == null) {
+        for (BuildingTypes b : Game.getThisPlayer().buildingIDs){
+
                 buildingTypes.add(b);
                 btnBuildings.add(new Button(b.getImage().getDrawable()));
                 lbBuildings.add(new Label(b.getBuildingName(), skin));
-            }
+
         }
 
         for (int i = 0;btnBuildings.size() > i; i++){
@@ -329,27 +331,28 @@ public class Hud {
 
         unitInfoTable= new Table(skin);
         unitInfoTable.setBounds(PlwGame.V_WIDTH * 0.6f, 0, PlwGame.V_WIDTH * 0.2f, PlwGame.V_HEIGHT * 0.2f);
-        //table.debug();
-
-        tableOverlay = new Table(skin);
-        tableOverlay.setBounds(PlwGame.V_WIDTH * 0.6f, 0, PlwGame.V_WIDTH * 0.2f, PlwGame.V_HEIGHT * 0.2f);
+        unitInfoTable.top();
+        unitInfoTable.row().height(unitInfoTable.getHeight()*1/4);
+        unitInfoTable.debug();
 
         unit = Game.player2.getUnits().get(0);
 
         lbUILife = new Label("Life: " + unit.getLife() + " / " + unit.getMaxLife(),skin);
         lbUILife.setSize(unitInfoTable.getWidth()*0.5f, unitInfoTable.getHeight()*0.05f);
-        healthBar = new HealthBar(unitInfoTable.getX(),unitInfoTable.getY(),unitInfoTable.getWidth(),unitInfoTable.getHeight(),unit.getLife(),unit.getMaxLife());
+        healthBar = new de.beaverstudios.plw.Hud.HealthBar(unitInfoTable.getX(),unitInfoTable.getY()+unitInfoTable.getHeight()*2/4,
+                unitInfoTable.getWidth(),unitInfoTable.getHeight()/4,unit);
 
         if (unit.getArmorType() == ArmorType.SHIELD){
             lbUIShield= new Label("Shield: " + unit.getShieldValue() + " / " + unit.getMaxShieldValue(),skin);
-            shieldBar = new ShieldBar(unitInfoTable.getX(),unitInfoTable.getY(),unitInfoTable.getWidth(),unitInfoTable.getHeight(),unit.getShieldValue(),unit.getMaxShieldValue());
-            tableOverlay.add(lbUIShield).center().top().setActorHeight(unitInfoTable.getHeight()*0.2f);
-            tableOverlay.row();
-            unitInfoTable.add(shieldBar);
+            shieldBar = new de.beaverstudios.plw.Hud.ShieldBar(unitInfoTable.getX(),unitInfoTable.getY()+unitInfoTable.getHeight()*3/4,
+                    unitInfoTable.getWidth(),unitInfoTable.getHeight()/4,unit);
+            unitInfoTable.add(lbUIShield).center().top().setActorHeight(unitInfoTable.getHeight()*0.2f);
+            unitInfoTable.row().height(unitInfoTable.getHeight()*1/4);
+            //unitInfoTable.add(shieldBar);
         }
 
-        tableOverlay.add(lbUILife);
-        unitInfoTable.add(healthBar);
+        unitInfoTable.add(lbUILife);
+        //unitInfoTable.add(healthBar);
 
         btnAdvance = new Button(TextureManager.IMGBTNRESUME.getDrawable());
         btnAdvance.setPosition(unitInfoTable.getX(),unitInfoTable.getY());
@@ -399,7 +402,7 @@ public class Hud {
         advancedTable.add(lbUIArmoryType);
 
         advancedTable.row().height(advancedTable.getHeight()/5);
-        advancedTable.add(TextureManager.IMGBUILDING4).height(20).width(20);
+        advancedTable.add(TextureManager.IMGBTNPAUSE).height(20).width(20);
         advancedTable.add(lbUIAttackSpeed);
         advancedTable.add(TextureManager.IMGSPEED).height(20).width(20);
         advancedTable.add(lbUIMovementspeed);
@@ -411,9 +414,10 @@ public class Hud {
         advancedTable.add();
 
         unitInfoGroup = new WidgetGroup();
+        unitInfoGroup.addActor(shieldBar);
+        unitInfoGroup.addActor(healthBar);
         unitInfoGroup.addActor(unitInfoTable);
         unitInfoGroup.addActor(advancedTable);
-        unitInfoGroup.addActor(tableOverlay);
         unitInfoGroup.addActor(btnAdvance);
         //</editor-fold>
 
@@ -513,7 +517,7 @@ public class Hud {
                 public void drop(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
                     System.out.println("Dropped");
                     setMenuBuildingSlot(finalI);
-                    GameScreen.bm.buyBuilding(buildingType,menuBuildingSlot, Game.player2);
+                    //Game.buyBuilding(buildingType,menuBuildingSlot, Game.player2);
                     createUpgradeMenu(menuTable);
                     updateBuildingDialog();
                     updateBuildingOverview();
@@ -788,7 +792,7 @@ public class Hud {
 
         for(int i = 0;Game.player2.getBuildings().size() > i; i++){
             slotTable.get(Game.player2.getBuildings().get(i).getSlot()).clearChildren();
-            slotTable.get(Game.player2.getBuildings().get(i).getSlot()).add(Game.player2.getBuildings().get(i).getUnitName()).width(buildintDialogTable.getWidth()/3).expandY();
+            slotTable.get(Game.player2.getBuildings().get(i).getSlot()).add(Game.player2.getBuildings().get(i).getBuildingName()).width(buildintDialogTable.getWidth()/3).expandY();
             final int finalI = i;
             slotTable.get(Game.player2.getBuildings().get(i).getSlot()).addListener(new ClickListener() {
                                                                                         @Override
@@ -798,28 +802,28 @@ public class Hud {
                                                                                             createUpgradeMenu(menuTable);
                                                                                         }
                                                                                     }
-            );slotTable.get(Game.player2.getBuildings().get(i).getSlot()).row().height(buildintDialogTable.getHeight()/6);;
+            );
+            slotTable.get(Game.player2.getBuildings().get(i).getSlot()).row().height(buildintDialogTable.getHeight()/6);
         }
 
         //System.out.println(buildingType);
-        u = buildingType.getUnitByIndex(buildingType.getIndex());
+        unitID = this.buildingType.getUnits().get(0);
 
         lbBuilding.setText(" " + buildingType.getBuildingName());
         lbBuildingPrice.setText("Price: " + buildingType.getPrice());
-        lbUnitName.setText(u.getName());
-        lbmaxLife.setText("Life: " + u.getMaxLife());
-        lbarmor.setText(" " + u.getArmor());
-        lbspeed.setText(" " + u.getMovementspeed());
-        lbdamage.setText(" " +  u.getDamage());
-        lbdamageType.setText(" " + u.getDamageType().getTypeName());
-        lbattackSpeed.setText("AS: " + u.getAttackspeed());
+        lbUnitName.setText(Game.getThisPlayer().unitIDs.get(unitID).getName());
+        lbmaxLife.setText("Life: " + Game.getThisPlayer().unitIDs.get(unitID).getMaxLife());
+        lbarmor.setText(" " + Game.getThisPlayer().unitIDs.get(unitID).getArmor());
+        lbdamage.setText(" " +  Game.getThisPlayer().unitIDs.get(unitID).getDamage());
+        lbdamageType.setText(" " + Game.getThisPlayer().unitIDs.get(unitID).getDamageType().getTypeName());
+        lbattackSpeed.setText("AS: " + Game.getThisPlayer().unitIDs.get(unitID).getAttackspeed());
     }
 
     public void updateBuildingOverview(){
         for (int i=0; i <9;i++) {
             buildingOverviewSlotTable.get(i).clear();
             if (Game.player2.hasSlot(i) != null) {
-                buildingOverviewSlotTable.get(i).setBackground(Game.player2.getBuildings().get(Game.player2.hasSlot(i)).getBuildingImage().getDrawable());
+                buildingOverviewSlotTable.get(i).setBackground(Game.player2.getBuildings().get(Game.player2.hasSlot(i)).getThisType().getImage().getDrawable());
             } else {
                 buildingOverviewSlotTable.get(i).add("Empty").expandX().expandY();
             }
@@ -856,10 +860,10 @@ public class Hud {
         lbUpgrades.clear();
         upgrades.clear();
 
-        for(BuildingTypes b : BuildingTypes.values()){
-            if(b.getReq() == building){
+        for(BuildingTypes b : Game.getThisPlayer().buildingIDs){
+            /*if(b.getReq() == building){
                 upgrades.add(b);
-            }
+            }*/
         }
         System.out.println("Upgrades" + upgrades);
 
@@ -951,6 +955,8 @@ public class Hud {
         lbUIShield.setText("");
         lbUILife.setText("");
         this.unit = unit;
+        healthBar.setUnit(unit);
+        shieldBar.setUnit(unit);
     }
 
     public void clearInfo() {
@@ -958,18 +964,6 @@ public class Hud {
         lbUIShield.setText("");
         lbUILife.setText("");
         unitInfoGroup.setVisible(false);
-    }
-
-    public void draw(SpriteBatch batch) {
-        if(unit != null && unit.getLife() < 1){
-            clearInfo();
-        }
-        if (unit != null) {
-            if (unit.getArmorType() == ArmorType.SHIELD) {
-                shieldBar.draw(batch, 0, unitInfoTable.getX(), unitInfoTable.getY() + unitInfoTable.getHeight() * 0.8f, unitInfoTable.getWidth(), unitInfoTable.getHeight() * 0.2f, unit.getShieldValue(), unit.getMaxShieldValue());
-            }
-            healthBar.draw(batch, 0, unitInfoTable.getX(), unitInfoTable.getY() + unitInfoTable.getHeight() * 0.6f,unitInfoTable.getWidth(), unitInfoTable.getHeight() * 0.2f, unit.getLife(), unit.getMaxLife());
-        }
     }
 
     public void setBuildingType(BuildingTypes buildingType) {
@@ -992,17 +986,7 @@ public class Hud {
         this.menuBuildingSlot = menuBuildingSlot;
     }
 
-
     public void dispose() {
 
     }
-    /*
-    public boolean isHelp() {
-        return help;
-    }
-
-    public static void setHelp(boolean help) {
-        Hud.help = help;
-    }
-       */
 }

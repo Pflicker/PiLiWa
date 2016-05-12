@@ -88,7 +88,7 @@ public class TechTree {
 
     // Add tree nodes here!
 
-        btn1 = new Button(TextureManager.IMGBARRACKS,skin);
+        btn1 = new Button(TextureManager.IMGBTNPAUSE,skin);
 
         layer1 = new WidgetGroup();
         layer1.addActor(btn1);

@@ -10,13 +10,15 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.beaverstudios.plw.PlwGame;
@@ -30,12 +32,17 @@ public class MainMenuScreen implements Screen, InputProcessor{
     private Stage stage;
 
     private Table table;
-    private TextButton startButton;
+    private TextButton btnQuickMatch;
+    private TextButton btnSP;
+    private TextButton btnMP;
     private TextButton btnOptions;
     private TextButton quitButton;
 
-    private SpriteBatch batch;
+    private TextButton btnFriends;
+    private SelectBox menu;
+
     private Sprite sprite;
+    private SpriteBatch batch;
     private Viewport menuPort;
     final PlwGame game;
 
@@ -51,16 +58,55 @@ public class MainMenuScreen implements Screen, InputProcessor{
             table.setWidth(stage.getWidth());
             table.align(Align.center | Align.top);
             table.setPosition(0, Gdx.graphics.getHeight());
+            table.columnDefaults(0);
+            table.columnDefaults(1);
+            table.columnDefaults(2);
 
-            startButton = new TextButton("New Game",skin);
-            quitButton = new TextButton("Quit Game",skin);
+            btnFriends = new TextButton("Friends",skin);
+            menu = new SelectBox(skin);
+            menu.setMaxListCount(2);
+            menu.setItems("Menu","Units");
+
+            menu.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if(menu.getSelectedIndex()==1){
+                        game.setScreen(new de.beaverstudios.plw.Screens.UnitDetailScreen(game));
+                        dispose();
+                    }
+
+                }
+            });
+
+            btnQuickMatch = new TextButton("Quick Match",skin);
+            btnSP = new TextButton("SinglePlayer",skin);
+            btnMP = new TextButton("Multiplayer",skin);
             btnOptions = new TextButton("Options",skin);
+            quitButton = new TextButton("Quit Game",skin);
 
-            startButton.addListener(new ClickListener() {
+            btnQuickMatch.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     Gdx.app.log("Clicked button", "Yep, you did");
-                    game.setScreen(new de.beaverstudios.plw.Screens.GameModeScreen(game));
+                    game.setScreen(new de.beaverstudios.plw.Screens.GameScreen(game));
+                    dispose();
+                }
+            });
+
+            btnSP.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Gdx.app.log("Clicked button", "Yep, you did");
+                    game.setScreen(new de.beaverstudios.plw.Screens.SPGameModeScreen(game));
+                    dispose();
+                }
+            });
+
+            btnMP.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Gdx.app.log("Clicked button", "Yep, you did");
+                    game.setScreen(new de.beaverstudios.plw.Screens.MPGameModeScreen(game));
                     dispose();
                 }
             });
@@ -84,11 +130,25 @@ public class MainMenuScreen implements Screen, InputProcessor{
             });
 
             table.padTop(30);
-            table.add(startButton).padBottom(30);
+            table.add(btnFriends).center().expandX();
+            table.add();
+            table.add(menu).center().expandX();
             table.row();
+            table.add();
+            table.add(btnQuickMatch).padBottom(30);
+            table.row();
+            table.add();
+            table.add(btnSP).padBottom(30);
+            table.row();
+            table.add();
+            table.add(btnMP).padBottom(30);
+            table.row();
+            table.add();
             table.add(btnOptions).padBottom(30);
             table.row();
+            table.add();
             table.add(quitButton);
+            table.debug();
             stage.addActor(table);
 
             batch = new SpriteBatch();
@@ -106,7 +166,6 @@ public class MainMenuScreen implements Screen, InputProcessor{
         public void dispose(){
             skin.dispose();
             stage.dispose();
-            batch.dispose();
             game.dispose();
         }
         @Override

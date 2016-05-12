@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<race id="0" name="Humans">
+		<base unitid="0" name="Base" w="20" h="20" maxlife="1000" armor="20" armortype="SHIELD" shield="true" maxshieldvalue ="1000" shieldreloadvalue="20" damage="100" damagetype="PHYSICAL" attackspeed="1" range="50" tier ="1" req="-1" texture="Units/soldier.atlas" />
+		<building buildingid="0" name="Barracks" price ="50" texture="barracks.png">
+			<unit unitid="1" name="Marine" w="10" h="10" maxlife="140" armor="5" armortype="PHYSICAL" shield="false" damage="25" damagetype="PHYSICAL" attackspeed="1" range="50" special="null" abilities="stimpack" tier ="1" req="-1" texture="Units/soldier.atlas" />
+			<unit unitid="2" name="Marine1" w="10" h="10" maxlife="140" armor="5"  armortype="PHYSICAL" shield="false" damage="25" damagetype="PHYSICAL" attackspeed="1" range="50" special="null" abilities="stimpack" tier ="2" req="0" texture="Units/soldier.atlas" />
+			<unit unitid="3" name="Marine1" w="10" h="10" maxlife="140" armor="5"  armortype="PHYSICAL" shield="false" damage="25" damagetype="PHYSICAL" attackspeed="1" range="50" special="null" abilities="stimpack" tier="3" req="1" texture="Units/soldier.atlas" />
+		</building>
+
+	</race>
+
+

@@ -8,7 +8,7 @@ import de.beaverstudios.plw.PlwGame;
  * Created by paul on 20.03.16.
  */
 public class Path {
-
+    /*
     public Path(){
 
     }
@@ -36,7 +36,7 @@ public class Path {
         u.setDy(vec2[1]);
         //System.out.println(u.getDx()+ " "+u.getDy());
 
-        */
+
 
         findNN(u);
         findTarget(u);
@@ -179,5 +179,5 @@ public class Path {
         dist = (float) java.lang.Math.sqrt(java.lang.Math.pow(u1.getX() - u2.getX(), 2) + java.lang.Math.pow(u1.getY() - u2.getY(), 2));
         return dist;
     }
-
+*/
 }

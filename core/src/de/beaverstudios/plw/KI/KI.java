@@ -1,8 +1,5 @@
 package de.beaverstudios.plw.KI;
 
-import de.beaverstudios.plw.Buildings.BuildingManager;
-import de.beaverstudios.plw.Buildings.Barracks;
-import de.beaverstudios.plw.Buildings.BuildingTypes;
 import de.beaverstudios.plw.Player.Game;
 import de.beaverstudios.plw.Player.Player;
 
@@ -13,7 +10,7 @@ public class KI {
 
     public KI(Player p){
     }
-
+/*
     public static void comTurn(Player p){
         calcPowerValue(p);
         calcToughnessValue(p);
@@ -51,5 +48,5 @@ public class KI {
         p.setTotalPower(power);
 
     }
-
+*/
  }

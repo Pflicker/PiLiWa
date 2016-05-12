@@ -1,7 +1,5 @@
 package de.beaverstudios.plw.KI;
 
-import de.beaverstudios.plw.Buildings.Barracks;
-import de.beaverstudios.plw.Buildings.BuildingManager;
 import de.beaverstudios.plw.Buildings.BuildingTypes;
 import de.beaverstudios.plw.Player.Game;
 import de.beaverstudios.plw.Player.Player;
@@ -12,7 +10,7 @@ import java.util.Random;
  * Created by Grass on 3/26/2016.
  */
 public class Metropolis {
-    static boolean trigger;
+    /*static boolean trigger;
     static int power;
     static int toughness;
     static double rnd;
@@ -37,7 +35,7 @@ public class Metropolis {
 
     static void suggestStep(Player p){
 
-
+        /*
         slot = randInt(0, 9);
 
         building = randInt(0, p.getBuildings().size());
@@ -91,6 +89,6 @@ public class Metropolis {
         }
 
     }
-
+*/
 }
 

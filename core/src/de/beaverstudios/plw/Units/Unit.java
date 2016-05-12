@@ -6,20 +6,24 @@ package de.beaverstudios.plw.Units;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 
 import de.beaverstudios.plw.Player.Game;
 import de.beaverstudios.plw.Player.Player;
+import de.beaverstudios.plw.Techs.GeneralTechs;
 import de.beaverstudios.plw.Techs.Types.ArmorType;
 import de.beaverstudios.plw.Techs.Types.DamageType;
 import de.beaverstudios.plw.Units.Healthbar.HealthBar;
 import de.beaverstudios.plw.PlwGame;
 import de.beaverstudios.plw.Units.Healthbar.ShieldBar;
 
-public abstract class Unit {
+public class Unit {
 
     String name;
     Player player;
@@ -60,56 +64,74 @@ public abstract class Unit {
     static float[] vec =new float[2];
 
     Integer value;
-    Texture skin;
+    String skin;
     Boolean invisible = false;
     Boolean flying = false;
     Boolean attackFlying = true;
     Boolean attackGround = true;
     Boolean stealthDetect = false;
-    Boolean direction;
+    Boolean flip;
     Boolean buildung = false;
     float rotate;
+    UnitTypes unitType;
 
     int slot;
 
     //Animation vars
-    int        FRAME_COLS;
-    int        FRAME_ROWS;
-    Animation walkAnimation;
-    Texture walkSheet;
-    TextureRegion[] walkFrames;
-    TextureRegion currentFrame;
-    float stateTime;
+    float walkStateTime;
+    float loadStateTime;
+    float shootStateTime;
 
     Rectangle bounds;
 
-    public void create() {
-        life = maxLife;
-        healthBar = new HealthBar(x, y + h + 1, w, 2, life, maxLife);
+    public Unit(UnitTypes unitTypes,Integer slot, Player player, Integer movementspeed) {
+        this.name=unitTypes.getName();
+        this.w = unitTypes.getW();
+        this.h=unitTypes.getH();
+        this.maxLife=unitTypes.getMaxLife();
+        this.armor=unitTypes.getArmor();
+        this.armorType=unitTypes.getArmorType();
+        this.maxShieldValue=unitTypes.getMaxShieldValue();
+        this.shieldReloadValue=unitTypes.getShieldReloadValue();
+        this.damage=unitTypes.getDamage();
+        this.damageType=unitTypes.getDamageType();
+        this.attackspeed=unitTypes.getAttackspeed();
+        this.range=unitTypes.getRange();
+        this.value=unitTypes.getValue();
+        this.skin=unitTypes.getPathToSkin();
+        this.unitType=unitTypes;
+        this.slot = slot;
+        this.player=player;
+        this.movementspeed=movementspeed;
+        create();
+    }
 
-        if (!buildung) {
-            x = getSpawnPointX(player, slot);
-            y = getSpawnPointY(player, slot);
-        }
+    public void create() {
+
+        life = maxLife;
+        healthBar = new HealthBar(this);
+
+        x = getSpawnPointX(player, slot);
+        y = getSpawnPointY(player, slot);
+
+        dx=-1f;
+        dy=0f;
 
         if (armorType == ArmorType.SHIELD) {
             shieldValue = maxShieldValue;
             shieldBar = new ShieldBar(x, y + h + 2, w, 2, shieldValue, maxShieldValue);
         }
 
-        walkSheet = skin;
-        TextureRegion[][] tmp = TextureRegion.split(this.walkSheet, this.walkSheet.getWidth() / this.FRAME_COLS, this.walkSheet.getHeight() / this.FRAME_ROWS);
-        walkFrames = new TextureRegion[this.FRAME_COLS * this.FRAME_ROWS];
-        int index = 0;
-        for (int i = 0; i < this.FRAME_ROWS; i++) {
-            for (int j = 0; j < this.FRAME_COLS; j++) {
-                this.walkFrames[index++] = tmp[i][j];
-            }
-        }
-        this.walkAnimation = new Animation(0.125f, this.walkFrames);
-        this.stateTime = 0f;
+        bounds = new Rectangle(x,y,unitType.getWalkAnimation().getKeyFrame(walkStateTime).getRegionWidth(),unitType.getWalkAnimation().getKeyFrame(walkStateTime).getRegionHeight());
 
-        bounds = new Rectangle(x,y,w,h);
+        if(this.player == Game.player1){
+            flip = true;
+        } else {
+            flip = false;
+        }
+
+        w = unitType.getWalkAnimation().getKeyFrame(walkStateTime).getRegionWidth();
+        h = unitType.getWalkAnimation().getKeyFrame(walkStateTime).getRegionHeight();
     }
 
     public void update(float dt) {
@@ -118,19 +140,33 @@ public abstract class Unit {
             checkShield(dt);
         }
         if (!buildung) {
-            Path.findPath(this);
+            //Path.findPath(this);
             x += dx * movementspeed * dt;
             y += dy * movementspeed * dt;
-        }
 
+        }
         if (fight){
             fight();
         }
-
         bounds.setX(x);
         bounds.setY(y);
 
         timeSinceDamageTaken +=dt;
+        walkStateTime += Gdx.graphics.getDeltaTime();
+    }
+
+    public void draw(SpriteBatch batch) {
+
+        if (dx != 0 || dy != 0) {
+            batch.draw(unitType.getWalkAnimation().getKeyFrame(walkStateTime, true), flip ? x+w : x, y,flip ? -w: w,h);
+        } else {
+            batch.draw(unitType.getWalkFrames()[0], x, y);
+        }
+
+        //healthBar.draw(batch, 1, getX(), getY() + unitType.getWalkAnimation().getKeyFrame(walkStateTime).getRegionHeight() + 1, getW(), 1, getLife(), getMaxLife());
+        if (getArmorType() == ArmorType.SHIELD) {
+            shieldBar.draw(batch, 1, getX(), getY()+unitType.getWalkAnimation().getKeyFrame(walkStateTime).getRegionHeight() + 2, getW(), 2, getShieldValue(), getMaxShieldValue());
+        }
     }
 
 
@@ -174,6 +210,9 @@ public abstract class Unit {
             if (slot == 2 || slot == 5 || slot == 8) {
                 x = 70f;
             }
+            if(slot ==-1){
+                x = 0f;
+            }
         }
 
         if (player == Game.player2) {
@@ -185,6 +224,9 @@ public abstract class Unit {
             }
             if (slot == 2 || slot == 5 || slot == 8) {
                 x = 600f;
+            }
+            if(slot ==-1){
+                x = PlwGame.V_WIDTH*0.8f -w;
             }
         }
         gridX = (int)(x/ PlwGame.V_WIDTH*PlwGame.GRID_RES);
@@ -203,6 +245,9 @@ public abstract class Unit {
             if (slot > 5 && slot <= 8) {
                 y = (float)((PlwGame.V_HEIGHT/2) - 20);
             }
+            if (slot == -1){
+                y = PlwGame.V_HEIGHT/2;
+            }
         }
         if (player == Game.player2) {
             if (slot <= 2) {
@@ -213,6 +258,9 @@ public abstract class Unit {
             }
             if (slot > 5 && slot <= 8) {
                 y = (float)((PlwGame.V_HEIGHT/2) -20);
+            }
+            if (slot == -1){
+                y = PlwGame.V_HEIGHT/2;
             }
         }
         gridY = (int)(y/PlwGame.V_HEIGHT*PlwGame.GRID_RES);
@@ -387,12 +435,36 @@ public abstract class Unit {
         this.value = value;
     }
 
-    public Texture getSkin() {
+    public float getShieldReloadTimer() {
+        return shieldReloadTimer;
+    }
+
+    public void setShieldReloadTimer(float shieldReloadTimer) {
+        this.shieldReloadTimer = shieldReloadTimer;
+    }
+
+    public float getShieldReloadStep() {
+        return shieldReloadStep;
+    }
+
+    public void setShieldReloadStep(float shieldReloadStep) {
+        this.shieldReloadStep = shieldReloadStep;
+    }
+
+    public String getSkin() {
         return skin;
     }
 
-    public void setSkin(Texture skin) {
+    public void setSkin(String skin) {
         this.skin = skin;
+    }
+
+    public UnitTypes getUnitType() {
+        return unitType;
+    }
+
+    public void setUnitType(UnitTypes unitType) {
+        this.unitType = unitType;
     }
 
     public Boolean getInvisible() {
@@ -435,12 +507,28 @@ public abstract class Unit {
         this.stealthDetect = stealthDetect;
     }
 
-    public Boolean getDirection() {
-        return direction;
+    public Boolean getFlip() {
+        return flip;
     }
 
-    public void setDirection(Boolean direction) {
-        this.direction = direction;
+    public void setFlip(Boolean flip) {
+        this.flip = flip;
+    }
+
+    public float getLoadStateTime() {
+        return loadStateTime;
+    }
+
+    public void setLoadStateTime(float loadStateTime) {
+        this.loadStateTime = loadStateTime;
+    }
+
+    public float getShootStateTime() {
+        return shootStateTime;
+    }
+
+    public void setShootStateTime(float shootStateTime) {
+        this.shootStateTime = shootStateTime;
     }
 
     public Boolean getBuildung() {
@@ -491,60 +579,12 @@ public abstract class Unit {
         this.fight = fight;
     }
 
-    public int getFRAME_COLS() {
-        return FRAME_COLS;
+    public float getWalkStateTime() {
+        return walkStateTime;
     }
 
-    public void setFRAME_COLS(int FRAME_COLS) {
-        this.FRAME_COLS = FRAME_COLS;
-    }
-
-    public int getFRAME_ROWS() {
-        return FRAME_ROWS;
-    }
-
-    public void setFRAME_ROWS(int FRAME_ROWS) {
-        this.FRAME_ROWS = FRAME_ROWS;
-    }
-
-    public Animation getWalkAnimation() {
-        return walkAnimation;
-    }
-
-    public void setWalkAnimation(Animation walkAnimation) {
-        this.walkAnimation = walkAnimation;
-    }
-
-    public Texture getWalkSheet() {
-        return walkSheet;
-    }
-
-    public void setWalkSheet(Texture walkSheet) {
-        this.walkSheet = walkSheet;
-    }
-
-    public TextureRegion[] getWalkFrames() {
-        return walkFrames;
-    }
-
-    public void setWalkFrames(TextureRegion[] walkFrames) {
-        this.walkFrames = walkFrames;
-    }
-
-    public TextureRegion getCurrentFrame() {
-        return currentFrame;
-    }
-
-    public void setCurrentFrame(TextureRegion currentFrame) {
-        this.currentFrame = currentFrame;
-    }
-
-    public float getStateTime() {
-        return stateTime;
-    }
-
-    public void setStateTime(float stateTime) {
-        this.stateTime = stateTime;
+    public void setWalkStateTime(float WalkStateTime) {
+        this.walkStateTime = WalkStateTime;
     }
 
     public static ArrayList<Unit> getNNtable() {

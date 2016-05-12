@@ -16,13 +16,12 @@ public class PlwGame extends Game {
 	public static final int GRID_RES = 10;
 	public static final int MELE_RANGE = 15;
 	public static final int DET_RANGE = 80;
-	private MainMenuScreen mainMenuScreen;
-
+	public static final int MOVEMENTSPEED = 20;
+	public static TextureManager textureManager;
 
 	public void create() {
-
-        mainMenuScreen = new MainMenuScreen(this);
-        setScreen(mainMenuScreen);
+		textureManager = new TextureManager();
+        setScreen(new MainMenuScreen(this));
 	}
 
 	public void render() {

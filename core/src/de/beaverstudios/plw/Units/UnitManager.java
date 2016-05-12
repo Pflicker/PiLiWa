@@ -1,9 +1,8 @@
 package de.beaverstudios.plw.Units;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 
@@ -11,7 +10,6 @@ import de.beaverstudios.plw.Animations.UnitValue;
 import de.beaverstudios.plw.Player.Game;
 import de.beaverstudios.plw.Player.Player;
 import de.beaverstudios.plw.PlwGame;
-import de.beaverstudios.plw.Screens.GameOverScreen;
 import de.beaverstudios.plw.Screens.GameScreen;
 import de.beaverstudios.plw.Techs.Types.ArmorType;
 
@@ -21,28 +19,13 @@ import de.beaverstudios.plw.Techs.Types.ArmorType;
 public class UnitManager {
 
     private static Grid grid;
-    public static Marine ghostMarine;
-    public static Melee ghostMelee;
-    public static Sniper ghostSniper;
-    public static MeleeTank ghostMeleeTank;
-    public static DarkTemplar ghostDarkTemplar;
-    public static Cat ghostCat;
     public static ArrayList<UnitValue> unitValues = new ArrayList<UnitValue>();
     public static Path path;
 
     public UnitManager() {
 
-
         grid = new Grid();
         path = new Path();
-
-
-        ghostMarine = new Marine(Game.ghostPlayer,9);
-        ghostCat = new Cat(Game.ghostPlayer,8);
-        ghostMelee = new Melee(Game.ghostPlayer,7);
-        ghostSniper = new Sniper(Game.ghostPlayer,7);
-        ghostMeleeTank = new MeleeTank(Game.ghostPlayer,7);
-        ghostDarkTemplar = new DarkTemplar(Game.ghostPlayer,7);
     }
 
     public void update(float dt) {
@@ -50,7 +33,7 @@ public class UnitManager {
         for (Player p : Game.players){
             for (Unit u : p.getUnits()) {
                 u.update(dt);
-                u.stateTime += dt;
+                u.walkStateTime += dt;
             }
             killUnits(p);
         }
@@ -92,63 +75,11 @@ public class UnitManager {
     public void render(SpriteBatch batch) {
         for (Player p : Game.players) {
             for (Unit u : p.getUnits()) {
-                //System.out.println("Player " + p + "Unit "+ u);
-                u.currentFrame = u.walkAnimation.getKeyFrame(u.stateTime, true);
-                if (p.isFlip()) {
-                    if (!u.currentFrame.isFlipX()) {
-                        u.currentFrame.flip(true, false);
-                    }
-                }
-                batch.draw(u.getCurrentFrame(), u.getX(), u.getY(), u.getW(), u.getH());
-                u.healthBar.draw(batch, 1, u.getX(), u.getY() + u.getH() + 1, u.getW(), 1, u.getLife(), u.getMaxLife());
-                if (u.getArmorType() == ArmorType.SHIELD) {
-                    u.shieldBar.draw(batch, 1, u.getX(), u.getY() + u.getH() + 2, u.getW(), 2, u.getShieldValue(), u.getMaxShieldValue());
-                }
+                u.draw(batch);
             }
         }
         for (int i = 0;unitValues.size() > i;i++){
             unitValues.get(i).render(batch, new BitmapFont());
         }
-    }
-
-    public static Marine getGhostMarine() {
-        return ghostMarine;
-    }
-
-    public static void setGhostMarine(Marine ghostMarine) {
-        UnitManager.ghostMarine = ghostMarine;
-    }
-
-
-    public static DarkTemplar getGhostDarkTemplar() {
-        return ghostDarkTemplar;
-    }
-
-    public static void setGhostDarkTemplar(DarkTemplar ghostDarkTemplar) {
-        UnitManager.ghostDarkTemplar = ghostDarkTemplar;
-    }
-
-    public static MeleeTank getGhostMeleeTank() {
-        return ghostMeleeTank;
-    }
-
-    public static void setGhostMeleeTank(MeleeTank ghostMeleeTank) {
-        UnitManager.ghostMeleeTank = ghostMeleeTank;
-    }
-
-    public static Sniper getGhostSniper() {
-        return ghostSniper;
-    }
-
-    public static void setGhostSniper(Sniper ghostSniper) {
-        UnitManager.ghostSniper = ghostSniper;
-    }
-
-    public static Melee getGhostMelee() {
-        return ghostMelee;
-    }
-
-    public static void setGhostMelee(Melee ghostMelee) {
-        UnitManager.ghostMelee = ghostMelee;
     }
 }

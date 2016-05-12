@@ -27,14 +27,7 @@ public class TextureManager {
 
     public static Texture CAT = new Texture(Gdx.files.internal("cat.png"));
     public static Texture HUDBACK = new Texture(Gdx.files.internal("hudback.png"));
-
-    public static Texture BARRACKS  = new Texture(Gdx.files.internal("barracks.png"));
-    public static Texture BUILDING2 = new Texture(Gdx.files.internal("factory.jpg"));
-    public static Texture BUILDING3 = new Texture(Gdx.files.internal("barracks.png"));
-    public static Texture BUILDING4 = new Texture(Gdx.files.internal("factory.jpg"));
-    public static Texture BUILDING5 = new Texture(Gdx.files.internal("barracks.png"));
-
-    public static Texture FACTORY = new Texture(Gdx.files.internal("factory.jpg"));
+    public static Texture BTNCAMPAIGN = new Texture(Gdx.files.internal("Buttons/Campaign.png"));
 
     public static Texture DAMAGE = new Texture(Gdx.files.internal("UnitInfo/damage.png"));
     public static Texture ARMOR = new Texture(Gdx.files.internal("UnitInfo/armor.png"));
@@ -44,14 +37,11 @@ public class TextureManager {
 
     public static Texture BOTTOMBARHUD = new Texture(Gdx.files.internal("bottombarback.png"));
 
+    public static Texture CAMPAIGNMAP = new Texture(Gdx.files.internal("Campaign/map.png"));
+
     public static Image IMGBTNPAUSE;
     public static Image IMGBTNRESUME;
-    public static Image IMGBARRACKS;
-    public static Image IMGFACTORY;
-    public static Image IMGBUILDING2;
-    public static Image IMGBUILDING3;
-    public static Image IMGBUILDING4;
-    public static Image IMGBUILDING5;
+    public static Image IMGBTNCAMPAIGN;
     public static Image IMGHUDBACK;
 
     public static Image IMGDAMAGE;
@@ -61,6 +51,7 @@ public class TextureManager {
     public static Image IMGHEALTH;
 
     public static Image IMGBOTTOMBARHUD;
+    public static Image IMGCAMPAIGNMAP;
 
 
 
@@ -70,29 +61,17 @@ public class TextureManager {
         IMGHUDBACK = new Image(HUDBACK);
         IMGHUDBACK.setDrawable(new SpriteDrawable(new Sprite(HUDBACK)));
 
-        IMGBARRACKS = new Image(BARRACKS);
-        IMGBARRACKS.setDrawable(new SpriteDrawable(new Sprite(BARRACKS)));
-
-        IMGFACTORY = new Image(FACTORY);
-        IMGFACTORY.setDrawable(new SpriteDrawable(new Sprite(FACTORY)));
-
         IMGBTNPAUSE = new Image(BTNPAUSE);
         IMGBTNPAUSE.setDrawable(new SpriteDrawable(new Sprite(BTNPAUSE)));
 
         IMGBTNRESUME = new Image(BTNRESUME);
         IMGBTNRESUME.setDrawable(new SpriteDrawable(new Sprite(BTNRESUME)));
 
-        IMGBUILDING2 = new Image(BUILDING2);
-        IMGBUILDING2.setDrawable(new SpriteDrawable(new Sprite(BUILDING2)));
+        IMGBTNCAMPAIGN = new Image(BTNCAMPAIGN);
+        IMGBTNCAMPAIGN.setDrawable(new SpriteDrawable(new Sprite(BTNCAMPAIGN)));
 
-        IMGBUILDING3 = new Image(BUILDING3);
-        IMGBUILDING3.setDrawable(new SpriteDrawable(new Sprite(BUILDING3)));
-
-        IMGBUILDING4 = new Image(BUILDING4);
-        IMGBUILDING4.setDrawable(new SpriteDrawable(new Sprite(BUILDING4)));
-
-        IMGBUILDING5 = new Image(BUILDING5);
-        IMGBUILDING5.setDrawable(new SpriteDrawable(new Sprite(BUILDING5)));
+        IMGCAMPAIGNMAP = new Image(CAMPAIGNMAP);
+        IMGCAMPAIGNMAP.setDrawable(new SpriteDrawable(new Sprite(CAMPAIGNMAP)));
 
         IMGDAMAGE = new Image(DAMAGE);
         IMGARMOR = new Image(ARMOR);

@@ -4,7 +4,6 @@ package de.beaverstudios.plw.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -21,7 +20,6 @@ import de.beaverstudios.plw.Hud.Hud;
 import de.beaverstudios.plw.InputProcessor.GameInputProcessor;
 import de.beaverstudios.plw.Player.Game;
 import de.beaverstudios.plw.PlwGame;
-import de.beaverstudios.plw.Buildings.BuildingManager;
 import de.beaverstudios.plw.Techs.Techs;
 import de.beaverstudios.plw.TextureManager;
 import de.beaverstudios.plw.Units.UnitManager;
@@ -55,7 +53,6 @@ public class GameScreen implements Screen {
 
     public static Hud hud;
     public static UnitManager um;
-    public static BuildingManager bm;
     public static Techs techs;
 
     final PlwGame gam;
@@ -83,10 +80,8 @@ public class GameScreen implements Screen {
         map = mapLoader.load("map2.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1);
 
-        world = new Game();
-
         um = new UnitManager();
-        bm = new BuildingManager();
+        world = new Game();
         hud = new Hud();
         techs = new Techs();
 
@@ -111,7 +106,6 @@ public class GameScreen implements Screen {
             centerGameCam();
             renderer.setView(gamecam);
             hud.update(dt);
-            bm.update(dt);
             um.update(dt);
 
         if (gameOver) {
@@ -142,10 +136,6 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(hud.hudStage.getCamera().combined);
 
         hud.hudStage.draw();
-
-        batch.begin();
-        hud.draw(batch);
-        batch.end();
 
     }
 
